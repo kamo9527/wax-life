@@ -6,7 +6,8 @@ module.exports = [{
       'xtabs': '../../static/iview/tabs/index',
       'xtab': '../../static/iview/tab/index',
       'xrow': '../../static/iview/row/index',
-      'xcol': '../../static/iview/col/index'
+      'xcol': '../../static/iview/col/index',
+      'wux-divider': '../../static/wux-weapp/divider/index'
     }
   }
 }, {
