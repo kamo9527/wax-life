@@ -47,10 +47,10 @@
         title="深圳驰雅私人工作坊" 
         inlineDesc="专注手工蜡艺术品设计制作">
         <div slot="more">
-          <div>
+          <button :plain="true" open-type="contact" class="my_link_note">
             <image class="my_link_icon" src="../../static/icon/wx.png" mode="widthFix"></image>
-            <div class="my_link_note">联系我们</div>
-          </div>
+            <div>联系我们</div>
+          </button>
         </div>
       </xcell>
       <div class="dot_line"></div>
@@ -58,12 +58,14 @@
         i-class="my_link_address" 
         src="../../static/icon/address.png" 
         title="深圳市宝安区凝精路82号"
+        @cellClick="getAddress"
         is-link>
       </xcell>
       <xcell 
         i-class="my_link_phone" 
         src="../../static/icon/phone.png" 
         title="15914039385"
+        @cellClick="phoneCall"
         is-link>
       </xcell>
       <div class="my_workshop_jobs" v-for="(url, index) in urls" :key="url">
@@ -146,6 +148,31 @@ export default {
       //   current: url, // 当前显示图片的http链接
       //   urls: this.urls // 需要预览的图片http链接列表
       // })
+    },
+    getAddress() {
+      wx.getLocation({
+        type: 'gcj02', //返回可以用于wx.openLocation的经纬度
+        success (res) {
+          const latitude = res.latitude
+          const longitude = res.longitude
+          wx.openLocation({
+            latitude,
+            longitude,
+            scale: 28
+          })
+        }
+      })
+    },
+    phoneCall() {
+      wx.makePhoneCall({
+        phoneNumber: '15914039385',
+        success: function() {
+          console.log('拨打电话成功！')
+        },
+        fail: function() {
+          console.log('拨打电话失败！')
+        }
+      })
     },
     bindViewTap() {
       const url = '../logs/index'
@@ -335,15 +362,19 @@ export default {
 
       .i_cell_bd .inline_desc {
         font-size: 13px;
-        color: #d4237a;
+        color: #ea9b5a;
+      }
+      .my_link_note{
+        font-size: 10px;
+        padding: 0;
       }
       .my_link_icon {
         width: 28px;
         height: 28px;
         vertical-align: middle;
       }
-      .my_link_note{
-        font-size: 10px;
+      button[plain] {
+        border: none;
       }
     }
     .dot_line{

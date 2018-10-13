@@ -37,13 +37,10 @@ export default {
       default: ''
     },
     title: String,
-    mobile: [String, Number],
     inlineDesc: {
       type: [String, Number],
       default: ''
     },
-    isBtn: Boolean,
-    index: Number,
     isLink: {
       type: Boolean,
       default: false
@@ -63,7 +60,7 @@ export default {
         let url = {path: this.link, query: this.query}
         this.$router.push(url)
       }
-      this.$emit('cellClick', this.index)
+      this.$emit('cellClick')
     },
     onBtn() {
       this.$emit('btnClick', this.index)

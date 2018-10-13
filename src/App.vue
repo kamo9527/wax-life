@@ -1,5 +1,5 @@
 <script>
-// import 'mp-weui/lib/style.css'
+import 'mp-weui/lib/style.css'
 import './assets/base/fn.less'
 
 

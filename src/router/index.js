@@ -1,9 +1,4 @@
 module.exports = [{
-  path: '/pages/index/detail',
-  config: {
-    navigationBarTitleText: '产品详情'
-  }
-}, {
   path: '/pages/index/index',
   config: {
     navigationBarTitleText: '蜡の生活，你的态度',
@@ -14,6 +9,11 @@ module.exports = [{
       'xcol': '../../static/iview/col/index',
       'wux-divider': '../../static/wux-weapp/divider/index'
     }
+  }
+}, {
+  path: '/pages/index/detail',
+  config: {
+    navigationBarTitleText: '产品详情'
   }
 }, {
   path: '/pages/shopping/cart',
