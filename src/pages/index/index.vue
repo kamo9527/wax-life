@@ -119,14 +119,6 @@ export default {
   watch: {},
   created() {},
   computed: {
-    question: {
-      get() {
-        return this.$store.state.question.question
-      },
-      set(value) {
-        this.$store.commit('question/updatequestion', value)
-      }
-    }
   },
   methods: {
     tabsChange(e) {

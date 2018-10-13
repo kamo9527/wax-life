@@ -1,17 +1,17 @@
 import Vue from 'vue'
 import App from '@/App'
 import store from '@/store'
-var Fly=require("flyio/dist/npm/wx")
+// var Fly=require("flyio/dist/npm/wx")
 
-var fly=new Fly
+// var fly=new Fly
 
-Vue.prototype.$http = fly
+// Vue.prototype.$http = fly
 
 
 Vue.config.productionTip = false
 
-import IboxPlugin from '@/plugins/ibox'
-Vue.use(IboxPlugin)
+// import IboxPlugin from '@/plugins/ibox'
+// Vue.use(IboxPlugin)
 
 const app = new Vue({
   store,

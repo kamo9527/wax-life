@@ -1,4 +1,13 @@
 module.exports = [{
+  path: '/pages/shopping/cart',
+  config: {
+    navigationBarTitleText: '购物车',
+    usingComponents: {
+      'input-number': '../../static/iview/input-number/index',
+      'i-radio': '../../static/iview/radio/index'
+    }
+  }
+}, {
   path: '/pages/index/index',
   config: {
     navigationBarTitleText: '蜡の生活，你的态度',
@@ -14,11 +23,6 @@ module.exports = [{
   path: '/pages/index/detail',
   config: {
     navigationBarTitleText: '产品详情'
-  }
-}, {
-  path: '/pages/shopping/cart',
-  config: {
-    navigationBarTitleText: 'vuex例子'
   }
 }, {
   path: '/pages/my/index',
