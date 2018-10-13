@@ -1,4 +1,9 @@
 module.exports = [{
+  path: '/pages/index/detail',
+  config: {
+    navigationBarTitleText: '产品详情'
+  }
+}, {
   path: '/pages/index/index',
   config: {
     navigationBarTitleText: '蜡の生活，你的态度',
