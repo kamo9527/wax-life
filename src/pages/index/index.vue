@@ -1,210 +1,441 @@
 <template>
-
-  <div>
-    <div><wux-floating-button v-bind:buttons="buttons" @iclick="handleClick6"></wux-floating-button></div>
-    <!-- <div><wu-input-number></wu-input-number></div> -->
-    <div><wux-vcode bg-color="#fff" font-color="#165189" ></wux-vcode></div>
-    <div>
-      <div style="margin: 16px">默认</div>
-      <i-card title="卡片标题" extra="额外内容" thumb="https://i.loli.net/2017/08/21/599a521472424.jpg">
-        <div slot="content">内容不错</div>
-        <div slot="footer">尾部内容</div>
-      </i-card>
-      <div style="margin: 16px">通栏</div>
-      <i-card full title="卡片标题" extra="额外内容" thumb="https://i.loli.net/2017/08/21/599a521472424.jpg">
-        <div slot="content">内容不错</div>
-        <div slot="footer">尾部内容</div>
-      </i-card>
+  <div class="my_store">
+    <xtabs :current="current" color="#ea9b5a" @change="tabsChange" :fixed="true">
+      <xtab key="home" title="首页"></xtab>
+      <xtab key="goods" title="产品"></xtab>
+      <xtab key="new" title="新品"></xtab>
+      <xtab key="workshop" title="作坊"></xtab>
+    </xtabs>
+    <div class="my_home show_move" v-if="current === 'home'">
+      <image src="../../static/images/goods.png" mode="widthFix"></image>
+      <image src="../../static/images/goods.png" mode="widthFix"></image>
+      <image src="../../static/images/goods.png" mode="widthFix"></image>
+      <image src="../../static/images/goods.png" mode="widthFix"></image>
+      <image src="../../static/images/goods.png" mode="widthFix"></image>
+      <image src="../../static/images/tips01.jpg" mode="widthFix"></image>
+      <image src="../../static/images/tips02.jpg" mode="widthFix"></image>
     </div>
-    <div class="userinfo" >
-      <img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover" />
-      <div class="userinfo-nickname">
-        <card :text="userInfo.nickName"></card>
-        <button open-type="getUserInfo" @getuserinfo="getUserInfo()">点我登录哦</button>
+    <div class="my_goods show_move" v-if="current === 'goods'">
+      <xrow i-class="goods_filter_tabs">
+        <xcol span="6" v-for="item in goodsFilter" :i-class="filterbar === item.key ? 'on' : '' " :key="item.key" @click="filterChange(item.key)">
+          {{item.name}}<span :class="item.sort" v-if="item.key === 'sort'"></span>
+        </xcol>
+      </xrow>
+      <div class="goods_list">
+        <div class="goods_item" v-for="item in goods" :key="item">
+          <image src="../../static/images/goods.png" mode="widthFix"></image>
+          <div class="content">
+            <div class="title">无敌风油精爽爽爽</div>
+            <div class="detail">￥<span class="price">252</span><span class="num">1555人付款</span><span class="more">. . .</span></div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="usermotto">
-      <div class="user-motto">
-        <card :text="motto"></card>
+    <div class="new_goods show_move" v-if="current === 'new'">
+      <div class="new_goods_item" v-for="item in newGoods" :key="item">
+        <image src="../../static/images/goods.png" mode="widthFix"></image>
+        <div class="content">
+          <div class="title">无敌风油精爽爽爽</div>
+          <div class="detail">￥<span class="price">252</span></div>
+        </div>
       </div>
     </div>
-    <div id="watch-example">
-      <p>问我一个问题吧:</p>
-      <input type="text" class="form-control" v-model="question">
-      <p>{{ answer }}</p>
+    <div class="my_workshop show_move" v-if="current === 'workshop'">
+      <xcell 
+        i-class="my_link" 
+        src="../../static/icon/serve.png" 
+        title="深圳驰雅私人工作坊" 
+        inlineDesc="专注手工蜡艺术品设计制作">
+        <div slot="more">
+          <div>
+            <image class="my_link_icon" src="../../static/icon/wx.png" mode="widthFix"></image>
+            <div class="my_link_note">联系我们</div>
+          </div>
+        </div>
+      </xcell>
+      <div class="dot_line"></div>
+       <xcell 
+        i-class="my_link_address" 
+        src="../../static/icon/address.png" 
+        title="深圳市宝安区凝精路82号"
+        is-link>
+      </xcell>
+      <xcell 
+        i-class="my_link_phone" 
+        src="../../static/icon/phone.png" 
+        title="15914039385"
+        is-link>
+      </xcell>
+      <div class="my_workshop_jobs" v-for="(url, index) in urls" :key="url">
+        <img class="my_img" :src="url"  @click="previewSwiperImg(url)" />
+      </div>
+      <div class="my_workshop_word">
+        <h2 class="title">产品的用处</h2>
+        <div><span class="dot"></span>家居装饰  熏香除臭  携带方便  留香长</div>
+        <div><span class="dot"></span>结婚闺蜜朋友生日伴手送礼</div>
+        <div>热销韩国花饰香薰蜡片，衣橱芳香伴手礼，闺蜜情人礼物，春日樱茶、良辰美景、婀娜多姿3个香味可选，放衣柜、客厅、卧室、行李箱，是家居出差旅行必备单品！</div>
+      </div>
+      <div class="my_workshop_word">
+        <h2 class="title">材质解析</h2>
+        <div>材质：天然蜂蜜蜡 + 植物大豆蜡，蜂蜜蜡由天然蜂巢提取而成，相比普通的石蜡，更加环保与健康，因蜂蜜质地比较硬，因而配上一定量的大豆蜡，能改善蜡片香薰质地。</div>
+      </div>
     </div>
-    <form class="form-container">
-      <input type="text" class="form-control" v-model="motto" placeholder="v-model" />
-      <input type="text" class="form-control" v-model.lazy="motto" placeholder="v-model.lazy" />
-    </form>
-    <a href="/pages/counter/index" class="counter">去往Vuex示例页面</a>
+    <div class="my_divider">
+      <wux-divider>
+        <text class="text" v-if="current === 'workshop'">我们的态度</text>
+        <text class="text" v-else>没有更多的产品啦</text>
+      </wux-divider>
+    </div>
   </div>
 </template>
-
 <script>
-  import card from '@/components/card'
-  import _ from 'lodash'
+import xcell from '@/components/cell'
 
-  export default {
-    data () {
-      return {
-        motto: 'Hello World',
-        userInfo: {},
-        answer: '先问问题在回答哦',
-        'current': 2, 'verticalCurrent': 2,
-        galleryoptions:{
-          urls: [
-            'https://unsplash.it/200/200',
-            'https://unsplash.it/300/300',
-            'https://unsplash.it/400/400',
-            'https://unsplash.it/600/600',
-            'https://unsplash.it/800/800',
-            'https://unsplash.it/900/900',
-            'https://unsplash.it/1000/1000',
-            'https://unsplash.it/1200/1200'
-          ]
-        },
-        buttons: [{
-          label: 'mp-weui',
-          icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAOGSURBVGje7VhLSFVRFF1HLROtLHtmhVJmz0c/NUstoQ84KAuSauKkdJDQh2pghRAFkTQwiKIoMppFk0ALKioKggbmQEJCsAQjKIMc9Ochymqg73Pf3ed+n4PgreG+e6+1zn7nnbvPBVJI4X8Dq3iOA5Twhq1cPZ3S63mPTnCNoeSL1/OnI/EIBrgpeeKVHHElHkEPV/gXz+QVT+IRnKLyIx/kuC/5yR+jwKt8nW/xCMq8yO9NmjxJ1rqV351UeZKsciNfk3R5kiyWtIQ9ygKMeNw21pjAHPU3MZhmkk/Do4TQHzz3IBfGg4RIOq47af9BU+uOAADX8q7jZrdzEQAIFXV28vkCXWn0aYB34uIf+ZJd7OYrfomLXmRWNH+nwDbL2kCnUJJjyNjIowyKtRU8zVWGSLHAdsJKvlBs6EwPO0Dfz4QFGTdhq8gzw6sByO1u1PnN1mypIDxCe5jHLTu+A1s1PPs8d6BFE18p+32i8ZvvuQMhDeMFKXmmJnmz5/UD4H6RM0whtURM7fUjDzBds6y5kYzYHlgjMrT5M6AmcEh8sMxsoFJM9NkBAE/FaHRujhkoFxN/+TYgv1kFA6VC2mc/E+UUxsToUrMBaXQc968PitGA2YB0bOYlwUCaGM00Pw4LaTm+pvoEKQOiajEDX8XEbN8GAmJ01GzgvZgoDpKuIN8Jhs0G3oqJDb4NHBCjg6YI92gOzXQ/6pytYS03d6Bfw7Hd1/qbNPFhU0T7NkwYoVytf4mGcSx2OEQ7oMbwTMPTRU9DGXO1Xe0Q/93cpe1BHxe6lg9RD/nNq50JJ3HMeR84nx2WXGm6wqtxSWeFbyOddvMRFXfwIa3Roi+Pvxf0s5gZPC9SfBJqGzlKZ7Da1LxlSN0AsE2gaBfX/tiR/HHrFgYS0ucxg79NJOIbgkWODFjfDQE2G9JvAgwmUHRrKsEftvLb7Hew4mtDSR7A5fwQF2nW1tp9Sb1hKw8AXGAoOjkVzeUWVttUXraU/27b/ijROkOh47eBjYEipzwAWG8ovW+3dgcGKlzIAwAbtFRNHgzU6Gp0hyJUN3Tfc9zPiWWqx7UBQL1AyG2NgCEsVv36x5ZkahBZMP913MxIZxBUll8dbVajwuowqvHNk4E+hFS7onWSg3aqXpWP+tggbXFfit0t3qFWVapBJBMs422SQ7G7vSmjkGGSl1iSVOEUUphe/AMv8ctn/pO1zAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNy0wNC0wNFQxMDo0MDo0MiswODowMNlOhSIAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTctMDQtMDRUMTA6NDA6NDIrMDg6MDCoEz2eAAAAAElFTkSuQmCC",
-          url: '../counter/index'
-        },
-          { label: 'wux-weapp',
-            icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAM3SURBVGje7VlNSBRRHP8/tU1dd7PNwkwiUqFIb5pGlJZEardIsOwi5iU6SF+XDhVBRFFJdKlbH0hdgkBIO3kptSKiEgKJWAikQrKgxLD9dZB982b2zex7b2ZZof2f/sv+vuYx8z5mGBkVYtRGzdRI1RSmWfpAYzRKI2zeTE3POorTcKtZ9KAgk+YRXEP6OoH8zNgfUDBPVnPQ5kUY1LAHgEvIC86+HDMO+UkcQpEt4EG8dWAmEAnGvtIh/Bg1LsgqPLIhZ7DSv32pw357Gvw2GzqOQn/2DKO2ay9R4JRgSODc8xegS5C6CPXYVwXeHnP7kCBzXYtJuM2ZC8bPA1q5yGfdGQ4hzHN2vTvOO1s37/azBb0A7A91WGzTEfjCr8FgckUhZ78ysycu8NuIzzh/2h0V3HRpWLkAuQC5ALkASzkAI0oeNIpUdwIu9ct0BKZ4Z3LcCPEubhrAWsVWGAQo5d070wDPebfJIIC1d35tGuAl7zpIv1p598aATUSEMF/R/+rfhvjG2Qp7aTeR91xkgyZzjXU28MKlmwesvfBhzeztvBswvn4irBU25iENHsN3ztvoIwARJrlQtwaribPmfE5iaBfGIKrIyUOcc3r8+RMKhAB3FDl9AifsMwAROgS5Ywr4RgF/1Lc9Ech2Qj6VBt0kYOewLIAAtmcaAPo9kLttyNpA7ImIUG8TdlmabKdpoDMweyIi7BCkm1wwmwVMr5qu4o4IMWoRfrpNScuFPiG+xPJ37eW4DHtVuiBXOXD9qjOHu/l63IKzRjzwD1PQZ1Fmal6DB0itYa/FFWE8k3AGUKFrXodhqXmdAncXPkm4dxUXJRAaMCERGES1cnzCVryQaAxhizeRYSemJMSbbredp1otnki0xtEgXR+Rj7aUN8IAcAGr9c25ahXuSzQ/ogXMPmRHIKuTMNmOO0Osww2J9k/sTQIiGJcA+lDs35yHKMN5iUccFYQSfE35o0tn+6UcIorjqRnIMTw/sC9DH1wWQxSj1xnAqjk0226NTIUIoRPTsgD+Py6oh4glTRmSD2WCZXDoUwIwSix2S/kFxX8SwLoHsjYCY9kOcC7LAdhTupJF/zP/AOvS/D0NTmDBAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE3LTA0LTA0VDExOjQ3OjQ1KzA4OjAwI6N5UAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNy0wNC0wNFQxMTo0Nzo0NSswODowMFL+wewAAAAASUVORK5CYII=",
-            url: '../logs/index'
-          },
-          { label: 'View on Demo',
-            icon: "data:image/png;base64,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",
-            url: '../counter/index'
-          }
-        ]
+export default {
+  data() {
+    return {
+      current: 'workshop',
+      userInfo: {},
+      priceSort: false,
+      filterbar: 'all',
+      goodsFilter: [
+        { key: 'all', name: '综合' },
+        { key: 'sales', name: '销量' },
+        { key: 'review', name: '点评率' },
+        { key: 'sort', name: '价格', sort: 'sort' } // sort : sort , sort_up, sort_down
+      ],
+      goods: [1, 2, 3, 4, 5, 6, 7, 32, 23, 232, 44],
+      newGoods: ['2', '4', '74', '45', '448', '7'],
+      urls: [
+        '../../static/images/goods.png',
+        '../../static/images/goods.png',
+        '../../static/images/goods.png'
+      ]
+    }
+  },
+  components: { xcell },
+  watch: {},
+  created() {},
+  computed: {
+    question: {
+      get() {
+        return this.$store.state.question.question
+      },
+      set(value) {
+        this.$store.commit('question/updatequestion', value)
+      }
+    }
+  },
+  methods: {
+    tabsChange(e) {
+      this.current = e.target.key
+    },
+    filterChange(key) {
+      this.filterbar = key
+      if (key === 'sort') {
+        this.priceSort = !this.priceSort
+        this.goodsFilter[3].sort = this.priceSort ? 'sort_up' : 'sort_down'
+      } else {
+        this.goodsFilter[3].sort = 'sort'
+        this.priceSort = false
       }
     },
+    previewSwiperImg(url){
+      console.log(url)
+      // wx.previewImage({
+      //   current: url, // 当前显示图片的http链接
+      //   urls: this.urls // 需要预览的图片http链接列表
+      // })
+    },
+    bindViewTap() {
+      const url = '../logs/index'
+      wx.navigateTo({ url })
+    },
+    getUserInfo() {
+      // 调用登录接口
+      wx.getUserInfo({
+        success: (res) => {
+          this.userInfo = res.userInfo
+        }
+      })
+    }
+  }
+}
 
-    components: {
-      card
-    },
-    watch: {
-      // 如果 `question` 发生改变，这个函数就会运行
-      question: function (newQuestion, oldQuestion) {
-        this.answer = 'Waiting for you to stop typing...'
-        this.debouncedGetAnswer()
+</script>
+<style lang="less">
+.my_store {
+  .my_home {
+    background-color: black;
+
+    image {
+      width: 100%;
+      vertical-align: middle;
+      margin-bottom: 10px;
+    }
+  }
+
+  .show_move {
+    padding-top: 42px;
+    animation: mymove 0.6s ease-out;
+    -webkit-animation: mymove 0.56s ease-out;
+  }
+
+  .my_goods {
+    .goods_filter_tabs {
+      position: fixed;
+      width: 100%;
+      background-color: #fff;
+    }
+
+    ._xcol {
+      line-height: 36px;
+      font-size: 14px;
+      color: #80848f;
+      text-align: center;
+    }
+
+    .on {
+      color: #ea9b5a;
+    }
+
+    .test {
+      width: 200px;
+      height: 100px;
+      line-height: 100px;
+      border: 1px solid #eee;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .sort,
+    .sort_up,
+    .sort_down {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      vertical-align: middle;
+    }
+
+    .sort {
+      background: url('../../../static/icon/sort.png') no-repeat;
+    }
+
+    .sort_up {
+      background: url('../../../static/icon/sort_up.png') no-repeat;
+    }
+
+    .sort_down {
+      background: url('../../../static/icon/sort_down.png') no-repeat;
+    }
+  }
+
+  .goods_list {
+    padding: 46px 10px 0;
+    display: flex;
+    flex-wrap: wrap;
+
+    .goods_item {
+      box-shadow: 0 0 145px #ea9b5a;
+      -webkit-box-shadow: 0 0 14px #ea9b5a;
+      flex-shrink: 0;
+      box-sizing: border-box;
+      width: 49%;
+      margin-left: 2%;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      background-color: #fff;
+
+      image {
+        width: 100%;
+        border-radius: 8px 8px 0 0;
+        vertical-align: middle;
       }
-    },
-    created: function () {
-      // `_.debounce` 是一个通过 Lodash 限制操作频率的函数。
-      // 在这个例子中，我们希望限制访问 yesno.wtf/api 的频率
-      // AJAX 请求直到用户输入完毕才会发出。想要了解更多关于
-      // `_.debounce` 函数 (及其近亲 `_.throttle`) 的知识，
-      // 请参考：https://lodash.com/docs#debounce
-      this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)
-    },
-    computed: {
-      question: {
-        get () {
-          return this.$store.state.question.question
-        },
-        set (value) {
-          this.$store.commit('question/updatequestion', value)
+
+      .content {
+        padding: 4px 8px 6px;
+      }
+
+      .title {
+        font-size: 14px;
+      }
+
+      .detail {
+        font-size: 10px;
+        color: #ea9b5a;
+
+        .price {
+          font-size: 14px;
+          margin-right: 6px;
+        }
+
+        .num {
+          color: #999;
+        }
+
+        .more {
+          float: right;
         }
       }
-    },
-    methods: {
-      updatequestion (e) {
-        this.$store.commit([question],'updatequestion', e.target.value)
-      },
-      bindViewTap () {
-        const url = '../logs/index'
-        wx.navigateTo({ url })
-      },
-      getUserInfo () {
-        // 调用登录接口
-        wx.getUserInfo({
-          success: (res) => {
-            this.userInfo = res.userInfo
-          }
-        })
-      },
-      clickHandle (msg, ev) {
-        console.log('clickHandle:', msg, ev)
-      },
-      getAnswer: function () {
-        this.answer = 'Thinking...'
-        var vm= this
-        this.$http.get('https://yesno.wtf/api')
-          .then(function (response) {
-            vm.answer = _.capitalize(response.data.answer)
-          })
-          .catch(function (error) {
-            vm.answer = 'Error! Could not reach the API. ' + error
-          })
-      },
-      setData (data) {
-        Object.keys(data).forEach(key => {
-          this[key] = data[key]
-        })
-      },
-      handleClick () {
-        const addCurrent = this.current + 1
-        const current = addCurrent > 2 ? 0 : addCurrent
-        this.setData({
-          'current': current
-        })
-      },
-      handleClick6 (event) {
-        const url = event.target.value.url
-        console.log(event.target.value.url)
-        wx.navigateTo({ url })
-      },
-      onChange(e) {
-        console.log(`验证码：${e.target.value}`)
+
+      &:nth-child(2n+1) {
+        margin-left: 0;
       }
     }
   }
 
-</script>
+  .new_goods {
+    padding: 42px 15px 0;
 
-<style scoped>
-  .userinfo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    .new_goods_item {
+      box-shadow: 0 0 25px #ea9b5a;
+      -webkit-box-shadow: 0 0 25px #ea9b5a;
+      flex-shrink: 0;
+      box-sizing: border-box;
+      width: 100%;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      background-color: #fff;
+
+      image {
+        width: 100%;
+        border-radius: 8px 8px 0 0;
+        vertical-align: middle;
+      }
+
+      .content {
+        padding: 4px 8px 5px;
+      }
+
+      .title {
+        font-size: 13px;
+      }
+
+      .detail {
+        font-size: 10px;
+        color: #ea9b5a;
+
+        .price {
+          font-size: 14px;
+          margin-right: 5px;
+        }
+      }
+    }
   }
 
-  .userinfo-avatar {
-    width: 128rpx;
-    height: 128rpx;
-    margin: 20rpx;
-    border-radius: 50%;
+  .my_workshop {
+    padding-top: 46px;
+
+    .my_link {
+      .i_cell_hd .img_icon {
+        width: 50px;
+        height: 50px;
+      }
+
+      .i_cell_bd .inline_desc {
+        font-size: 13px;
+        color: #d4237a;
+      }
+      .my_link_icon {
+        width: 28px;
+        height: 28px;
+        vertical-align: middle;
+      }
+      .my_link_note{
+        font-size: 10px;
+      }
+    }
+    .dot_line{
+      width: 100%;
+      height: 2px;
+      margin: 6px 0;
+      background-color: #ea9b5a;
+      background: linear-gradient(to right, #e6e6e6, #ea9b5a);
+    }
+    .my_link_address::before{
+      display: none;
+    }
+    .my_link_address, .my_link_phone{
+      .i_cell_hd .img_icon {
+        width: 22px;
+        height: 22px;
+        vertical-align: middle;
+      }
+    }
+    .my_workshop_jobs{
+      padding: 0 10px 10px;
+      .my_img{
+        width: 100%;
+        border-radius: 8px;
+        display: block;
+        vertical-align: middle;
+      }
+    }
+    .my_workshop_word{
+      padding: 10px;
+      color: #515151;
+      .title{
+        font-size: 18px;
+        font-weight: bolder;
+        color: #ea9b5a;
+        text-align: center;
+        position: relative;
+        margin-bottom: 10px;
+        &::after{
+          content: " ";
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: -2px;
+          width: 40px;
+          margin: auto;
+          border-top: 2px solid #ea9b5a;
+        }
+      }
+      .dot{
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        background-color: #ea9b5a;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+    }
   }
 
-  .userinfo-nickname {
-    color: #aaa;
+  .my_divider {
+    padding: 10px 40px 20px;
+
+    .text {
+      font-size: 14px;
+      color: #BFBFBF;
+    }
+  }
+}
+
+@keyframes mymove {
+  0% {
+    opacity: 0;
+    transform: translate(375px, 0);
   }
 
-  .usermotto {
-    margin-top: 150px;
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@-webkit-keyframes mymove {
+  0% {
+    opacity: 0;
+    transform: translate(375px, 0);
   }
 
-  .form-control {
-    display: block;
-    padding: 0 12px;
-    margin-bottom: 5px;
-    border: 1px solid #ccc;
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
   }
+}
 
-  .counter {
-    display: inline-block;
-    margin: 10px auto;
-    padding: 5px 10px;
-    color: blue;
-    border: 1px solid blue;
-  }
-  .i-steps-demo{
-    margin:20px;
-  }
-  .one-tag{
-    font-size:14px;
-    margin:30px 5px 20px 0;
-  }
 </style>

@@ -1,0 +1,120 @@
+/**
+ * 设置边框幅度
+ * 2/@w = 2/37.5rem = 0.053333rem
+ */
+.radius(@radius:2/@w) {
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    border-radius: @radius;
+    -ms-border-radius: @radius;
+    -o-border-radius: @radius;
+}
+.t-shadow(@lr:2px, @tb:1px, @r:1px, @c:#de7535){
+  -webkit-text-shadow: @lr  @tb @r @c;
+  -moz-text-shadow:  @lr  @tb @r @c;
+  -ms-text-shadows: @lr  @tb @r @c;
+  -o-text-shadow: @lr  @tb @r @c;
+  text-shadow:  @lr  @tb @r @c;
+}
+.b-shadow(@lr:2px, @tb:1px, @r:4px, @c:#b02c1d){
+  -webkit-box-shadow: -@lr -@tb  @r @c,@lr @tb @r @c,-@lr @tb @r @c,@lr -@tb @r @c;
+  -moz-box-shadow:  -@lr -@tb  @r @c,@lr @tb @r @c,-@lr @tb @r @c,@lr -@tb @r @c;
+  -ms-box-shadows: -@lr -@tb  @r @c,@lr @tb @r @c,-@lr @tb @r @c,@lr -@tb @r @c;
+  -o-box-shadow: -@lr -@tb  @r @c,@lr @tb @r @c,-@lr @tb @r @c,@lr -@tb @r @c;
+  box-shadow: -@lr -@tb  @r @c,@lr @tb @r @c,-@lr @tb @r @c,@lr -@tb @r @c;
+}
+
+/* 隐藏 & 显示 配合js */
+
+.fn-hide {
+  display: none!important
+}
+.fn-show {
+  display: block
+}
+
+/* 清除浮动 */
+
+.fn-clear {
+  zoom: 1
+}
+
+.fn-clear:after {
+  clear: both;
+  display: block;
+  visibility: hidden;
+  height: 0;
+  content: '.'
+}
+/* 盒子模型 */
+.db {
+  display: -webkit-flex;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex
+}
+
+.flex-vam {
+  display: -webkit-flex;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  -webkit-box-align: center
+}
+
+.v {
+  -webkit-box-orient: vertical;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column
+}
+
+.fx1 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1
+}
+
+.vm {
+  display: box;
+  display: -webkit-box;
+  display: -moz-box;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -webkit-box-align: center;
+  -moz-box-align: center
+}
+.line{
+  width: 100%;
+  height: 10px;
+  background-color: #eee;
+}
+.bg_fff{
+  background-color: #fff;
+}
+.company_title{
+  padding-top: 20px;
+  text-align: center;
+  .title{
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .l_title{
+    color: #666;
+  }
+  .l_text{
+    font-size: 13px;
+    color: #1296db;
+  }
+}
+.footer_btn{
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  padding: 10px 15px;
+  background-color: #fff;
+  box-sizing: border-box;
+}

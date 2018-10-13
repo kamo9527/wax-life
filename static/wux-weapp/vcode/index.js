@@ -143,7 +143,7 @@ Component({
         },
     },
     attached() {
-        this.draw()
+        // this.draw()
     },
     detached() {
         this.ctx = null
