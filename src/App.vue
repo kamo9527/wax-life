@@ -1,5 +1,5 @@
 <script>
-// import 'mp-weui/lib/style.css'
+import 'mp-weui/lib/style.css'
 import './assets/base/fn.less'
 
 
@@ -17,10 +17,9 @@ export default {
 </script>
 
 <style>
-/*page{
+page{
   height: 100%;
-  font-size: 13px;
-  background-color: #F2F2F2;
-}*/
-/*@import './assets/base/fn.less';*/
+  /*font-size: 13px;*/
+  /*background-color: #F2F2F2;*/
+}
 </style>

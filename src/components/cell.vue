@@ -37,13 +37,10 @@ export default {
       default: ''
     },
     title: String,
-    mobile: [String, Number],
     inlineDesc: {
       type: [String, Number],
       default: ''
     },
-    isBtn: Boolean,
-    index: Number,
     isLink: {
       type: Boolean,
       default: false
@@ -60,10 +57,12 @@ export default {
   methods: {
     onClick() {
       if (this.link) {
-        let url = {path: this.link, query: this.query}
-        this.$router.push(url)
+        // let url = {path: this.link, query: this.query}
+        // this.$router.push(url)
+        const url = this.link
+        wx.navigateTo({ url })
       }
-      this.$emit('cellClick', this.index)
+      this.$emit('cellClick')
     },
     onBtn() {
       this.$emit('btnClick', this.index)
