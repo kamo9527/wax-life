@@ -7,6 +7,7 @@
     <div class="i_cell_bd">
       <div class="title">{{title}} <span class="i_mobile">{{mobile}}</span></div>
       <div class="inline_desc" :class="{'fn-hide': !inlineDesc}">{{inlineDesc}}</div>
+      <slot name="operate"></slot>
     </div>
     <div class="i_cell_fr">
       {{fr}}
