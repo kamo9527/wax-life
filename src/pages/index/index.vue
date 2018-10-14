@@ -118,7 +118,8 @@ export default {
   components: { xcell },
   watch: {},
   created() {},
-  computed: {
+  onShow(option) {
+    console.log(option)
   },
   methods: {
     tabsChange(e) {
