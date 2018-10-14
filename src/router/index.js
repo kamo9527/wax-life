@@ -11,15 +11,6 @@ module.exports = [{
     }
   }
 }, {
-  path: '/pages/my/list',
-  config: {
-    navigationBarTitleText: '我的订单',
-    usingComponents: {
-      'xtabs': '../../static/iview/tabs/index',
-      'xtab': '../../static/iview/tab/index'
-    }
-  }
-}, {
   path: '/pages/my/index',
   config: {
     navigationBarTitleText: '个人中心',
@@ -27,6 +18,15 @@ module.exports = [{
       'wux-gallery': '../../static/wux-weapp/gallery/index',
       'wux-row': '../../static/wux-weapp/row/index',
       'wux-col': '../../static/wux-weapp/col/index'
+    }
+  }
+}, {
+  path: '/pages/my/list',
+  config: {
+    navigationBarTitleText: '我的订单',
+    usingComponents: {
+      'xtabs': '../../static/iview/tabs/index',
+      'xtab': '../../static/iview/tab/index'
     }
   }
 }, {
