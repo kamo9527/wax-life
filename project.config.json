@@ -7,10 +7,11 @@
 		"minified": true,
 		"newFeature": true
 	},
-	"miniprogramRoot": "./dist/",
+	"miniprogramRoot": "dist/",
 	"compileType": "miniprogram",
-	"appid": "gh_bcc0c89fbf46",
-	"projectname": "wax-life",
+	"appid": "wx14a9b124d8984bf1",
+	"cloudfunctionRoot": "functions/",
+	"projectname": "wax-life_cloud",
 	"condition": {
 		"search": {
 			"current": -1,

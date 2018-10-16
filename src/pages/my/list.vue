@@ -43,7 +43,7 @@ export default {
       current: 'picking',
       isShow: false,
       showList: false,
-      showNoList: false,
+      showNoList: true,
       statusInfo: {
         going: '已发货',
         done: '已到货'
