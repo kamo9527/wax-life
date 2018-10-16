@@ -64,7 +64,7 @@ export default {
 .goods_style{
   font-size: 12px;
   padding: 5px 22px 5px 4px;
-  background-color: #eee;
+  background-color: #F8F8F8;
   border-radius: 4px;
   position: relative;
   &::after{

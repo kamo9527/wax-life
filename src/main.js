@@ -7,12 +7,19 @@ import store from '@/store'
 
 // Vue.prototype.$http = fly
 
-
+Vue.prototype.yunImagesBasic = 'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/goods/'
 Vue.config.productionTip = false
 
 // import IboxPlugin from '@/plugins/ibox'
 // Vue.use(IboxPlugin)
-
+if (!wx.cloud) {
+  console.error('请使用 2.2.3 或以上的基础库以使用云能力')
+} else {
+  wx.cloud.init({
+    env: 'wax-test-ee69e9',
+    traceUser: true,
+  })
+}
 const app = new Vue({
   store,
   ...App
@@ -21,6 +28,7 @@ const app = new Vue({
 app.$mount()
 
 export default {
+  cloud: true,
   config: {
     pages: [],
     window: {
