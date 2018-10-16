@@ -7,13 +7,13 @@
       <xtab key="workshop" title="作坊"></xtab>
     </xtabs>
     <div class="my_home show_move" v-if="current === 'home'">
-      <image src="../../static/images/goods.png" mode="widthFix"></image>
-      <image src="../../static/images/goods.png" mode="widthFix"></image>
-      <image src="../../static/images/goods.png" mode="widthFix"></image>
-      <image src="../../static/images/goods.png" mode="widthFix"></image>
-      <image src="../../static/images/goods.png" mode="widthFix"></image>
-      <image src="../../static/images/tips01.jpg" mode="widthFix"></image>
-      <image src="../../static/images/tips02.jpg" mode="widthFix"></image>
+      <image
+        v-for="item in yunImages" 
+        :key="item"
+        :src="basicUrl + item"
+        mode="widthFix" 
+        >
+      </image>
     </div>
     <div class="my_goods show_move" v-if="current === 'goods'">
       <xrow i-class="goods_filter_tabs">
@@ -94,9 +94,12 @@
 import xcell from '@/components/cell'
 
 export default {
+  components: { xcell },
   data() {
     return {
-      current: 'workshop',
+      current: 'home',
+      basicUrl: '',
+      yunImages: ['LCHY_001.png', 'LCHY_giving_01.jpg', 'LCHY_giving_02.jpg'],
       userInfo: {},
       priceSort: false,
       filterbar: 'all',
@@ -106,20 +109,34 @@ export default {
         { key: 'review', name: '点评率' },
         { key: 'sort', name: '价格', sort: 'sort' } // sort : sort , sort_up, sort_down
       ],
-      goods: [1, 2, 3, 4, 5, 6, 7, 32, 23, 232, 44],
+      goods: [],
       newGoods: ['2', '4', '74', '45', '448', '7'],
       urls: [
-        '../../static/images/goods.png',
-        '../../static/images/goods.png',
-        '../../static/images/goods.png'
+        'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/goods/LCHY_001.png',
+        'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/goods/LCHY_001.png',
+        'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/goods/LCHY_001.png'
       ]
     }
   },
-  components: { xcell },
-  watch: {},
-  created() {},
-  onShow(option) {
-    console.log(option)
+  created() {
+    this.basicUrl = this.yunImagesBasic
+  },
+  onShow() {
+    const db = wx.cloud.database()
+    // 查询当前用户所有的 counters
+    db.collection('goods').get({
+      success: res => {
+        this.goods = res.data
+        console.log('[数据库] [查询记录] 成功')
+      },
+      fail: err => {
+        wx.showToast({
+          icon: 'none',
+          title: '查询记录失败'
+        })
+        console.error('[数据库] [查询记录] 失败：', err)
+      }
+    })
   },
   methods: {
     tabsChange(e) {
@@ -137,10 +154,10 @@ export default {
     },
     previewSwiperImg(url){
       console.log(url)
-      // wx.previewImage({
-      //   current: url, // 当前显示图片的http链接
-      //   urls: this.urls // 需要预览的图片http链接列表
-      // })
+      wx.previewImage({
+        current: url, // 当前显示图片的http链接
+        urls: this.urls // 需要预览的图片http链接列表
+      })
     },
     getAddress() {
       wx.getLocation({
@@ -185,22 +202,18 @@ export default {
 </script>
 <style lang="less">
 .my_store {
+  padding-top: 42px;
+  .show_move {
+    animation: mymove 0.6s ease-out;
+    -webkit-animation: mymove 0.6s ease-out;
+  }
   .my_home {
-    background-color: black;
-
     image {
       width: 100%;
       vertical-align: middle;
       margin-bottom: 10px;
     }
   }
-
-  .show_move {
-    padding-top: 42px;
-    animation: mymove 0.6s ease-out;
-    -webkit-animation: mymove 0.56s ease-out;
-  }
-
   .my_goods {
     .goods_filter_tabs {
       position: fixed;
@@ -305,8 +318,7 @@ export default {
   }
 
   .new_goods {
-    padding: 42px 15px 0;
-
+    padding: 0 15px;
     .new_goods_item {
       box-shadow: 0 0 25px #ea9b5a;
       -webkit-box-shadow: 0 0 25px #ea9b5a;
@@ -345,8 +357,6 @@ export default {
   }
 
   .my_workshop {
-    padding-top: 46px;
-
     .my_link {
       .i_cell_hd .img_icon {
         width: 50px;

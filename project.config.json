@@ -10,8 +10,8 @@
 	"miniprogramRoot": "dist/",
 	"compileType": "miniprogram",
 	"appid": "wx14a9b124d8984bf1",
-	"cloudfunctionRoot": "functions/",
-	"projectname": "wax-life_cloud",
+	"cloudfunctionRoot": "cloudfunctions/",
+	"projectname": "%E8%9C%A1%E6%BB%8B%E5%91%B3",
 	"condition": {
 		"search": {
 			"current": -1,
