@@ -99,7 +99,15 @@ export default {
     return {
       current: 'home',
       basicUrl: '',
-      yunImages: ['LCHY_001.png', 'LCHY_giving_01.jpg', 'LCHY_giving_02.jpg'],
+      yunImages: [
+        'wax_life_home/home_01.png', 
+        'wax_life_home/home_02.png', 
+        'wax_life_home/home_03.png', 
+        'wax_life_home/home_04.png', 
+        'wax_life_home/home_05.png', 
+        'wax_life_home/giving_01.jpg', 
+        'wax_life_home/giving_02.jpg'
+      ],
       userInfo: {},
       priceSort: false,
       filterbar: 'all',

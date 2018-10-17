@@ -1,7 +1,7 @@
 module.exports = [{
   path: '/pages/index/index',
   config: {
-    navigationBarTitleText: '蜡の生活，你的态度',
+    navigationBarTitleText: '蜡の态度',
     usingComponents: {
       'xtabs': '../../static/iview/tabs/index',
       'xtab': '../../static/iview/tab/index',
