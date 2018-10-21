@@ -7,7 +7,7 @@ import store from '@/store'
 
 // Vue.prototype.$http = fly
 
-Vue.prototype.yunImagesBasic = 'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/goods/'
+Vue.prototype.yunImagesBasic = 'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/'
 Vue.config.productionTip = false
 
 // import IboxPlugin from '@/plugins/ibox'
