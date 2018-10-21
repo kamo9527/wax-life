@@ -100,13 +100,13 @@ export default {
       current: 'home',
       basicUrl: '',
       yunImages: [
-        'wax_life_home/home_01.png', 
-        'wax_life_home/home_02.png', 
-        'wax_life_home/home_03.png', 
-        'wax_life_home/home_04.png', 
-        'wax_life_home/home_05.png', 
-        'wax_life_home/giving_01.jpg', 
-        'wax_life_home/giving_02.jpg'
+        'home/home_01.png', 
+        'home/home_02.png', 
+        'home/home_03.png', 
+        'home/home_04.png', 
+        'home/home_05.png', 
+        'home/giving_01.jpg', 
+        'home/giving_02.jpg'
       ],
       userInfo: {},
       priceSort: false,
@@ -120,9 +120,9 @@ export default {
       goods: [],
       newGoods: ['2', '4', '74', '45', '448', '7'],
       urls: [
-        'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/goods/LCHY_001.png',
-        'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/goods/LCHY_001.png',
-        'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/goods/LCHY_001.png'
+        'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/home_05.png',
+        'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/home_05.png',
+        'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/home_05.png'
       ]
     }
   },

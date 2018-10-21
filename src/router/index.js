@@ -48,4 +48,14 @@ module.exports = [{
       'i-radio': '../../static/iview/radio/index'
     }
   }
-}]
+}, {
+  path: '/pages/manage/goodsUpdata',
+  config: {
+    navigationBarTitleText: '产品上传',
+    usingComponents: {
+      'i-input': '../../static/iview/input/index',
+      'i-panel': '../../static/iview/panel/index',
+      'wux-popup': '../../static/wux-weapp/popup/index'
+    }
+  }
+},]
