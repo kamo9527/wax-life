@@ -33,10 +33,11 @@
     </div>
     <div class="new_goods show_move" v-if="current === 'new'">
       <div class="new_goods_item" v-for="item in newGoods" :key="item">
-        <image src="../../static/images/goods.png" mode="widthFix"></image>
+        <image :src="item.brand_img" mode="widthFix"></image>
         <div class="content">
-          <div class="title">无敌风油精爽爽爽</div>
-          <div class="detail">￥<span class="price">252</span></div>
+          <div class="update_day">{{item.is_new}}</div>
+          <div class="title">{{item.title}}</div>
+          <div class="detail">￥<span class="price">{{item.price}}</span></div>
         </div>
       </div>
     </div>
@@ -118,8 +119,6 @@ export default {
         { key: 'praise', name: '点评率' },
         { key: 'price', name: '价格', sort: 'sort' } // sort : sort , sort_up, sort_down
       ],
-      // goods: [],
-      newGoods: ['2', '4', '74', '45', '448', '7'],
       urls: [
         'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/home_05.png',
         'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/home_05.png',
@@ -134,22 +133,23 @@ export default {
     this.updataAllGoods()
   },
   computed: {
-    goods() {
+    goods() { // 排序搜索
       let key = this.filterbar
+      let sort = this.priceSort
       let arr = [...this.goodsList]
-      if (key === 'all') {
+      if (key === 'all') { // 综合
         return this.goodsList
-      } else if (key === 'price') {
+      } else if (key === 'price') { // 价格排序
         return arr.sort((a, b) => {
-          return this.priceSort ? (b.price - a.price) : (a.price - b.price)
+          return sort ? (b.price - a.price) : (a.price - b.price)
         })
-      } else {
+      } else { // 销量和好评率
         return arr.sort((a, b) => {
           return b[key] - a[key]
         })  
       }
     },
-    ...mapGetters(['goodsList'])
+    ...mapGetters(['goodsList', 'newGoods'])
   },
   methods: {
     tabsChange(e) {
@@ -301,7 +301,7 @@ export default {
       .content {
         padding: 4px 8px 6px;
       }
-
+      
       .title {
         font-size: 13px;
       }
@@ -351,8 +351,15 @@ export default {
 
       .content {
         padding: 4px 8px 5px;
+        overflow: hidden;
       }
 
+      .update_day{
+        padding-top: 10px;
+        font-size: 16px;
+        color: #ea9b5a;
+        float: right;
+      }
       .title {
         font-size: 13px;
       }

@@ -13,27 +13,8 @@ const state = {
   goods: []
 }
 const getters = {
-  goodsList: stata => stata.goods,
-  // goodsBySale: stata => {
-  //   return stata.goods.sort((a, b) => {
-  //     return b.sale - a.sale
-  //   })
-  // },
-  // goodsByPraise: stata => {
-  //   return stata.goods.sort((a, b) => {
-  //     return b.praise - a.praise
-  //   })
-  // },
-  // goodsByPriceUp: stata => {
-  //   return stata.goods.sort((a, b) => {
-  //     return a.price - b.price
-  //   })
-  // },
-  // goodsByPriceDown: stata => {
-  //   return stata.goods.sort((a, b) => {
-  //     return b.price - a.price
-  //   })
-  // },
+  goodsList: stata => state.goods.filter(item => !item.is_new),
+  newGoods: stata => state.goods.filter(item => item.is_new),
   selectGoods: state => {
     return state.goods.filter(item => item.num)
   },
