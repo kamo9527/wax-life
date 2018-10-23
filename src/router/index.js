@@ -51,7 +51,7 @@ module.exports = [{
 }, {
   path: '/pages/manage/goodsUpdata',
   config: {
-    navigationBarTitleText: '产品上传',
+    navigationBarTitleText: '产品录入',
     usingComponents: {
       'i-input': '../../static/iview/input/index',
       'i-panel': '../../static/iview/panel/index',

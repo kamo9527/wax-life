@@ -18,25 +18,26 @@
     <div class="my_goods show_move" v-if="current === 'goods'">
       <xrow i-class="goods_filter_tabs">
         <xcol span="6" v-for="item in goodsFilter" :i-class="filterbar === item.key ? 'on' : '' " :key="item.key" @click="filterChange(item.key)">
-          {{item.name}}<span :class="item.sort" v-if="item.key === 'sort'"></span>
+          {{item.name}}<span :class="item.sort" v-if="item.key === 'price'"></span>
         </xcol>
       </xrow>
       <div class="goods_list">
-        <div class="goods_item" v-for="item in goods" :key="item">
-          <image src="../../static/images/goods.png" mode="widthFix"></image>
+        <div class="goods_item" v-for="item in goods" :key="item.id">
+          <image :src="item.brand_img" mode="widthFix"></image>
           <div class="content">
-            <div class="title">无敌风油精爽爽爽</div>
-            <div class="detail">￥<span class="price">252</span><span class="num">1555人付款</span><span class="more">. . .</span></div>
+            <div class="title">{{item.title}}</div>
+            <div class="detail">￥<span class="price">{{item.price}}</span><span class="num">{{item.sale}}人付款</span><span class="more">. . .</span></div>
           </div>
         </div>
       </div>
     </div>
     <div class="new_goods show_move" v-if="current === 'new'">
       <div class="new_goods_item" v-for="item in newGoods" :key="item">
-        <image src="../../static/images/goods.png" mode="widthFix"></image>
+        <image :src="item.brand_img" mode="widthFix"></image>
         <div class="content">
-          <div class="title">无敌风油精爽爽爽</div>
-          <div class="detail">￥<span class="price">252</span></div>
+          <div class="update_day">{{item.is_new}}</div>
+          <div class="title">{{item.title}}</div>
+          <div class="detail">￥<span class="price">{{item.price}}</span></div>
         </div>
       </div>
     </div>
@@ -92,6 +93,7 @@
 </template>
 <script>
 import xcell from '@/components/cell'
+import {mapGetters, mapActions} from 'vuex'
 
 export default {
   components: { xcell },
@@ -113,12 +115,10 @@ export default {
       filterbar: 'all',
       goodsFilter: [
         { key: 'all', name: '综合' },
-        { key: 'sales', name: '销量' },
-        { key: 'review', name: '点评率' },
-        { key: 'sort', name: '价格', sort: 'sort' } // sort : sort , sort_up, sort_down
+        { key: 'sale', name: '销量' },
+        { key: 'praise', name: '点评率' },
+        { key: 'price', name: '价格', sort: 'sort' } // sort : sort , sort_up, sort_down
       ],
-      goods: [],
-      newGoods: ['2', '4', '74', '45', '448', '7'],
       urls: [
         'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/home_05.png',
         'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/home_05.png',
@@ -130,21 +130,26 @@ export default {
     this.basicUrl = this.yunImagesBasic
   },
   onShow() {
-    const db = wx.cloud.database()
-    // 查询当前用户所有的 counters
-    db.collection('goods').get({
-      success: res => {
-        this.goods = res.data
-        console.log('[数据库] [查询记录] 成功')
-      },
-      fail: err => {
-        wx.showToast({
-          icon: 'none',
-          title: '查询记录失败'
+    this.updataAllGoods()
+  },
+  computed: {
+    goods() { // 排序搜索
+      let key = this.filterbar
+      let sort = this.priceSort
+      let arr = [...this.goodsList]
+      if (key === 'all') { // 综合
+        return this.goodsList
+      } else if (key === 'price') { // 价格排序
+        return arr.sort((a, b) => {
+          return sort ? (b.price - a.price) : (a.price - b.price)
         })
-        console.error('[数据库] [查询记录] 失败：', err)
+      } else { // 销量和好评率
+        return arr.sort((a, b) => {
+          return b[key] - a[key]
+        })  
       }
-    })
+    },
+    ...mapGetters(['goodsList', 'newGoods'])
   },
   methods: {
     tabsChange(e) {
@@ -152,7 +157,7 @@ export default {
     },
     filterChange(key) {
       this.filterbar = key
-      if (key === 'sort') {
+      if (key === 'price') {
         this.priceSort = !this.priceSort
         this.goodsFilter[3].sort = this.priceSort ? 'sort_up' : 'sort_down'
       } else {
@@ -161,7 +166,6 @@ export default {
       }
     },
     previewSwiperImg(url){
-      console.log(url)
       wx.previewImage({
         current: url, // 当前显示图片的http链接
         urls: this.urls // 需要预览的图片http链接列表
@@ -203,7 +207,8 @@ export default {
           this.userInfo = res.userInfo
         }
       })
-    }
+    },
+    ...mapActions(['updataAllGoods'])
   }
 }
 
@@ -296,9 +301,9 @@ export default {
       .content {
         padding: 4px 8px 6px;
       }
-
+      
       .title {
-        font-size: 14px;
+        font-size: 13px;
       }
 
       .detail {
@@ -346,8 +351,15 @@ export default {
 
       .content {
         padding: 4px 8px 5px;
+        overflow: hidden;
       }
 
+      .update_day{
+        padding-top: 10px;
+        font-size: 16px;
+        color: #ea9b5a;
+        float: right;
+      }
       .title {
         font-size: 13px;
       }

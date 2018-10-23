@@ -5,7 +5,7 @@
     </i-panel>
     <i-panel title="上传商品详情轮播照片4张 *">
       <ul class="swiper_upload">
-        <li v-for="(item, index) in formData.swiper" :key="index" class="pic_item" @click="uploadImg('swiper', index + '')">
+        <li v-for="(item, index) in formData.swiper" :key="item.name" class="pic_item" @click="uploadImg('swiper', index + '')">
           <image class="img" :src="item.src"></image>
           <icon type="clear" size="20" class="my_cancel" @click.stop="clearImg('swiper', index)" />
         </li>
@@ -16,9 +16,9 @@
     </i-panel>
     <i-panel title="上传商品种类，并写标题（至少1种）">
       <ul class="swiper_upload">
-        <li v-for="(item, styleIndex) in formData.style" :key="styleIndex" class="pic_item" @click="uploadImg('style', styleIndex + '')">
+        <li v-for="(item, styleIndex) in formData.style" :key="item.name" class="pic_item" @click="uploadImg('style', styleIndex + '')">
           <image class="img" :src="item.src"></image>
-          <div class="img_title">{{item.name}}</div>
+          <div class="img_title">{{item.title}}</div>
           <icon type="clear" size="20" class="my_cancel" @click.stop="clearImg('style', styleIndex)" />
         </li>
         <li class="pic_item" @click="styleAddShow = true">
@@ -28,7 +28,7 @@
     </i-panel>
     <i-panel title="上传商品详情其他介绍照片（至少4张）">
       <ul class="swiper_upload">
-        <li v-for="(item, othersIndex) in formData.others" :key="othersIndex" class="pic_item" @click="uploadImg('others', othersIndex + '')">
+        <li v-for="(item, othersIndex) in formData.others" :key="item.name" class="pic_item" @click="uploadImg('others', othersIndex + '')">
           <image class="img" :src="item.src"></image>
           <icon type="clear" size="20" class="my_cancel" @click.stop="clearImg('others', othersIndex)" />
         </li>
@@ -40,10 +40,10 @@
     <wux-popup position="bottom" title="添加种类" class-names="slideInUp" :visible="styleAddShow" @close.stop="onClose">
       <div class="my_popup">
         <div class="my_popup_title">种类标题：</div>
-        <input :input="addItem.name" @input="addItemName" title="种类标题：" placeholder="请输入" />
+        <input @input="addItemName" title="种类标题：" placeholder="请输入" />
       </div>
       <div class="add_item_info">
-        <image class="img" :src="addItem.src" @click="uploadImg('style')"></image>
+        <image class="img" :src="addItem.src" @click="uploadStyle"></image>
         <button @click="finish" type="primary" class="fixed_btnggg">确定</button>
       </div>
     </wux-popup>
@@ -58,11 +58,11 @@ export default {
       isClick: true, // 防止重复点击
       styleAddShow: false, // 风格项添加
       addItem: {
-        name: '',
+        title: '',
         src: '../../static/images/upload.png'
       },
       basicInfo: [
-        { key: 'id', name: '产品ID：', placeholder: '如 LCHY_01' },
+        { key: 'id', name: '产品ID：', placeholder: '如 LCHY01' },
         { key: 'title', name: '产品标题：' },
         { key: 'price', name: '产品价格：' },
         { key: 'sale', name: '产品销量：' },
@@ -79,6 +79,13 @@ export default {
         others: [] // 其余的图片上传
       }
     }
+  },
+  onShow() {
+  },
+  onUnload() {
+    this.formData.swiper = []
+    this.formData.style = []
+    this.formData.others = []
   },
   computed: {
     swiperLen() {
@@ -107,24 +114,24 @@ export default {
       this.formData[key] = val
     },
     addItemName(e) {
-      this.addItem.name = e.target.value
+      this.addItem.title = e.target.value
     },
     clearImg(key, i) {
       this.formData[key].splice(i, 1)
     },
     onClose() {
-      this.addItem.name = ''
+      this.addItem.title = ''
       this.addItem.src = '../../static/images/upload.png'
       this.styleAddShow = false
     },
     finish() {
-      if (this.addItem.name && this.addItem.src) {
-        let item = {...this.addItem}
+      if (this.addItem.title && this.addItem.src) {
+        let item = { ...this.addItem }
         this.formData.style.push(item)
       }
       this.onClose()
     },
-    uploadImg(key, i) { // 上传图片
+    uploadStyle() {
       if (!this.formData.id) {
         wx.showToast({
           icon: 'none',
@@ -132,55 +139,98 @@ export default {
         })
         return
       }
-      if (key === 'style' && !this.addItem.name) {
+      if (!this.addItem.title) {
         wx.showToast({
           icon: 'none',
-          title: '请输入产品风格',
+          title: '请输入种类标题',
         })
         return
       }
-      let _id = this.formData.id
-      let _num = this.formData[key].length + 1
-      let _this = this
+      this.upload(1, (arr) => {
+        if (!arr || arr.length === 0) return
+        let len = this.formData.style.length + 1
+        this.addItem.src = arr[0]
+        this.addItem.name = `${this.formData.id}_style_${len}`
+      })
+    },
+    uploadImg(key, i) {
+      let l = 1
+      if (!this.formData.id) {
+        wx.showToast({
+          icon: 'none',
+          title: '请输入产品ID',
+        })
+        return
+      }
+      if (!i) { // 单选
+        if (key === 'swiper') l = 4 - this.swiperLen
+        if (key === 'others') l = 9
+      }
+      this.upload(l, (arr) => {
+        if (!arr || arr.length === 0) return
+        if (i) {
+          this.formData[key][i].src = arr[0]
+        } else {
+          let _id = this.formData.id
+          let _num = this.formData[key].length
+          arr.forEach((v, i) => {
+            let len = _num + i + 1
+            this.formData[key].push({
+              name: `${_id}_${key}_${len}`,
+              src: v
+            })
+          })
+        }
+      })
+    },
+    upload(num = 1, callback) { // 上传图片
+      if (num >= 9) num = 9
       wx.chooseImage({
-        count: 1,
+        count: num,
         sizeType: ['compressed'],
         sourceType: ['album', 'camera'],
         success: (res) => {
           wx.showLoading({
-            title: '上传中',
+            title: '上传中'
           })
-          const filePath = res.tempFilePaths[0]
-          const timestamp = new Date().getTime()
-          // 上传图片
-          const cloudPath = 'images/' + timestamp + filePath.match(/\.[^.]+?$/)[0]
-          wx.cloud.uploadFile({
-              cloudPath,
-              filePath
-            })
-            .then(res => {
-              wx.hideLoading()
-              const src = res.fileID
-              if (i) {
-                _this.formData[key][i].src = src
-                return
-              }
-              if (key === 'style') { // 种类照片上传
-                _this.addItem.src = src
-              } else {
-                _this.formData[key].push({
-                  name: `${key}_${_id}_${_num}`,
-                  src: src
-                })
-              }
-            })
-            .catch(error => {
-              wx.hideLoading()
-              wx.showToast({
-                icon: 'none',
-                title: '上传失败',
+          let i = 0
+          let list = []
+          let timer = null
+          let len = res.tempFilePaths.length
+          let upload = function(l) {
+            const filePath = res.tempFilePaths[i]
+            const timestamp = new Date().getTime()
+            // 上传图片
+            const cloudPath = 'images/' + timestamp + filePath.match(/\.[^.]+?$/)[0]
+            wx.cloud.uploadFile({
+                cloudPath,
+                filePath
               })
-            })
+              .then(res => {
+                const src = res.fileID
+                list.push(src)
+                // 如果还有照片，继续上传
+                i++
+                if (i < l) {
+                  clearTimeout(timer)
+                  timer = setTimeout(() => {
+                    upload(l)
+                  }, 50)
+                } else {
+                  timer = null
+                  wx.hideLoading()
+                  callback(list)
+                }
+              })
+              .catch(error => {
+                wx.hideLoading()
+                wx.showToast({
+                  icon: 'none',
+                  title: '上传失败',
+                })
+              })
+          }
+          upload(len)
         },
         fail: e => {
           console.error(e)
@@ -197,6 +247,7 @@ export default {
       }
       if (this.isClick) {
         this.isClick = false
+        this.formData.brand_img = this.formData.swiper[0].src
         const db = wx.cloud.database()
         db.collection('goods').add({
             data: this.formData
@@ -204,9 +255,13 @@ export default {
           .then(res => {
             this.isClick = true
             wx.showToast({
-              title: '提交成功'
+              title: '提交成功',
+              success: () => {
+                wx.switchTab({
+                  url: '../my/index'
+                })
+              }
             })
-            // 页面跳转
           })
           .catch(error => {
             this.isClick = true
@@ -241,20 +296,24 @@ export default {
     width: 23.5%;
     height: 68px;
     background-color: #F8F8F8;
+
     .img {
       display: block;
       width: 100%;
       height: 68px;
       vertical-align: middle;
     }
-    .my_cancel{
+
+    .my_cancel {
       position: absolute;
       top: -10px;
       right: 0;
     }
-    .img_title{
-      text-align: center; 
+
+    .img_title {
+      text-align: center;
     }
+
     &:nth-child(4n+4) {
       margin-right: 0;
     }
@@ -264,28 +323,32 @@ export default {
 .add_item_info {
   padding: 14px;
   text-align: center;
+
   .img {
-      display: block;
-      margin: 0 auto 20px;
-      width: 100px;
-      height: 100px;
-      vertical-align: middle;
-      background-color: #F8F8F8;
-    }
+    display: block;
+    margin: 0 auto 20px;
+    width: 100px;
+    height: 100px;
+    vertical-align: middle;
+    background-color: #F8F8F8;
+  }
 }
-.my_popup{
+
+.my_popup {
   overflow: hidden;
   padding: 6px 14px;
-  border-top: 1rpx solid #F8F8F8; 
-  border-bottom: 1rpx solid #F8F8F8; 
+  border-top: 1rpx solid #F8F8F8;
+  border-bottom: 1rpx solid #F8F8F8;
   text-align: left;
-  .my_popup_title{
+
+  .my_popup_title {
     color: #000;
     float: left;
     height: 26px;
     line-height: 26px;
   }
 }
+
 .fixed_btn {
   position: fixed;
   bottom: 0;

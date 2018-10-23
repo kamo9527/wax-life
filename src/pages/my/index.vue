@@ -20,8 +20,14 @@
     <div class="i_center_list">
       <xcell
         title="我的管理" 
-        src="../../static/icon/all.png" 
+        src="../../static/icon/manage.png" 
         link="../my/list"
+        >
+      </xcell>
+      <xcell
+        title="商品录入" 
+        src="../../static/icon/upload.png" 
+        link="../manage/goodsUpdata"
         >
       </xcell>
       <xcell
