@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="my_cart">
     <div class="localaction">
       <image src="../../static/icon/local.png" class="local_img" mode="widthFix"></image>
       <open-data type="userProvince" lang="zh_CN"></open-data>
@@ -11,7 +11,9 @@
       :item="item"
       >
     </order-item>
-    <div class="i_cell_list"></div>
+    <div class="no_list" v-if="selectGoods.length === 0">
+      <image src="../../static/images/no_list.png" mode="widthFix" class="no_list_img"></image>
+    </div>
     <accounts 
       color="#ea9b5a"
       :selected="isAllselect"
@@ -79,6 +81,8 @@ export default {
 }
 </script>
 <style scoped lang="less">
+.my_cart{
+  padding-bottom: 50px;
 .localaction {
   padding-bottom: 10px;
   display: flex !important;
@@ -92,7 +96,17 @@ export default {
     margin-right: 10px;
   }
 }
-.i_cell_list{
-  padding-bottom: 50px;
+.no_list{
+  padding-top: 142px;
+  .no_list_img{
+    display: block;
+    width: 100%;
+  }
+  .no_list_tips{
+    text-align: center;
+    color: #999;
+  }
 }
+}
+
 </style>

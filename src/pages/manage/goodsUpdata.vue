@@ -5,7 +5,7 @@
     </i-panel>
     <i-panel title="上传商品详情轮播照片4张 *">
       <ul class="swiper_upload">
-        <li v-for="(item, index) in formData.swiper" :key="index" class="pic_item" @click="uploadImg('swiper', index + '')">
+        <li v-for="(item, index) in formData.swiper" :key="item.name" class="pic_item" @click="uploadImg('swiper', index + '')">
           <image class="img" :src="item.src"></image>
           <icon type="clear" size="20" class="my_cancel" @click.stop="clearImg('swiper', index)" />
         </li>
@@ -16,9 +16,9 @@
     </i-panel>
     <i-panel title="上传商品种类，并写标题（至少1种）">
       <ul class="swiper_upload">
-        <li v-for="(item, styleIndex) in formData.style" :key="styleIndex" class="pic_item" @click="uploadImg('style', styleIndex + '')">
+        <li v-for="(item, styleIndex) in formData.style" :key="item.name" class="pic_item" @click="uploadImg('style', styleIndex + '')">
           <image class="img" :src="item.src"></image>
-          <div class="img_title">{{item.name}}</div>
+          <div class="img_title">{{item.title}}</div>
           <icon type="clear" size="20" class="my_cancel" @click.stop="clearImg('style', styleIndex)" />
         </li>
         <li class="pic_item" @click="styleAddShow = true">
@@ -28,7 +28,7 @@
     </i-panel>
     <i-panel title="上传商品详情其他介绍照片（至少4张）">
       <ul class="swiper_upload">
-        <li v-for="(item, othersIndex) in formData.others" :key="othersIndex" class="pic_item" @click="uploadImg('others', othersIndex + '')">
+        <li v-for="(item, othersIndex) in formData.others" :key="item.name" class="pic_item" @click="uploadImg('others', othersIndex + '')">
           <image class="img" :src="item.src"></image>
           <icon type="clear" size="20" class="my_cancel" @click.stop="clearImg('others', othersIndex)" />
         </li>
@@ -58,11 +58,11 @@ export default {
       isClick: true, // 防止重复点击
       styleAddShow: false, // 风格项添加
       addItem: {
-        name: '',
+        title: '',
         src: '../../static/images/upload.png'
       },
       basicInfo: [
-        { key: 'id', name: '产品ID：', placeholder: '如 LCHY_01' },
+        { key: 'id', name: '产品ID：', placeholder: '如 LCHY01' },
         { key: 'title', name: '产品标题：' },
         { key: 'price', name: '产品价格：' },
         { key: 'sale', name: '产品销量：' },
@@ -79,6 +79,13 @@ export default {
         others: [] // 其余的图片上传
       }
     }
+  },
+  onShow() {
+  },
+  onUnload() {
+    this.formData.swiper = []
+    this.formData.style = []
+    this.formData.others = []
   },
   computed: {
     swiperLen() {
@@ -107,18 +114,18 @@ export default {
       this.formData[key] = val
     },
     addItemName(e) {
-      this.addItem.name = e.target.value
+      this.addItem.title = e.target.value
     },
     clearImg(key, i) {
       this.formData[key].splice(i, 1)
     },
     onClose() {
-      this.addItem.name = ''
+      this.addItem.title = ''
       this.addItem.src = '../../static/images/upload.png'
       this.styleAddShow = false
     },
     finish() {
-      if (this.addItem.name && this.addItem.src) {
+      if (this.addItem.title && this.addItem.src) {
         let item = { ...this.addItem }
         this.formData.style.push(item)
       }
@@ -132,7 +139,7 @@ export default {
         })
         return
       }
-      if (!this.addItem.name) {
+      if (!this.addItem.title) {
         wx.showToast({
           icon: 'none',
           title: '请输入种类标题',
@@ -141,7 +148,9 @@ export default {
       }
       this.upload(1, (arr) => {
         if (!arr || arr.length === 0) return
+        let len = this.formData.style.length + 1
         this.addItem.src = arr[0]
+        this.addItem.name = `${this.formData.id}_style_${len}`
       })
     },
     uploadImg(key, i) {
@@ -238,6 +247,7 @@ export default {
       }
       if (this.isClick) {
         this.isClick = false
+        this.formData.brand_img = this.formData.swiper[0].src
         const db = wx.cloud.database()
         db.collection('goods').add({
             data: this.formData
@@ -245,9 +255,13 @@ export default {
           .then(res => {
             this.isClick = true
             wx.showToast({
-              title: '提交成功'
+              title: '提交成功',
+              success: () => {
+                wx.switchTab({
+                  url: '../my/index'
+                })
+              }
             })
-            // 页面跳转
           })
           .catch(error => {
             this.isClick = true
