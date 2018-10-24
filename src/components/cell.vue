@@ -53,7 +53,8 @@ export default {
     query: {
       type: Object,
       default: {}
-    }
+    },
+    mobile: String
   },
   methods: {
     onClick() {

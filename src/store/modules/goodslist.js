@@ -18,6 +18,9 @@ const getters = {
   selectGoods: state => {
     return state.goods.filter(item => item.num)
   },
+  selectGoodsss: state => {
+    return state.ssgoodsss.filter(item => item.num)
+  },
   selectBuy: state => {
     return state.goods.filter(item => item.num && item.select)
   },

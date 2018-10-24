@@ -32,7 +32,11 @@ module.exports = [{
 }, {
   path: '/pages/index/detail',
   config: {
-    navigationBarTitleText: '产品详情'
+    navigationBarTitleText: '产品详情',
+    usingComponents: {
+      "wux-popup": "../../static/wux-weapp/popup/index",
+      'i-input-number': '../../static/iview/input-number/index'
+    }
   }
 }, {
   path: '/pages/my/link',
@@ -68,5 +72,10 @@ module.exports = [{
       'i-input': '../../static/iview/input/index',
       'i-modal': '../../static/iview/modal/index'
     }
+  }
+}, {
+  path: '/pages/index/paying',
+  config: {
+    navigationBarTitleText: '填写订单'
   }
 }]

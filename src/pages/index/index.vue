@@ -22,7 +22,7 @@
         </xcol>
       </xrow>
       <div class="goods_list">
-        <div class="goods_item" v-for="item in goods" :key="item.id">
+        <div class="goods_item" v-for="item in goods" :key="item" @click="chooseGood(item)">
           <image :src="item.brand_img" mode="widthFix"></image>
           <div class="content">
             <div class="title">{{item.title}}</div>
@@ -210,7 +210,16 @@ export default {
         }
       })
     },
-    ...mapActions(['updataAllGoods'])
+
+    ...mapActions(['updataAllGoods']),
+    
+    // 选择商品
+    chooseGood(item) {
+      this.$store.commit('UPDATE_GOODS_DETAIL', item)
+      wx.navigateTo({
+        url: '/pages/index/detail'
+      })
+    }
   }
 }
 
