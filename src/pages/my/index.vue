@@ -22,7 +22,7 @@
         v-if="hasAuth"
         title="我的管理" 
         src="../../static/icon/manage.png" 
-        link="../my/list"
+        link="../manage/list"
         >
       </xcell>
       <xcell
