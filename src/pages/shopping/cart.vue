@@ -5,12 +5,12 @@
       <open-data type="userProvince" lang="zh_CN"></open-data>
       <open-data type="userCity" lang="zh_CN"></open-data>
     </div>
-    <order-item
+    <goods-item
       v-for="(item, index) in selectGoods" :key="index"
       color="#ea9b5a"
       :item="item"
       >
-    </order-item>
+    </goods-item>
     <div class="no_list" v-if="selectGoods.length === 0">
       <image src="../../static/images/no_list.png" mode="widthFix" class="no_list_img"></image>
     </div>
@@ -23,12 +23,12 @@
   </div>
 </template>
 <script>
-import orderItem from '@/components/orderItem'
+import goodsItem from '@/components/goodsItem'
 import accounts from '@/components/accounts'
 import {mapGetters} from 'vuex'
 export default {
   components: {
-    orderItem,
+    goodsItem,
     accounts
   },
   data() {

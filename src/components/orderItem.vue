@@ -1,115 +1,108 @@
 <template>
-  <div :class="['i_cell', iClass]">
-    <i-radio i-class="my_radio" :color="color" :disabled="item.disabled" :checked="item.select" @change="radioChange"></i-radio>
-    <div class="i_cell_hd">
-      <img :src="item.src" class="goods_pic" alt="" />
+  <div class="my_list_item">
+    <div :class="['i_cell', 'i_cell_bd_start', iClass]">
+      <div class="i_cell_hd">
+        <img :src="item.src" class="img_icon order_pic" alt="" />
     </div>
-    <div class="i_cell_bd">
-      <div class="title pb10">{{item.title}}</div>
-      <div><span class="goods_style">{{item.kind}}</span></div>
-      <div class="goods_pay">
-        <div class="item_count">
-          <img src="../../static/icon/minus.png" class="count_icon" @click.stop="minus" alt="">
-          <span class="count_num">{{item.num}}</span>
-          <img src="../../static/icon/add.png" class="count_icon" @click.stop="add" alt="">
+        <div class="i_cell_bd">
+          <div class="title pb10">订单编号：{{item.id}}</div>
+          <div><span class="inline_desc">{{item.goods_id}}</span></div>
+          <div class="order_detail">姓名：{{item.order_name}}</div>
+          <div class="order_detail">手机号：{{item.order_phone}}</div>
         </div>
-        <div class="goods_price">￥{{item.price * item.num}}</div>
+        <div class="i_cell_fr">
+          <div>￥{{item.num * item.price}}</div>
+          <div>x{{item.num}}</div>
+          <div class="status">{{statusInfo[item.status]}}</div>
+        </div>
       </div>
+      <div class="i_cell">
+        <div class="i_cell_bd">
+          <span class="my_courier" @click.stop="getCourier(item.courier)">快递单号: {{item.courier || '暂无'}}</span>
+        </div>
+        <div class="i_cell_fr" v-if="item.status !== 'done'">
+          <button size="mini" type="primary" @click.stop="btnClick(item.id, item.status)" class="operate_btn">{{btnInfo[item.status]}}</button>
+        </div>
+      </div>
+      <web-view src="http://www.kuaidi100.com/" v-if="isShow"></web-view>
     </div>
-  </div>
 </template>
 <script>
 export default {
   props: {
     iClass: String,
-    color: String,
-    disabled: Boolean,
     item: Object
   },
   data() {
     return {
+      isShow: false,
+      btnInfo: {
+        picking: '录入',
+        sending: '确认收货'
+      },
+      statusInfo: {
+        picking: '待发货',
+        sending: '运输中',
+        done: '已完成'
+      }
     }
   },
   methods: {
-    radioChange(e) {
-      this.item.select = e.target.current
-      // this.$emit('onChange', this.item)
+    getCourier(courier) {
+      if (courier) {
+        let _this = this
+        wx.setClipboardData({
+          data: courier,
+          success: (res) => {
+            wx.showToast({
+              title: '复制成功',
+              duration: 2000,
+              success: (res) => {
+                _this.isShow = true
+              }
+            })
+          }
+        })
+      }
     },
-    add() {
-      this.item.num++
-      // this.$emit('onChange', this.item)
-    },
-    minus() {
-      this.item.num--
-      // this.$emit('onChange', this.item)
+    btnClick(id, status) {
+      this.$emit('onBtn', id, status)
     }
   }
 }
+
 </script>
-<style lang="less">
-.my_radio{
-  transform:scale(0.8);
-}
-.pb10{
-    padding-top: 2px;
+<style scoped lang="less">
+.my_list_item {
+  margin-top: 10px;
+  background-color: #FAFAFA;
+
+  &::before {
+    display: none;
   }
-.goods_pic {
-    vertical-align: middle;
-    width: 70px;
-    height: 70px;
-    margin-left: 5px;
-    margin-right: 16px;
+
+  .order_pic {
     border-radius: 4px;
   }
-.goods_style{
-  font-size: 12px;
-  padding: 5px 22px 5px 4px;
-  background-color: #F8F8F8;
-  border-radius: 4px;
-  position: relative;
-  &::after{
-    content: "";
-    position: absolute;
-    top: 4px;
-    right: 6px;
+
+  .my_courier {
+    color: #0A76F5;
+  }
+
+  .status {
+    color: #ea9b5a;
+    font-size: 13px;
+    float: right;
+    padding-top: 15px;
+  }
+
+  .order_detail {
+    font-size: 13px;
+  }
+
+  .operate_btn {
     display: inline-block;
     vertical-align: middle;
-    transform: rotate(135deg);
-    width: 8px;
-    height: 8px;
-    border-width: 1px 1px 0 0;
-    border-color: #a0a0a0;
-    border-style: solid;
-  }
-}
-.goods_pay{
-  overflow: hidden;
-  .item_count{
-    padding-top: 4px; 
-    float: right;
-    height: 20px;
-    line-height: 20px;
-    overflow: hidden;
-    vertical-align: middle; 
-    overflow: hidden;
-    .count_num{
-    float: left;
-    text-align: center;
-    width: 30px;
-    color: #999;
-  }
-  .count_icon {
-    float: left;
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-  }
-  }
-  
-  .goods_price{
-    padding-top: 2px;
-    font-size: 16px;
-    color: #ea9b5a;
   }
 }
 
