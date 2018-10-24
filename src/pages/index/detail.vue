@@ -2,7 +2,7 @@
   <div class="content">
     <scroll-view scroll-y>
       <div class="swiper_container">
-        <swiper circular class="swiper_info" :current="current" @change="imageCount">
+        <swiper circular class="swiper_info" :current="current" @change="imageCount" autoplay>
           <swiper-item v-for="item in goodInfo.swiper" :key="item">
             <image 
               class="slide_image"
@@ -45,11 +45,11 @@
     <div class="foot">
       <div class="left">
         <span class="store">
-          <img src="/static/images/goods.png" alt="">
+          <img src="/static/icon/sub.png" alt="">
           <p>店铺</p>
         </span>
         <span class="service">
-          <img src="/static/images/goods.png" alt="">
+          <img src="/static/icon/serve.png" alt="">
           <p>客服</p>
         </span>
       </div>
@@ -185,9 +185,14 @@ export default {
       },
       sizeDialogData: {
         colorName: '111',
+        colorId: '111',
         price: '98',
         stock: '100',
-        imgUrl: '/static/images/goods.png'
+        imgUrl: '/static/images/goods.png',
+        
+      },
+      selectData: {
+
       }
     }
   },
@@ -203,6 +208,7 @@ export default {
     this.goodInfo = store.state.gooddetail.good
     this.sizeDialogData.colorName = this.goodInfo.style[0].title
     this.sizeDialogData.imgUrl = this.goodInfo.style[0].src
+    this.sizeDialogData.colorId = this.goodInfo.style[0].name
     this.goodInfo.style[0].select = true
   },
   
@@ -229,6 +235,7 @@ export default {
 
       this.sizeDialogData.colorName = target.title
       this.sizeDialogData.imgUrl = target.src
+      this.sizeDialogData.colorId = target.name
 
     },
 
@@ -254,14 +261,21 @@ export default {
       if(this.bugType === 'cart') {
         this.addToCart()
       }else {
+        const productInfo = {
+          id: this.goodInfo.id,
+          title: this.goodInfo.title,
+          colorName: this.sizeDialogData.colorName,
+          colorId: this.sizeDialogData.colorId,
+          src: this.sizeDialogData.imgUrl,
+          price: this.sizeDialogData.price,
+          num: this.goodNum
+        }
+        this.$store.commit('UPDATE_PAYING_GOOD', productInfo)
+        
         wx.navigateTo({
           url: '/pages/index/paying'
         })
-        this.sizeDialogShow = false
-        // console.log('this.$route', this.$route)
-        
-        // return
-        // this.$route.push({path: '/pages/index/paying', query: 'id'})
+        this.sizeDialogShow = false  
 
       }
     },

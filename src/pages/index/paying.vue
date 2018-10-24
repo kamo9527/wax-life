@@ -2,25 +2,45 @@
   <div>
     <xcell
       v-if="isAddress"
-      :title="addressInfo.name"
-      :mobile="addressInfo.mobile" 
+      :title="addressInfo.userName"
+      :mobile="addressInfo.telNumber" 
       :inline-desc="addressInfo.address"
       i-class="i_pay_address"
-      link="/pages/my/address">
+      @cellClick="addressManage">
     </xcell>
     <xcell
       v-else
       title="请点击选择收获地址"
       src="../../static/icon/local.png"
       i-class="i_pay_address"
-      link="/pages/my/address">
+      @cellClick="addressManage">
     </xcell>
     <div class="address_line"></div>
-    <mini-goods-list :goods-list="selectBuy"></mini-goods-list>
+    <good-item
+      color="#ea9b5a"
+      :item="item"
+      :good-list="selectGoods"
+      >
+    </good-item>
+    <!-- <div>
+      <div class="lable">购物清单</div>.
+      <div v-for="(item, index) in selectGoods" :key="index">
+        <div class="good_detail">
+          <img :src="item.src" alt="">
+          <span>{{item.title}}</span>
+        </div>
+        <div class="good_price">
+          {{item.num + '*' + item.price + '元'}}
+        </div>
+      </div>
+      
+    </div> -->
+
+    <!-- <mini-goods-list :goods-list="selectBuy"></mini-goods-list> -->
     <div class="line"></div>
     <xcell
       title="商品总价"
-      :fr="`￥${queryForm.allGoods}`"
+      :fr="`￥${totalAmount}`"
       i-class="i_cell_pay">
     </xcell>
     <xcell
@@ -30,7 +50,7 @@
     </xcell>
     <xcell
       title="合计"
-      :fr="`￥${allPrice}`"
+      :fr="`￥${totalAmount}`"
       i-class="i_cell_pay last_cell">
     </xcell>
     <pay 
@@ -42,13 +62,18 @@
 <script>
 import xcell from '@/components/cell'
 import miniGoodsList from '@/components/miniGoodsList'
+import goodItem from '@/components/goodItem'
+
 import pay from '@/components/pay'
+import {mapGetters} from 'vuex'
+
 // import {mapGetters} from 'vuex'
 // import { postClient } from '@/rest/goods'
 export default {
   components: {
     xcell,
     miniGoodsList,
+    goodItem,
     pay
   },
   data() {
@@ -59,7 +84,7 @@ export default {
         allGoods: 1515,
         freight: 45
       },
-      selectBuy: '111',
+      selectBuy: '1',
       addressItem: '222'
 
     }
@@ -77,22 +102,108 @@ export default {
   },
   computed: {
     allPrice() {
-      return this.queryForm.allGoods + this.queryForm.freight
+      return this.totalAmount + this.queryForm.freight
     },
+
+    isAllselect() {
+      let item = this.selectGoods.some(v => {
+        return !v.select
+      })
+      return !item && this.selectGoods.length > 0
+    },
+    totalAmount() {
+      let price = 0
+      this.selectGoods.forEach(v => {
+        price += (v.price * v.num)
+      })
+      return price
+    },
+    ...mapGetters({
+      selectGoods: 'payingGoods'
+    })
   },
   methods: {
-    changeAddress() {
-      this.$router.push('/pages/my/address')
-    },
     toPay() {
       let price = this.isAddress ? `恭喜您支付了${this.allPrice}元` : '请选择收获地址'
-      wx.showToast({
-        title: price,
-        icon: 'none',
-        duration: 1500
+
+      console.log('selectGoods', this.selectGoods)
+      console.log('addressInfo', this.addressInfo)
+
+      const data = {
+        act: 'createOrder',
+        data: {
+          totalAmount: this.totalAmount,
+          allPrice: this.allPrice,
+          freight: this.queryForm.freight,
+          fh_status: 0, // '0未发货  1部分发货 2全部发货'
+          status: 'paying',
+          order_status: 0, // '订单状态  0待支付 1待收货 2待确认  3已完成  4已取消'
+          sh_name: this.addressInfo.userName,
+          sh_phone: this.addressInfo.telNumber,
+          sh_address: this.addressInfo.address,
+          src: this.selectGoods[0] ? this.selectGoods[0].src : '../../static/icon/local.png',
+          title: this.selectGoods[0] ? this.selectGoods[0].title : '暂无信息',
+          list: this.selectGoods
+        }
+      }
+
+      wx.cloud.callFunction({
+        name: 'orderAction',
+        data,
+        complete: res => {
+          if(res.result.code == 0) {
+            wx.showToast({
+              title: '开单成功啦',
+              complete: () => {
+                setTimeout(() => {
+                  wx.switchTab({
+                    url: '/pages/index/index'
+                  })
+                }, 1500)
+                
+              }
+            })
+          }else {
+            wx.showToast({
+              title: '开单失败，请稍后再试',
+              icon: 'none'
+            })
+          }
+          
+        }
       })
+
+      // wx.showToast({
+      //   title: price,
+      //   icon: 'none',
+      //   duration: 1500
+      // })
+    },
+    addressManage() {
+      if(wx.chooseAddress){
+        wx.chooseAddress({
+          success: (res) => {
+            const data = res
+            data.address = this.formatAddress(res)
+            this.addressInfo = data
+            this.isAddress = true
+          },
+          fail: (err) => {
+            console.log(JSON.stringify(err))
+          }
+        })
+      }else{
+        console.log('当前微信版本不支持chooseAddress');
+      }
+    },
+    formatAddress(data) {
+      return '' + data.provinceName + data.cityName + data.countyName + data.detailInfo
     }
-  }
+  },
+
+  
+  
+
 }
 </script>
 <style lang="less">

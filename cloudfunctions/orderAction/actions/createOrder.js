@@ -14,7 +14,7 @@ exports.call = async (event, context) => {
     data.update_time = create_time
 
     try {
-        await db.collection('order').add({
+        await db.collection('orders').add({
           data: data
         })
 

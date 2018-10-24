@@ -1,10 +1,12 @@
 const state = {
-  good: {}
+  good: {},
+  payingGoods: [],
+  cartGoos: []
 }
 const getters = {
-  // selectGoods: state => {
-  //   return state.goods.filter(item => item.num)
-  // },
+  payingGoods: state => {
+    return state.payingGoods
+  },
   // selectBuy: state => {
   //   return state.goods.filter(item => item.num && item.select)
   // },
@@ -19,9 +21,12 @@ const getters = {
 const mutations = {
   'UPDATE_GOODS_DETAIL' (state, data) {
     state.good = data
-    console.log('UPDATE_GOODS_DETAIL', state.good)
-    
   },
+
+  'UPDATE_PAYING_GOOD' (state, data) {
+    state.payingGoods = [data]
+  },
+
   'UPDATE_GOODS_ALL_SELECT' (state, data) {
     state.goods.forEach(v => {
       v.select = data.checked
