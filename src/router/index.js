@@ -1,15 +1,4 @@
 module.exports = [{
-  path: '/pages/manage/list',
-  config: {
-    navigationBarTitleText: '物流管理',
-    usingComponents: {
-      'xtabs': '../../static/iview/tabs/index',
-      'xtab': '../../static/iview/tab/index',
-      'i-input': '../../static/iview/input/index',
-      'i-modal': '../../static/iview/modal/index'
-    }
-  }
-}, {
   path: '/pages/index/index',
   config: {
     navigationBarTitleText: '蜡の态度',
@@ -67,6 +56,17 @@ module.exports = [{
       'i-input': '../../static/iview/input/index',
       'i-panel': '../../static/iview/panel/index',
       'wux-popup': '../../static/wux-weapp/popup/index'
+    }
+  }
+}, {
+  path: '/pages/manage/list',
+  config: {
+    navigationBarTitleText: '物流管理',
+    usingComponents: {
+      'xtabs': '../../static/iview/tabs/index',
+      'xtab': '../../static/iview/tab/index',
+      'i-input': '../../static/iview/input/index',
+      'i-modal': '../../static/iview/modal/index'
     }
   }
 }]
