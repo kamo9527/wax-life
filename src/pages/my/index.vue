@@ -19,12 +19,14 @@
     <div class="line bg_fff"></div>
     <div class="i_center_list">
       <xcell
+        v-if="hasAuth"
         title="我的管理" 
         src="../../static/icon/manage.png" 
         link="../my/list"
         >
       </xcell>
       <xcell
+        v-if="hasAuth"
         title="商品录入" 
         src="../../static/icon/upload.png" 
         link="../manage/goodsUpdata"
@@ -64,40 +66,32 @@ export default {
   },
   data() {
     return {
-      // membersImg: '',
-      phoneNumber: '13632779376'
+      hasAuth: false
     }
   },
   onShow() {
-    // this.$store.commit('UPDATE_IS_PICK', false)
-    // this.membersImg = '../../static/icon/members.png'
+    wx.cloud.callFunction({
+      name: 'permissions',
+      data: {}
+    }).then(res => {
+      this.hasAuth = res.result.hasAuth
+    }).catch(err => {
+      console.error('[云函数] [permissions] 调用失败：', err)
+    })
   },
   methods: {
-    getData() {
-      // getApi01().then(res => {
-      //   if (res.code === 0) {
-      //     console.log(res.data.name)
-      //   } else {
-      //     wx.showToast({
-      //       title: res.message,
-      //       icon: 'none',
-      //       duration: 1500
-      //     })
-      //   }
-      // })
-    },
-    getUserInfo() {
-      // 调用登录接口
-      wx.login({
-        success: () => {
-          wx.getUserInfo({
-            success: (res) => {
-              this.userInfo = res.userInfo
-            }
-          })
-        }
-      })
-    },
+    // getUserInfo() {
+    //   // 调用登录接口
+    //   wx.login({
+    //     success: () => {
+    //       wx.getUserInfo({
+    //         success: (res) => {
+    //           this.userInfo = res.userInfo
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
     addressManage() {
       if(wx.chooseAddress){
         wx.chooseAddress({
@@ -119,7 +113,7 @@ export default {
     },
     phoneCall() {
       wx.makePhoneCall({
-        phoneNumber: this.phoneNumber,
+        phoneNumber: '15914039385',
         success: function() {
           console.log('拨打电话成功！')
         },

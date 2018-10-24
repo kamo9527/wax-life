@@ -58,7 +58,7 @@
        <xcell 
         i-class="my_link_address" 
         src="../../static/icon/address.png" 
-        title="深圳市宝安区凝精路82号"
+        title="广东省惠州市博罗县"
         @cellClick="getAddress"
         is-link>
       </xcell>
@@ -120,9 +120,10 @@ export default {
         { key: 'price', name: '价格', sort: 'sort' } // sort : sort , sort_up, sort_down
       ],
       urls: [
-        'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/home_05.png',
-        'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/home_05.png',
-        'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/home_05.png'
+        'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/0.jpg',
+        'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/0 (2).jpg',
+        'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/0 (1).jpg',
+        'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/8e1db27682629.jpg'
       ]
     }
   },
@@ -172,17 +173,18 @@ export default {
       })
     },
     getAddress() {
-      wx.getLocation({
-        type: 'gcj02', //返回可以用于wx.openLocation的经纬度
-        success (res) {
-          const latitude = res.latitude
-          const longitude = res.longitude
-          wx.openLocation({
-            latitude,
-            longitude,
-            scale: 28
-          })
-        }
+      // wx.getLocation({
+      //   type: 'gcj02', //返回可以用于wx.openLocation的经纬度
+      //   success (res) {
+          
+      //   }
+      // })
+      const latitude = 23.242904
+      const longitude = 114.127264
+      wx.openLocation({
+        latitude,
+        longitude,
+        scale: 28
       })
     },
     phoneCall() {
@@ -294,6 +296,7 @@ export default {
 
       image {
         width: 100%;
+        height: 174px;
         border-radius: 8px 8px 0 0;
         vertical-align: middle;
       }
