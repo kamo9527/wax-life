@@ -4,28 +4,13 @@
       <xtab key="picking" title="待收货"></xtab>
       <xtab key="done" title="已完成"></xtab>
     </xtabs>
-    <!-- <div class="my_list" v-if="showList">
-      <xcell i-class="my_list_item" src="../../static/images/goods.png" title="啊哥哥如果韩寒而隔热隔热个人" inline-desc="个人个人个" bd-start>
-        <div slot="operate">
-          <div class="my_courier" @click="getCourier('484848')">快递单号: 458884848848</div>
-        </div>
-        <div slot="more">
-          <div>￥4848</div>
-          <div>x45</div>
-          <div class="status">运输中</div>
-        </div>
-      </xcell>
-      <xcell i-class="my_list_item" src="../../static/images/goods.png" title="啊哥哥如果韩寒而隔热隔热个人" inline-desc="个人个人个" bd-start>
-        <div slot="operate">
-          <div class="my_courier" @click="getCourier('484848')">快递单号: 暂无</div>
-        </div>
-        <div slot="more">
-          <div>￥4848</div>
-          <div>x45</div>
-          <div class="status">待发货</div>
-        </div>
-      </xcell>
-    </div> -->
+    <div class="my_list" v-if="showList">
+      <order-item
+        v-for="item in list" :key="item.id"
+        :item="item"
+        >
+      </order-item>
+    </div>
     <div class="no_list" v-if="showNoList">
       <image src="../../static/images/no_list.png" mode="widthFix" class="no_list_img"></image>
     </div>
@@ -33,21 +18,31 @@
   </section>
 </template>
 <script>
-import xcell from '@/components/cell'
+import orderItem from '@/components/orderItem'
 export default {
   components: {
-    xcell
+    orderItem
   },
   data() {
     return {
       current: 'picking',
-      isShow: false,
-      showList: false,
-      showNoList: true,
+      showList: true,
+      showNoList: false,
       statusInfo: {
         going: '已发货',
         done: '已到货'
-      }
+      },
+      list: [{
+        src: 'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/0 (1).jpg',
+        goods_id: 'LCHY_02',
+        order_name: '长贵',
+        order_phone: '1594742224',
+        id: '4545',
+        allPrice: 98,
+        num: 4,
+        courier: '45455445454',
+        status: 'sending'
+      }]
     }
   },
   onShow() {
@@ -96,30 +91,9 @@ export default {
 }
 
 </script>
-<style lang="less">
+<style scoped lang="less">
 .my_list {
   padding-top: 42px;
-
-  .my_list_item {
-    margin-top: 10px;
-    background-color: #FAFAFA;
-    .i_cell_hd {
-      .img_icon {border-radius: 4px;}
-    }
-    &::before{display: none;}
-  }
-
-  .my_courier {
-    padding-top: 16px;
-    font-size: 13px;
-    color: #0A76F5;
-  }
-  .status{
-    color: #ea9b5a;
-    font-size: 13px;
-    float: right;
-    padding-top: 15px;
-  }
 }
 .no_list{
   padding-top: 142px;
