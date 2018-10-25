@@ -65,6 +65,7 @@ module.exports = [{
 }, {
   path: '/pages/manage/list',
   config: {
+    enablePullDownRefresh: true,
     navigationBarTitleText: '物流管理',
     usingComponents: {
       'xtabs': '../../static/iview/tabs/index',

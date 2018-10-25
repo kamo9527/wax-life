@@ -6,13 +6,16 @@
     </div>
         <div class="i_cell_bd">
           <div class="title pb10">订单编号：{{item.id}}</div>
-          <div><span class="inline_desc">{{item.goods_id}}</span></div>
+          <div class="order_content">
+            <span class="title">咯咯咯呵呵呵韩国是个好人退货然后忽然他汉人同化汉人</span>
+            <span>x1</span>
+          </div>
           <div class="order_detail">姓名：{{item.order_name}}</div>
           <div class="order_detail">手机号：{{item.order_phone}}</div>
         </div>
         <div class="i_cell_fr">
-          <div>￥{{item.num * item.price}}</div>
-          <div>x{{item.num}}</div>
+          <div>2018-05-22</div>
+          <div>￥{{item.allPrice}}</div>
           <div class="status">{{statusInfo[item.status]}}</div>
         </div>
       </div>
@@ -20,7 +23,7 @@
         <div class="i_cell_bd">
           <span class="my_courier" @click.stop="getCourier(item.courier)">快递单号: {{item.courier || '暂无'}}</span>
         </div>
-        <div class="i_cell_fr" v-if="item.status !== 'done'">
+        <div class="i_cell_fr" v-if="item.status !== 'done' && isBtn">
           <button size="mini" type="primary" @click.stop="btnClick(item.id, item.status)" class="operate_btn">{{btnInfo[item.status]}}</button>
         </div>
       </div>
@@ -31,7 +34,11 @@
 export default {
   props: {
     iClass: String,
-    item: Object
+    item: Object,
+    isBtn: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -46,6 +53,9 @@ export default {
         done: '已完成'
       }
     }
+  },
+  onShow() {
+    this.isShow = false
   },
   methods: {
     getCourier(courier) {
@@ -93,9 +103,24 @@ export default {
     color: #ea9b5a;
     font-size: 13px;
     float: right;
-    padding-top: 15px;
+    padding-top: 20px;
   }
-
+  .order_content{
+    height: 15px;
+    line-height: 15px;
+    span{
+      font-size: 12px;
+      color: #666;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .title{
+      max-width: 160px;
+      white-space: nowrap;
+      text-overflow:ellipsis; 
+      overflow:hidden;
+    }
+  }
   .order_detail {
     font-size: 13px;
   }

@@ -7,9 +7,9 @@
     </xtabs>
     <div class="my_list" v-if="showList">
       <order-item
-        i-class="my_list_item"
         v-for="item in list" :key="item.id"
         :item="item"
+        :is-btn="true"
         @onBtn="operate"
         >
       </order-item>
@@ -44,24 +44,22 @@ export default {
         order_name: '长贵',
         order_phone: '1594742224',
         id: '4545',
-        num: 45,
-        price: 98,
+        allPrice: 98,
+        num: 4,
         courier: '45455445454',
         status: 'done'
-      }, {
-        src: 'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/0 (1).jpg',
-        goods_id: 'LCHY_02',
-        order_name: '长贵',
-        order_phone: '1594742224',
-        id: '4545',
-        num: 45,
-        price: 98,
-        courier: '45455445454',
-        status: 'sending'
       }]
     }
   },
   onShow() {
+  },
+  onPullDownRefresh() {
+    wx.showNavigationBarLoading() // 在当前页面显示导航条加载动画。
+    setTimeout(() => {
+      console.log('aaaa')
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+    }, 500)
   },
   methods: {
     tabsChange(e) {
@@ -120,7 +118,7 @@ export default {
 }
 
 </script>
-<style lang="less">
+<style scoped lang="less">
 .my_list {
   padding-top: 42px;
 }
