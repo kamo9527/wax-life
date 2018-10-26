@@ -126,58 +126,75 @@ export default {
     toPay() {
       let price = this.isAddress ? `恭喜您支付了${this.allPrice}元` : '请选择收获地址'
 
-      console.log('selectGoods', this.selectGoods)
-      console.log('addressInfo', this.addressInfo)
+      // console.log('selectGoods', this.selectGoods)
+      // console.log('addressInfo', this.addressInfo)
 
-      const data = {
-        act: 'createOrder',
-        data: {
-          totalAmount: this.totalAmount,
-          allPrice: this.allPrice,
-          freight: this.queryForm.freight,
-          fh_status: 0, // '0未发货  1部分发货 2全部发货'
-          status: 'paying',
-          order_status: 0, // '订单状态  0待支付 1待收货 2待确认  3已完成  4已取消'
-          sh_name: this.addressInfo.userName,
-          sh_phone: this.addressInfo.telNumber,
-          sh_address: this.addressInfo.address,
-          src: this.selectGoods[0] ? this.selectGoods[0].src : '../../static/icon/local.png',
-          title: this.selectGoods[0] ? this.selectGoods[0].title : '暂无信息',
-          list: this.selectGoods
-        }
-      }
+      // const data = {
+      //   act: 'createOrder',
+      //   data: {
+      //     totalAmount: this.totalAmount,
+      //     allPrice: this.allPrice,
+      //     freight: this.queryForm.freight,
+      //     fh_status: 0, // '0未发货  1部分发货 2全部发货'
+      //     status: 'paying',
+      //     order_status: 0, // '订单状态  0待支付 1待收货 2待确认  3已完成  4已取消'
+      //     sh_name: this.addressInfo.userName,
+      //     sh_phone: this.addressInfo.telNumber,
+      //     sh_address: this.addressInfo.address,
+      //     src: this.selectGoods[0] ? this.selectGoods[0].src : '../../static/icon/local.png',
+      //     title: this.selectGoods[0] ? this.selectGoods[0].title : '暂无信息',
+      //     list: this.selectGoods
+      //   }
+      // }
 
-      wx.cloud.callFunction({
-        name: 'orderAction',
-        data,
-        complete: res => {
-          if(res.result.code == 0) {
-            wx.showToast({
-              title: '开单成功啦',
-              complete: () => {
-                setTimeout(() => {
-                  wx.switchTab({
-                    url: '/pages/index/index'
-                  })
-                }, 1500)
-                
-              }
-            })
-          }else {
-            wx.showToast({
-              title: '开单失败，请稍后再试',
-              icon: 'none'
-            })
+      if(this.isAddress) {
+        const data = {
+          act: 'createOrder',
+          data: {
+            allPrice: this.allPrice,
+            order_name: this.addressInfo.userName,
+            order_phone: this.addressInfo.telNumber,
+            order_address: this.addressInfo.address,
+            order_img: this.selectGoods[0] ? this.selectGoods[0].src : '../../static/icon/local.png',
+            list: this.selectGoods
           }
-          
         }
-      })
 
-      // wx.showToast({
-      //   title: price,
-      //   icon: 'none',
-      //   duration: 1500
-      // })
+        wx.cloud.callFunction({
+          name: 'orderAction',
+          data,
+          complete: res => {
+            if(res.result.code == 0) {
+              wx.showToast({
+                title: '开单成功啦',
+                complete: () => {
+                  setTimeout(() => {
+                    wx.switchTab({
+                      url: '/pages/index/index'
+                    })
+                  }, 1500)
+                  
+                }
+              })
+            }else {
+              wx.showToast({
+                title: '开单失败，请稍后再试',
+                icon: 'none'
+              })
+            }
+            
+          }
+        })
+      }else {
+        wx.showToast({
+          title: price,
+          icon: 'none',
+          duration: 1500
+        })
+      }
+      
+
+      
     },
     addressManage() {
       if(wx.chooseAddress){

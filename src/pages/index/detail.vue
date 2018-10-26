@@ -261,14 +261,22 @@ export default {
       if(this.bugType === 'cart') {
         this.addToCart()
       }else {
+        // const productInfo = {
+        //   id: this.goodInfo.id,
+        //   title: this.goodInfo.title,
+        //   colorName: this.sizeDialogData.colorName,
+        //   colorId: this.sizeDialogData.colorId,
+        //   src: this.sizeDialogData.imgUrl,
+        //   price: this.sizeDialogData.price,
+        //   num: this.goodNum
+        // }
         const productInfo = {
           id: this.goodInfo.id,
-          title: this.goodInfo.title,
-          colorName: this.sizeDialogData.colorName,
-          colorId: this.sizeDialogData.colorId,
-          src: this.sizeDialogData.imgUrl,
           price: this.sizeDialogData.price,
-          num: this.goodNum
+          num: this.goodNum,
+          styleTitle: this.sizeDialogData.colorName, 
+          styleName: this.sizeDialogData.colorId, 
+          styleSrc: this.sizeDialogData.imgUrl
         }
         this.$store.commit('UPDATE_PAYING_GOOD', productInfo)
         
