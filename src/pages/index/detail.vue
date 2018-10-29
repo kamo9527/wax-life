@@ -141,47 +141,8 @@ export default {
         desc: '进口精油北欧风香薰蜡烛台礼盒天然大豆蜡卧室无烟大理石陶瓷杯',
         saleTotal: '3',
         style: [],
-        colorTypes: [
-          {
-            colorName: '111',
-            price: '98',
-            stock: '100',
-            imgUrl: '/static/images/goods.png',
-            select: true
-          },
-          {
-            colorName: '222',
-            price: '55',
-            stock: '10',
-            imgUrl: '/static/images/goods.png',
-            select: false
-          },
-          {
-            colorName: '333',
-            price: '577',
-            stock: '190',
-            imgUrl: '/static/images/goods.png',
-            select: false
-          }
-        ],
-        params: [
-          {
-            name: '品牌',
-            desc: 'DI ENJOY'
-          },
-          {
-            name: '形状',
-            desc: '杯状'
-          },
-          {
-            name: '适用空间',
-            desc: '其他'
-          },
-          {
-            name: '颜色分类',
-            desc: '鼠尾草海盐,蔚蓝魅曲,春日樱茶,婀娜花姿'
-          },
-        ]
+        colorTypes: [],
+        params: []
       },
       sizeDialogData: {
         colorName: '111',
@@ -250,6 +211,18 @@ export default {
     },
 
     addToCart() {
+      const productInfo = {
+        id: this.goodInfo.id,
+        price: this.sizeDialogData.price,
+        num: this.goodNum,
+        styleTitle: this.sizeDialogData.colorName, 
+        styleName: this.sizeDialogData.colorId, 
+        title: this.goodInfo.title,
+        styleSrc: this.sizeDialogData.imgUrl
+      }
+
+      this.$store.commit('ADD_TO_CART', productInfo)
+
       wx.showToast({
         title: '已添加到购物车',
         complete: () => {
@@ -261,15 +234,6 @@ export default {
       if(this.bugType === 'cart') {
         this.addToCart()
       }else {
-        // const productInfo = {
-        //   id: this.goodInfo.id,
-        //   title: this.goodInfo.title,
-        //   colorName: this.sizeDialogData.colorName,
-        //   colorId: this.sizeDialogData.colorId,
-        //   src: this.sizeDialogData.imgUrl,
-        //   price: this.sizeDialogData.price,
-        //   num: this.goodNum
-        // }
         const productInfo = {
           id: this.goodInfo.id,
           price: this.sizeDialogData.price,

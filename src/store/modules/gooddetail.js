@@ -1,7 +1,6 @@
 const state = {
   good: {},
   payingGoods: [],
-  cartGoos: []
 }
 const getters = {
   payingGoods: state => {
@@ -24,7 +23,11 @@ const mutations = {
   },
 
   'UPDATE_PAYING_GOOD' (state, data) {
-    state.payingGoods = [data]
+    if(data instanceof Array) {
+      state.payingGoods = data
+    }else {
+      state.payingGoods = [data]
+    }
   },
 
   'UPDATE_GOODS_ALL_SELECT' (state, data) {
