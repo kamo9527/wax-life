@@ -3,11 +3,11 @@
     <div class="lable">购物清单</div>
     <div class="content" v-for="(item, index) in goodList" :key="index">
       <div class="good_detail">
-        <img :src="item.src" alt="">
-        <span>{{item.title}}</span>
+        <img :src="item.styleSrc" alt="">
+        <span>{{item.styleTitle}}</span>
       </div>
       <div class="good_price">
-        {{item.num + '*' + item.price + '元'}}
+        {{item.num + 'x' + item.price + '元'}}
       </div>
     </div>
   </div>
