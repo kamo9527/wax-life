@@ -10,19 +10,30 @@ const state = {
     { id: 4, title: '新鲜糯米糍10斤 * 一箱', src: '../../static/images/goods.png', price: 110, num: 0, select: true, status: 'done' },
     { id: 5, title: '新鲜龙眼10斤 * 一箱', src: '../../static/images/goods.png', price: 110, num: 0, select: true, status: 'done' }
   ],
-  goods: []
+  cartGoods: [
+    // const productInfo = {
+    //   id: this.goodInfo.id,
+    //   price: this.sizeDialogData.price,
+    //   num: this.goodNum,
+    //   styleTitle: this.sizeDialogData.colorName, 
+    //   styleName: this.sizeDialogData.colorId, 
+    //   styleSrc: this.sizeDialogData.imgUrl
+    // }
+    // { id: 2, title: '新鲜桂味10斤 * 一箱', src: '../../static/images/goods.png', price: 110, num: 10, select: true, status: 'going', kind: '个人个人' }
+  ],
+  showGoods: []
 }
 const getters = {
-  goodsList: stata => state.goods.filter(item => !item.is_new),
-  newGoods: stata => state.goods.filter(item => item.is_new),
+  goodsList: stata => state.showGoods.filter(item => !item.is_new),
+  newGoods: stata => state.showGoods.filter(item => item.is_new),
   selectGoods: state => {
-    return state.goods.filter(item => item.num)
+    return state.cartGoods.filter(item => item.num)
   },
   selectGoodsss: state => {
     return state.ssgoodsss.filter(item => item.num)
   },
   selectBuy: state => {
-    return state.goods.filter(item => item.num && item.select)
+    return state.cartGoods.filter(item => item.num && item.select)
   },
   selectStatus: (state, getters) => (status) => {
     if (status === 'all') {
@@ -31,10 +42,11 @@ const getters = {
       return getters.selectBuy.filter(item => item.status === status)
     }
   }
+
 }
 const mutations = {
   'UPDATE_ALL_GOODS' (state, data) {
-    state.goods = data
+    state.showGoods = data
   },
   'UPDATE_GOODS_ITEM' (state, data) {
     state.goods.find(v => {
@@ -45,7 +57,33 @@ const mutations = {
     state.goods.forEach(v => {
       v.select = data.checked
     })
-  }
+  },
+
+  // 加入购物车
+  'ADD_TO_CART' (state, data) {
+    const cartGoods = state.cartGoods
+    console.log('ADD_TO_CART', state.cartGoods)
+    // select: true, status: 'going', kind: '个人个人'
+    data.select = true
+    data.status = 'going'
+    data.kind = data.styleTitle
+
+    if(cartGoods.length === 0) {
+      state.cartGoods.push(data) 
+    }else {
+      let isSameId = false
+      cartGoods.forEach(item => {
+        if(item.id == data.id) {
+          item.num = item.num + data.num
+          isSameId = true
+        }
+      })
+      if(!isSameId) {
+        state.cartGoods.push(data) 
+      }
+    }
+    
+  },
 }
 
 const actions = {

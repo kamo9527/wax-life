@@ -82,7 +82,7 @@ export default {
       addressInfo: {},
       queryForm: {
         allGoods: 1515,
-        freight: 45
+        freight: 0
       },
       selectBuy: '1',
       addressItem: '222'

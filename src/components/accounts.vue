@@ -15,6 +15,7 @@
 </template>
 <script>
 import {mapMutations} from 'vuex'
+import store from '@/store/'
 export default {
   props: {
     iClass: String,
@@ -36,7 +37,11 @@ export default {
     },
     account() {
       if (this.accounts > 0) {
-        const url = '../index/detail'
+        // 更新结算数据
+        const list = this.$store.state.goodslist.cartGoods
+        this.$store.commit('UPDATE_PAYING_GOOD', list)
+
+        const url = '../index/paying'
         wx.navigateTo({ url })
       } else {
         wx.showToast({

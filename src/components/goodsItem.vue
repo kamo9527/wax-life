@@ -2,7 +2,7 @@
   <div :class="['i_cell', iClass]">
     <i-radio i-class="my_radio" :color="color" :disabled="item.disabled" :checked="item.select" @change="radioChange"></i-radio>
     <div class="i_cell_hd">
-      <img :src="item.src" class="goods_pic" alt="" />
+      <img :src="item.styleSrc" class="goods_pic" alt="" />
     </div>
     <div class="i_cell_bd">
       <div class="title pb10">{{item.title}}</div>
