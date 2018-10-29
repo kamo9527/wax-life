@@ -11,10 +11,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
-    "axios": "^0.18.0",
-    "flyio": "^0.5.7",
     "minapp-api-promise": "^1.0.2",
-    "mp-weui": "^1.0.4",
     "mpvue": "^1.0.13",
     "vuex": "^3.0.1"
   },

@@ -1,7 +1,6 @@
 <script>
-import 'mp-weui/lib/style.css'
 import './assets/base/fn.less'
-
+import './assets/base/style.min.css'
 
 export default {
   mpType: 'app',
