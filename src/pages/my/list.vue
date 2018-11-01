@@ -32,17 +32,19 @@ export default {
         going: '已发货',
         done: '已到货'
       },
-      list: [{
-        src: 'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/0 (1).jpg',
-        goods_id: 'LCHY_02',
-        order_name: '长贵',
-        order_phone: '1594742224',
-        id: '4545',
-        allPrice: 98,
-        num: 4,
-        courier: '45455445454',
-        status: 'sending'
-      }]
+      list: [
+        // {
+        //   src: 'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/0 (1).jpg',
+        //   goods_id: 'LCHY_02',
+        //   order_name: '长贵',
+        //   order_phone: '1594742224',
+        //   id: '4545',
+        //   allPrice: 98,
+        //   num: 4,
+        //   courier: '45455445454',
+        //   status: 'sending'
+        // }
+      ]
     }
   },
   onShow() {
@@ -54,9 +56,13 @@ export default {
     // },
     // ...mapGetters(['selectStatus'])
   },
+  mounted() {
+    this.getOrders('picking')
+  },
   methods: {
     tabsChange(e) {
       this.current = e.target.key
+      this.getOrders(this.current)
     },
     getCourier(num) {
       let _this = this
@@ -84,6 +90,27 @@ export default {
             icon: 'none',
             duration: 1500
           })
+        }
+      })
+    },
+
+    getOrders(type) {
+      wx.showLoading() 
+      wx.cloud.callFunction({
+        name: 'orderAction',
+        data: {
+          act: 'getOrderByOpenId',
+          status: type
+        },
+        complete: res => {
+          wx.hideLoading() 
+          // this.orderList = res.result.data
+          // this.tabChange()
+          res.result.data.forEach(item => {
+            item.orderShowTime = item.show_time.substring(0, 10)
+          }) 
+          this.list = res.result.data
+          console.log('getOrderByOpenId: ', res)
         }
       })
     }

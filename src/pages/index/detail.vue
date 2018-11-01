@@ -164,7 +164,6 @@ export default {
   },
 
   onShow() {
-    console.log('store', store.state.gooddetail.good)
     // console.log(this.yunImagesBasic)
     this.goodInfo = store.state.gooddetail.good
     this.sizeDialogData.colorName = this.goodInfo.style[0].title
@@ -243,6 +242,7 @@ export default {
           styleSrc: this.sizeDialogData.imgUrl
         }
         this.$store.commit('UPDATE_PAYING_GOOD', productInfo)
+        this.$store.commit('UPDATE_TOPAY_TYPE', 0)
         
         wx.navigateTo({
           url: '/pages/index/paying'

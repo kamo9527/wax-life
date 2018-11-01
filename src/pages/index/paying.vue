@@ -67,6 +67,8 @@ import goodItem from '@/components/goodItem'
 import pay from '@/components/pay'
 import {mapGetters} from 'vuex'
 
+import store from '@/store/'
+
 // import {mapGetters} from 'vuex'
 // import { postClient } from '@/rest/goods'
 export default {
@@ -126,27 +128,6 @@ export default {
     toPay() {
       let price = this.isAddress ? `恭喜您支付了${this.allPrice}元` : '请选择收获地址'
 
-      // console.log('selectGoods', this.selectGoods)
-      // console.log('addressInfo', this.addressInfo)
-
-      // const data = {
-      //   act: 'createOrder',
-      //   data: {
-      //     totalAmount: this.totalAmount,
-      //     allPrice: this.allPrice,
-      //     freight: this.queryForm.freight,
-      //     fh_status: 0, // '0未发货  1部分发货 2全部发货'
-      //     status: 'paying',
-      //     order_status: 0, // '订单状态  0待支付 1待收货 2待确认  3已完成  4已取消'
-      //     sh_name: this.addressInfo.userName,
-      //     sh_phone: this.addressInfo.telNumber,
-      //     sh_address: this.addressInfo.address,
-      //     src: this.selectGoods[0] ? this.selectGoods[0].src : '../../static/icon/local.png',
-      //     title: this.selectGoods[0] ? this.selectGoods[0].title : '暂无信息',
-      //     list: this.selectGoods
-      //   }
-      // }
-
       if(this.isAddress) {
         const data = {
           act: 'createOrder',
@@ -156,6 +137,7 @@ export default {
             order_phone: this.addressInfo.telNumber,
             order_address: this.addressInfo.address,
             order_img: this.selectGoods[0] ? this.selectGoods[0].src : '../../static/icon/local.png',
+            status: 'picking',
             list: this.selectGoods
           }
         }
@@ -168,12 +150,14 @@ export default {
               wx.showToast({
                 title: '开单成功啦',
                 complete: () => {
+                  // 购物车置空
+                  this.$store.state.gooddetail.isCartToPay && this.$store.commit('CLEAN_CART')
+                  
                   setTimeout(() => {
                     wx.switchTab({
                       url: '/pages/index/index'
                     })
                   }, 1500)
-                  
                 }
               })
             }else {
