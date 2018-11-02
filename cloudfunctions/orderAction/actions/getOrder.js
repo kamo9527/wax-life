@@ -8,8 +8,9 @@ exports.call = async (event, context) => {
     const openId = event.userInfo.openId
 
     try {
-        const result = await db.collection('order').where({
-            openId: openId // 填入当前用户 openid
+        const result = await db.collection('orders').where({
+            openId: openId, // 填入当前用户 openid
+            status: event.status
         }).get()
 
         const res = {

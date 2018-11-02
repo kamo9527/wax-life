@@ -10,17 +10,7 @@ const state = {
     { id: 4, title: '新鲜糯米糍10斤 * 一箱', src: '../../static/images/goods.png', price: 110, num: 0, select: true, status: 'done' },
     { id: 5, title: '新鲜龙眼10斤 * 一箱', src: '../../static/images/goods.png', price: 110, num: 0, select: true, status: 'done' }
   ],
-  cartGoods: [
-    // const productInfo = {
-    //   id: this.goodInfo.id,
-    //   price: this.sizeDialogData.price,
-    //   num: this.goodNum,
-    //   styleTitle: this.sizeDialogData.colorName, 
-    //   styleName: this.sizeDialogData.colorId, 
-    //   styleSrc: this.sizeDialogData.imgUrl
-    // }
-    // { id: 2, title: '新鲜桂味10斤 * 一箱', src: '../../static/images/goods.png', price: 110, num: 10, select: true, status: 'going', kind: '个人个人' }
-  ],
+  cartGoods: [],
   showGoods: []
 }
 const getters = {
@@ -62,8 +52,6 @@ const mutations = {
   // 加入购物车
   'ADD_TO_CART' (state, data) {
     const cartGoods = state.cartGoods
-    console.log('ADD_TO_CART', state.cartGoods)
-    // select: true, status: 'going', kind: '个人个人'
     data.select = true
     data.status = 'going'
     data.kind = data.styleTitle
@@ -84,6 +72,10 @@ const mutations = {
     }
     
   },
+  // 清空购物车
+  'CLEAN_CART' (state, data) {
+    state.cartGoods = []
+  }
 }
 
 const actions = {

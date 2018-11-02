@@ -1,21 +1,13 @@
 const state = {
   good: {},
   payingGoods: [],
+  // 结单入口标记
+  isCartToPay: false
 }
 const getters = {
   payingGoods: state => {
     return state.payingGoods
   },
-  // selectBuy: state => {
-  //   return state.goods.filter(item => item.num && item.select)
-  // },
-  // selectStatus: (state, getters) => (status) => {
-  //   if (status === 'all') {
-  //     return getters.selectBuy
-  //   } else {
-  //     return getters.selectBuy.filter(item => item.status === status)
-  //   }
-  // }
 }
 const mutations = {
   'UPDATE_GOODS_DETAIL' (state, data) {
@@ -34,7 +26,11 @@ const mutations = {
     state.goods.forEach(v => {
       v.select = data.checked
     })
-  }
+  },
+
+  'UPDATE_TOPAY_TYPE' (state, data) {
+    state.isCartToPay = data
+  },
 }
 
 // const actions = {

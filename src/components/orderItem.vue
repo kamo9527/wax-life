@@ -2,19 +2,19 @@
   <div class="my_list_item">
     <div :class="['i_cell', 'i_cell_bd_start', iClass]">
       <div class="i_cell_hd">
-        <img :src="item.src" class="img_icon order_pic" alt="" />
+        <img :src="item.list && item.list[0].styleSrc" class="img_icon order_pic" alt="" />
     </div>
         <div class="i_cell_bd">
-          <div class="title pb10">订单编号：{{item.id}}</div>
+          <div class="title pb10">订单编号：{{item.orderId}}</div>
           <div class="order_content">
-            <span class="title">咯咯咯呵呵呵韩国是个好人退货然后忽然他汉人同化汉人</span>
-            <span>x1</span>
+            <span class="title">{{item.list && item.list[0].title}}</span>
+            <!-- <span>x1</span> -->
           </div>
           <div class="order_detail">姓名：{{item.order_name}}</div>
           <div class="order_detail">手机号：{{item.order_phone}}</div>
         </div>
         <div class="i_cell_fr">
-          <div>2018-05-22</div>
+          <div>{{item.orderShowTime}}</div>
           <div>￥{{item.allPrice}}</div>
           <div class="status">{{statusInfo[item.status]}}</div>
         </div>

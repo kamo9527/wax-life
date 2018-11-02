@@ -40,6 +40,7 @@ export default {
         // 更新结算数据
         const list = this.$store.state.goodslist.cartGoods
         this.$store.commit('UPDATE_PAYING_GOOD', list)
+        this.$store.commit('UPDATE_TOPAY_TYPE', 1)
 
         const url = '../index/paying'
         wx.navigateTo({ url })
