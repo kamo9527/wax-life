@@ -7,12 +7,12 @@ const db = cloud.database()
 require('../tools/moment').install()
 
 const createOrderNumber = (showTime, createTime, orderPhone) => {
-    const firstTime = showTime.split(' ')[0].replace(/-/g, '').substring(0, 8)
+    // const firstTime = showTime.split(' ')[0].replace(/-/g, '').substring(0, 8)
     const randomNum = Math.floor(Math.random()*899 + 100)
     const secondTime = String(createTime).substring(8, )
     const phone = ('000000' + orderPhone.replace(/-/g, '')).split('').reverse().join('').substring(0, 6)
 
-    return '' + firstTime + randomNum + secondTime + phone 
+    return '' + randomNum + secondTime + phone 
 }
 
 exports.call = async (event, context) => {
