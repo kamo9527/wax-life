@@ -23,6 +23,9 @@ exports.call = async (event, context) => {
     data.create_time = create_time
     data.update_time = create_time
     data.show_time = new Date(create_time).formatDate('yyyy-MM-dd hh:mm:ss')
+    data.courier = ''
+    data.fh_time = ''
+    data.sh_time = ''
 
     data.orderId = createOrderNumber(data.show_time, data.create_time, data.order_phone)
 

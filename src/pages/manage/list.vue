@@ -24,6 +24,25 @@
 </template>
 <script>
 import orderItem from '@/components/orderItem'
+
+Date.prototype.formatDate = function(fmt) {
+    var o = {
+        "M+" : this.getMonth() + 1,
+        "d+" : this.getDate(),
+        "h+" : this.getHours(),
+        "m+" : this.getMinutes(),
+        "s+" : this.getSeconds(),
+        "q+" : Math.floor((this.getMonth() + 3) / 3),
+        "S" : this.getMilliseconds()
+    };
+    if (/(y+)/.test(fmt))
+        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt))
+        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
+
 export default {
   components: {
     orderItem
@@ -38,20 +57,13 @@ export default {
       showList: true,
       showNoList: false,
       showModal: false,
-      list: [{
-        src: 'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/0 (1).jpg',
-        goods_id: 'LCHY_02',
-        order_name: '长贵',
-        order_phone: '1594742224',
-        id: '4545',
-        allPrice: 98,
-        num: 4,
-        courier: '45455445454',
-        status: 'done'
-      }]
+      list: []
     }
   },
   onShow() {
+  },
+  mounted() {
+    this.getOrders(this.current)
   },
   onPullDownRefresh() {
     wx.showNavigationBarLoading() // 在当前页面显示导航条加载动画。
@@ -64,9 +76,20 @@ export default {
   methods: {
     tabsChange(e) {
       this.current = e.target.key
+      this.getOrders(this.current)
     },
     sure() {
-      this.list.splice()
+      const id = this.questData.id
+
+      const reqData = {
+        status: 'sending',
+        courier: this.questData.courierNumber,
+        fh_time: new Date().formatDate('yyyy-MM-dd hh:mm:ss')
+      }
+
+      this.updateOrders(id, reqData)
+      // return
+      // this.list.splice()
       this.questData.courierNumber = ''
       this.showModal = false
       // 发送请求修改数据库
@@ -85,9 +108,16 @@ export default {
         wx.showModal({
           title: '提示',
           content: '确定收货么？',
-          success (res) {
+          success: res => {
             if (res.confirm) {
               console.log('用户点击确定')
+              const id = this.questData.id
+              const reqData = {
+                status: 'done',
+                sh_time: new Date().formatDate('yyyy-MM-dd hh:mm:ss')
+              }
+              this.updateOrders(id, reqData)
+
               // 发送请求修改数据库
               // 刷新列表
             } else if (res.cancel) {
@@ -110,6 +140,54 @@ export default {
             title: res.message,
             icon: 'none',
             duration: 1500
+          })
+        }
+      })
+    },
+
+    getOrders(type) {
+      wx.showLoading() 
+      wx.cloud.callFunction({
+        name: 'orderAction',
+        data: {
+          act: 'getOrderByOpenId',
+          status: type
+        },
+        complete: res => {
+          wx.hideLoading() 
+          res.result.data.forEach(item => {
+            item.orderShowTime = item.show_time.substring(0, 10)
+          }) 
+          this.list = res.result.data
+          console.log('getOrders', res)
+        }
+      })
+    },
+
+    updateOrders(orderId, data) {    
+      wx.showLoading() 
+      wx.cloud.callFunction({
+        name: 'orderAction',
+        data: {
+          act: 'updateOrder',
+          orderId,
+          data
+        },
+        complete: res => {
+          wx.hideLoading()     
+          let msg
+          if(res.result.code == 0) {
+            msg = '更新成功'
+          }else {
+            msg = '更新失败'
+          }
+          wx.showToast({
+            title: msg,
+            icon: 'none',
+            duration: 1500,
+            complete: res => {
+              this.getOrders(this.current)
+            }
           })
         }
       })

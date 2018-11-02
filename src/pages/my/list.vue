@@ -104,8 +104,6 @@ export default {
         },
         complete: res => {
           wx.hideLoading() 
-          // this.orderList = res.result.data
-          // this.tabChange()
           res.result.data.forEach(item => {
             item.orderShowTime = item.show_time.substring(0, 10)
           }) 
