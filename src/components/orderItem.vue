@@ -24,7 +24,7 @@
           <span class="my_courier" @click.stop="getCourier(item.courier)">快递单号: {{item.courier || '暂无'}}</span>
         </div>
         <div class="i_cell_fr" v-if="item.status !== 'done' && isBtn">
-          <button size="mini" type="primary" @click.stop="btnClick(item.id, item.status)" class="operate_btn">{{btnInfo[item.status]}}</button>
+          <button size="mini" type="primary" @click.stop="btnClick(item.orderId, item.status)" class="operate_btn">{{btnInfo[item.status]}}</button>
         </div>
       </div>
       <web-view src="http://www.kuaidi100.com/" v-if="isShow"></web-view>
