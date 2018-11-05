@@ -26,37 +26,17 @@ export default {
   data() {
     return {
       current: 'picking',
-      showList: true,
+      showList: false,
       showNoList: false,
       statusInfo: {
         going: '已发货',
         done: '已到货'
       },
-      list: [
-        // {
-        //   src: 'cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/0 (1).jpg',
-        //   goods_id: 'LCHY_02',
-        //   order_name: '长贵',
-        //   order_phone: '1594742224',
-        //   id: '4545',
-        //   allPrice: 98,
-        //   num: 4,
-        //   courier: '45455445454',
-        //   status: 'sending'
-        // }
-      ]
+      list: []
     }
   },
-  onShow() {
-  },
-  computed: {
-    // goods() {
-    //   let status = this.tabstatus
-    //   return this.selectStatus(status)
-    // },
-    // ...mapGetters(['selectStatus'])
-  },
   mounted() {
+    Object.assign(this.$data, this.$options.data())
     this.getOrders('picking')
   },
   methods: {
@@ -80,21 +60,8 @@ export default {
         }
       })
     },
-    getData() {
-      getApi01().then(res => {
-        if (res.code === 0) {
-          console.log(res.data.name)
-        } else {
-          wx.showToast({
-            title: res.message,
-            icon: 'none',
-            duration: 1500
-          })
-        }
-      })
-    },
     getOrders(type) {
-      wx.showLoading() 
+      wx.showLoading()
       wx.cloud.callFunction({
         name: 'orderAction',
         data: {
@@ -102,12 +69,13 @@ export default {
           status: type
         },
         complete: res => {
-          wx.hideLoading() 
+          wx.hideLoading()
           res.result.data.forEach(item => {
             item.orderShowTime = item.show_time.substring(0, 10)
-          }) 
+          })
           this.list = res.result.data
-          console.log('getOrderByOpenId: ', res)
+          this.showList = this.list.length > 0
+          this.showNoList = !this.showList
         }
       })
     }

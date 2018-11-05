@@ -102,12 +102,12 @@ export default {
       current: 'home',
       basicUrl: '',
       yunImages: [
-        'home/home_01.png', 
-        'home/home_02.png', 
-        'home/home_03.png', 
-        'home/home_04.png', 
-        'home/home_05.png', 
-        'home/giving_01.jpg', 
+        'home/home_01.png',
+        'home/home_02.png',
+        'home/home_03.png',
+        'home/home_04.png',
+        'home/home_05.png',
+        'home/giving_01.jpg',
         'home/giving_02.jpg'
       ],
       priceSort: false,
@@ -147,7 +147,7 @@ export default {
       } else { // 销量和好评率
         return arr.sort((a, b) => {
           return b[key] - a[key]
-        })  
+        })
       }
     },
     ...mapGetters(['currentVuex', 'goodsList', 'newGoods'])
@@ -168,7 +168,7 @@ export default {
         this.priceSort = false
       }
     },
-    previewSwiperImg(url){
+    previewSwiperImg(url) {
       wx.previewImage({
         current: url, // 当前显示图片的http链接
         urls: this.urls // 需要预览的图片http链接列表
@@ -214,7 +214,7 @@ export default {
       })
     },
     ...mapMutations(['UPDATE_CURRENT']),
-    ...mapActions(['updataAllGoods']),
+    ...mapActions(['updataAllGoods'])
   }
 }
 

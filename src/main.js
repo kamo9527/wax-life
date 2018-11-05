@@ -17,7 +17,7 @@ if (!wx.cloud) {
 } else {
   wx.cloud.init({
     env: 'wax-test-ee69e9',
-    traceUser: true,
+    traceUser: true
   })
 }
 const app = new Vue({

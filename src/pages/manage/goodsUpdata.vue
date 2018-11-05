@@ -80,8 +80,7 @@ export default {
       }
     }
   },
-  onShow() {
-  },
+  onShow() {},
   onUnload() {
     this.formData.swiper = []
     this.formData.style = []
@@ -135,14 +134,14 @@ export default {
       if (!this.formData.id) {
         wx.showToast({
           icon: 'none',
-          title: '请输入产品ID',
+          title: '请输入产品ID'
         })
         return
       }
       if (!this.addItem.title) {
         wx.showToast({
           icon: 'none',
-          title: '请输入种类标题',
+          title: '请输入种类标题'
         })
         return
       }
@@ -158,7 +157,7 @@ export default {
       if (!this.formData.id) {
         wx.showToast({
           icon: 'none',
-          title: '请输入产品ID',
+          title: '请输入产品ID'
         })
         return
       }
@@ -203,32 +202,33 @@ export default {
             // 上传图片
             const cloudPath = 'images/' + timestamp + filePath.match(/\.[^.]+?$/)[0]
             wx.cloud.uploadFile({
-                cloudPath,
-                filePath
-              })
-              .then(res => {
-                const src = res.fileID
-                list.push(src)
-                // 如果还有照片，继续上传
-                i++
-                if (i < l) {
-                  clearTimeout(timer)
-                  timer = setTimeout(() => {
-                    upload(l)
-                  }, 50)
-                } else {
-                  timer = null
-                  wx.hideLoading()
-                  callback(list)
-                }
-              })
-              .catch(error => {
+              cloudPath,
+              filePath
+            })
+            .then(res => {
+              const src = res.fileID
+              list.push(src)
+              // 如果还有照片，继续上传
+              i++
+              if (i < l) {
+                clearTimeout(timer)
+                timer = setTimeout(() => {
+                  upload(l)
+                }, 50)
+              } else {
+                timer = null
                 wx.hideLoading()
-                wx.showToast({
-                  icon: 'none',
-                  title: '上传失败',
-                })
+                callback(list)
+              }
+            })
+            .catch(error => {
+              wx.hideLoading()
+              wx.showToast({
+                icon: 'none',
+                title: '上传失败'
               })
+              console.log(error)
+            })
           }
           upload(len)
         },
@@ -241,7 +241,7 @@ export default {
       if (this.isComplete) {
         wx.showToast({
           icon: 'none',
-          title: '请输入完整的信息',
+          title: '请输入完整的信息'
         })
         return
       }
@@ -250,26 +250,27 @@ export default {
         this.formData.brand_img = this.formData.swiper[0].src
         const db = wx.cloud.database()
         db.collection('goods').add({
-            data: this.formData
+          data: this.formData
+        })
+        .then(res => {
+          this.isClick = true
+          wx.showToast({
+            title: '提交成功',
+            success: () => {
+              wx.switchTab({
+                url: '../my/index'
+              })
+            }
           })
-          .then(res => {
-            this.isClick = true
-            wx.showToast({
-              title: '提交成功',
-              success: () => {
-                wx.switchTab({
-                  url: '../my/index'
-                })
-              }
-            })
+        })
+        .catch(error => {
+          this.isClick = true
+          wx.showToast({
+            icon: 'none',
+            title: '提交失败'
           })
-          .catch(error => {
-            this.isClick = true
-            wx.showToast({
-              icon: 'none',
-              title: '提交失败'
-            })
-          })
+          console.log(error)
+        })
       }
     }
   }

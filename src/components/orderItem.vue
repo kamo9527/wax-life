@@ -5,16 +5,16 @@
         <img :src="item.list && item.list[0].styleSrc" class="img_icon order_pic" alt="" />
     </div>
         <div class="i_cell_bd">
+          <div class="title pb10">下单日期：{{item.orderShowTime}}</div>
           <div class="title pb10">订单编号：{{item.orderId}}</div>
-          <div class="order_content">
-            <span class="title">{{item.list && item.list[0].title}}</span>
-            <!-- <span>x1</span> -->
+          <div class="order_content" v-for="v in item.list" :key="v.id">
+            <span class="title">{{v.styleTitle}} </span>
+            <span>x {{v.num}}</span>
           </div>
           <div class="order_detail">姓名：{{item.order_name}}</div>
           <div class="order_detail">手机号：{{item.order_phone}}</div>
         </div>
         <div class="i_cell_fr">
-          <div>{{item.orderShowTime}}</div>
           <div>￥{{item.allPrice}}</div>
           <div class="status">{{statusInfo[item.status]}}</div>
         </div>
@@ -105,22 +105,27 @@ export default {
     float: right;
     padding-top: 20px;
   }
-  .order_content{
+
+  .order_content {
     height: 15px;
     line-height: 15px;
-    span{
+
+    span {
       font-size: 12px;
       color: #666;
       display: inline-block;
       vertical-align: middle;
     }
-    .title{
+
+    .title {
       max-width: 160px;
+      margin-right: 5px;
       white-space: nowrap;
-      text-overflow:ellipsis; 
-      overflow:hidden;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
   }
+
   .order_detail {
     font-size: 13px;
   }
