@@ -7,7 +7,7 @@
     </xtabs>
     <div class="my_list" v-if="showList">
       <order-item
-        v-for="item in list" :key="item.id"
+        v-for="item in list" :key="item.orderId"
         :item="item"
         :is-btn="true"
         @onBtn="operate"
@@ -76,6 +76,7 @@ export default {
   methods: {
     tabsChange(e) {
       this.current = e.target.key
+      this.list = []
       this.getOrders(this.current)
     },
     sure() {
@@ -116,6 +117,7 @@ export default {
                 status: 'done',
                 sh_time: new Date().formatDate('yyyy-MM-dd hh:mm:ss')
               }
+              this.list = []
               this.updateOrders(id, reqData)
 
               // 发送请求修改数据库
@@ -151,7 +153,8 @@ export default {
         name: 'orderAction',
         data: {
           act: 'getOrderByOpenId',
-          status: type
+          status: type,
+          isManager: true
         },
         complete: res => {
           wx.hideLoading() 
