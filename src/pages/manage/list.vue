@@ -6,12 +6,7 @@
       <xtab key="done" title="已完成"></xtab>
     </xtabs>
     <div class="my_list" v-if="showList">
-      <order-item
-        v-for="item in list" :key="item.orderId"
-        :item="item"
-        :is-btn="true"
-        @onBtn="operate"
-        >
+      <order-item v-for="item in list" :key="item.orderId" :item="item" :is-btn="true" @onBtn="operate">
       </order-item>
     </div>
     <div class="no_list" v-if="showNoList">
@@ -24,25 +19,6 @@
 </template>
 <script>
 import orderItem from '@/components/orderItem'
-
-Date.prototype.formatDate = function(fmt) {
-    var o = {
-        "M+" : this.getMonth() + 1,
-        "d+" : this.getDate(),
-        "h+" : this.getHours(),
-        "m+" : this.getMinutes(),
-        "s+" : this.getSeconds(),
-        "q+" : Math.floor((this.getMonth() + 3) / 3),
-        "S" : this.getMilliseconds()
-    };
-    if (/(y+)/.test(fmt))
-        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-    for (var k in o)
-    if (new RegExp("(" + k + ")").test(fmt))
-        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-    return fmt;
-}
-
 export default {
   components: {
     orderItem
@@ -60,9 +36,8 @@ export default {
       list: []
     }
   },
-  onShow() {
-  },
   mounted() {
+    Object.assign(this.$data, this.$options.data())
     this.getOrders(this.current)
   },
   onPullDownRefresh() {
@@ -107,7 +82,6 @@ export default {
               }
               this.list = []
               this.updateOrders(id, reqData)
-
               // 发送请求修改数据库
               // 刷新列表
             } else if (res.cancel) {
@@ -121,22 +95,8 @@ export default {
       let val = e.target.detail.value
       this.questData.courier = val
     },
-    getData() {
-      getApi01().then(res => {
-        if (res.code === 0) {
-          console.log(res.data.name)
-        } else {
-          wx.showToast({
-            title: res.message,
-            icon: 'none',
-            duration: 1500
-          })
-        }
-      })
-    },
-
     getOrders(type) {
-      wx.showLoading() 
+      wx.showLoading()
       wx.cloud.callFunction({
         name: 'orderAction',
         data: {
@@ -145,10 +105,10 @@ export default {
           isManager: true
         },
         complete: res => {
-          wx.hideLoading() 
+          wx.hideLoading()
           res.result.data.forEach(item => {
             item.orderShowTime = item.show_time.substring(0, 10)
-          }) 
+          })
           this.list = res.result.data
           console.log('getOrders', res)
         }
@@ -157,11 +117,11 @@ export default {
     updateOrderCourier(info) {
       wx.showLoading()
       wx.cloud.callFunction({
-      name: 'orderAction',
-      data: {
-        act: 'updateOrderCourier',
-        info
-      }
+        name: 'orderAction',
+        data: {
+          act: 'updateOrderCourier',
+          info
+        }
       }).then(res => {
         wx.hideLoading()
         wx.showToast({
@@ -189,7 +149,7 @@ export default {
           let msg = ''
           if (res.result.code === 0) {
             msg = '更新成功'
-          }else {
+          } else {
             msg = '更新失败'
           }
           wx.showToast({
@@ -211,15 +171,19 @@ export default {
 .my_list {
   padding-top: 42px;
 }
-.no_list{
+
+.no_list {
   padding-top: 142px;
-  .no_list_img{
+
+  .no_list_img {
     display: block;
     width: 100%;
   }
-  .no_list_tips{
+
+  .no_list_tips {
     text-align: center;
     color: #999;
   }
 }
+
 </style>
