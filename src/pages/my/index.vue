@@ -60,6 +60,7 @@
 </template>
 <script>
 import xcell from '@/components/cell'
+import { mapMutations } from 'vuex'
 export default {
   components: {
     xcell
@@ -107,6 +108,7 @@ export default {
       }
     },
     goHome() {
+      this.UPDATE_CURRENT('workshop')
       wx.switchTab({  
         url: '../index/index'  
       })
@@ -121,7 +123,8 @@ export default {
           console.log('拨打电话失败！')
         }
       })
-    }
+    },
+    ...mapMutations(['UPDATE_CURRENT'])
   }
 }
 </script>

@@ -93,7 +93,7 @@
 </template>
 <script>
 import xcell from '@/components/cell'
-import {mapGetters, mapActions} from 'vuex'
+import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 export default {
   components: { xcell },
@@ -110,7 +110,6 @@ export default {
         'home/giving_01.jpg', 
         'home/giving_02.jpg'
       ],
-      userInfo: {},
       priceSort: false,
       filterbar: 'all',
       goodsFilter: [
@@ -131,6 +130,7 @@ export default {
     this.basicUrl = this.yunImagesBasic
   },
   onShow() {
+    this.current = this.currentVuex
     this.updataAllGoods()
   },
   computed: {
@@ -150,11 +150,13 @@ export default {
         })  
       }
     },
-    ...mapGetters(['goodsList', 'newGoods'])
+    ...mapGetters(['currentVuex', 'goodsList', 'newGoods'])
   },
   methods: {
     tabsChange(e) {
-      this.current = e.target.key
+      let key = e.target.key
+      this.current = key
+      this.UPDATE_CURRENT(key)
     },
     filterChange(key) {
       this.filterbar = key
@@ -173,12 +175,6 @@ export default {
       })
     },
     getAddress() {
-      // wx.getLocation({
-      //   type: 'gcj02', //返回可以用于wx.openLocation的经纬度
-      //   success (res) {
-          
-      //   }
-      // })
       const latitude = 23.242904
       const longitude = 114.127264
       wx.openLocation({
@@ -206,20 +202,19 @@ export default {
       // 调用登录接口
       wx.getUserInfo({
         success: (res) => {
-          this.userInfo = res.userInfo
+          console.log(res.userInfo)
         }
       })
     },
-
-    ...mapActions(['updataAllGoods']),
-    
     // 选择商品
     chooseGood(item) {
       this.$store.commit('UPDATE_GOODS_DETAIL', item)
       wx.navigateTo({
         url: '/pages/index/detail'
       })
-    }
+    },
+    ...mapMutations(['UPDATE_CURRENT']),
+    ...mapActions(['updataAllGoods']),
   }
 }
 

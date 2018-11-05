@@ -93,7 +93,6 @@ export default {
         }
       })
     },
-
     getOrders(type) {
       wx.showLoading() 
       wx.cloud.callFunction({
