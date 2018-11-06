@@ -2,7 +2,7 @@
   <div class="content">
     <scroll-view scroll-y>
       <div class="swiper_container">
-        <swiper circular class="swiper_info" :current="current" @change="imageCount" autoplay>
+        <swiper circular class="swiper_info" :current="current" @change="imageCount">
           <swiper-item v-for="item in goodInfo.swiper" :key="item">
             <image class="slide_image" :src="item.src" @click="previewSwiperImg(item)">
             </image>
@@ -19,9 +19,9 @@
           <span>{{goodAdress}}</span>
         </div>
       </div>
-      <xcell title="服务" fr="7天无理由 · 运费险"></xcell>
+      <!-- <xcell title="服务" fr="7天无理由 · 运费险"></xcell> -->
       <xcell title="规格" fr="请选择 颜色分类" @cellClick="sizeSelect"></xcell>
-      <xcell title="参数" fr="品牌 形状..." @cellClick="paramsDialogShow = true"></xcell>
+      <!-- <xcell title="参数" fr="品牌 形状..." @cellClick="paramsDialogShow = true"></xcell> -->
       <div class="img_title">
         <span>
           <span class="line1"></span>

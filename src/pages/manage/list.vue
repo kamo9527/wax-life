@@ -30,7 +30,7 @@ export default {
         courier: ''
       },
       current: 'picking',
-      showList: true,
+      showList: false,
       showNoList: false,
       showModal: false,
       list: []
@@ -51,7 +51,6 @@ export default {
   methods: {
     tabsChange(e) {
       this.current = e.target.key
-      this.list = []
       this.getOrders(this.current)
     },
     sure() {
@@ -74,16 +73,7 @@ export default {
           content: '确定收货么？',
           success: res => {
             if (res.confirm) {
-              console.log('用户点击确定')
-              const id = this.questData.id
-              const reqData = {
-                status: 'done',
-                sh_time: new Date().formatDate('yyyy-MM-dd hh:mm:ss')
-              }
-              this.list = []
-              this.updateOrders(id, reqData)
-              // 发送请求修改数据库
-              // 刷新列表
+              this.updateOrderStatus(id)
             } else if (res.cancel) {
               console.log('用户点击取消')
             }
@@ -97,25 +87,24 @@ export default {
     },
     getOrders(type) {
       wx.showLoading()
+      this.list = []
       wx.cloud.callFunction({
         name: 'orderAction',
         data: {
           act: 'getOrderByOpenId',
           status: type,
           isManager: true
-        },
-        complete: res => {
-          wx.hideLoading()
-          res.result.data.forEach(item => {
-            item.orderShowTime = item.show_time.substring(0, 10)
-          })
-          this.list = res.result.data
-          console.log('getOrders', res)
         }
+      }).then(res => {
+        wx.hideLoading()
+        this.list = res.result.data
+        this.showList = this.list.length > 0
+        this.showNoList = !this.showList
+      }).catch(err => {
+        console.error('[云函数] [permissions] 调用失败：', err)
       })
     },
     updateOrderCourier(info) {
-      wx.showLoading()
       wx.cloud.callFunction({
         name: 'orderAction',
         data: {
@@ -123,9 +112,8 @@ export default {
           info
         }
       }).then(res => {
-        wx.hideLoading()
         wx.showToast({
-          title: '更新成功',
+          title: '快递更新成功',
           duration: 1500,
           complete: res => {
             this.getOrders(this.current)
@@ -135,32 +123,23 @@ export default {
         console.error('[云函数] [permissions] 调用失败：', err)
       })
     },
-    updateOrderStatus(orderId, data) {
-      wx.showLoading()
+    updateOrderStatus(id) {
       wx.cloud.callFunction({
         name: 'orderAction',
         data: {
-          act: 'updateOrder',
-          orderId,
-          data
-        },
-        complete: res => {
-          wx.hideLoading()
-          let msg = ''
-          if (res.result.code === 0) {
-            msg = '更新成功'
-          } else {
-            msg = '更新失败'
-          }
-          wx.showToast({
-            title: msg,
-            icon: 'none',
-            duration: 1500,
-            complete: res => {
-              this.getOrders(this.current)
-            }
-          })
+          act: 'updateOrderStatus',
+          orderId: id
         }
+      }).then(res => {
+        wx.showToast({
+          title: '状态更新成功',
+          duration: 1500,
+          complete: res => {
+            this.getOrders(this.current)
+          }
+        })
+      }).catch(err => {
+        console.error('[云函数] [permissions] 调用失败：', err)
       })
     }
   }

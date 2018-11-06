@@ -62,21 +62,20 @@ export default {
     },
     getOrders(type) {
       wx.showLoading()
+      this.list = []
       wx.cloud.callFunction({
         name: 'orderAction',
         data: {
           act: 'getOrderByOpenId',
           status: type
-        },
-        complete: res => {
-          wx.hideLoading()
-          res.result.data.forEach(item => {
-            item.orderShowTime = item.show_time.substring(0, 10)
-          })
-          this.list = res.result.data
-          this.showList = this.list.length > 0
-          this.showNoList = !this.showList
         }
+      }).then(res => {
+        wx.hideLoading()
+        this.list = res.result.data
+        this.showList = this.list.length > 0
+        this.showNoList = !this.showList
+      }).catch(err => {
+        console.error('[云函数] [permissions] 调用失败：', err)
       })
     }
   }
