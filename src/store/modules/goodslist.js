@@ -32,52 +32,47 @@ const getters = {
       return getters.selectBuy.filter(item => item.status === status)
     }
   }
-
 }
 const mutations = {
-  'UPDATE_ALL_GOODS' (state, data) {
+  'UPDATE_ALL_GOODS'(state, data) {
     state.showGoods = data
   },
-  'UPDATE_GOODS_ITEM' (state, data) {
+  'UPDATE_GOODS_ITEM'(state, data) {
     state.goods.find(v => {
       if (v.id === data.id) v = data
     })
   },
-  'UPDATE_GOODS_ALL_SELECT' (state, data) {
+  'UPDATE_GOODS_ALL_SELECT'(state, data) {
     state.goods.forEach(v => {
       v.select = data.checked
     })
   },
-
   // 加入购物车
-  'ADD_TO_CART' (state, data) {
+  'ADD_TO_CART'(state, data) {
     const cartGoods = state.cartGoods
     data.select = true
     data.status = 'going'
     data.kind = data.styleTitle
-
-    if(cartGoods.length === 0) {
-      state.cartGoods.push(data) 
-    }else {
+    if (cartGoods.length === 0) {
+      state.cartGoods.push(data)
+    } else {
       let isSameId = false
       cartGoods.forEach(item => {
-        if(item.id == data.id) {
+        if (item.id === data.id) {
           item.num = item.num + data.num
           isSameId = true
         }
       })
-      if(!isSameId) {
-        state.cartGoods.push(data) 
+      if (!isSameId) {
+        state.cartGoods.push(data)
       }
     }
-    
   },
   // 清空购物车
-  'CLEAN_CART' (state, data) {
+  'CLEAN_CART'(state, data) {
     state.cartGoods = []
   }
 }
-
 const actions = {
   async updataAllGoods({ commit }) {
     const db = wx.cloud.database()

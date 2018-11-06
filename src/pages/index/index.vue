@@ -93,7 +93,7 @@
 </template>
 <script>
 import xcell from '@/components/cell'
-import {mapGetters, mapActions} from 'vuex'
+import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 export default {
   components: { xcell },
@@ -102,15 +102,14 @@ export default {
       current: 'home',
       basicUrl: '',
       yunImages: [
-        'home/home_01.png', 
-        'home/home_02.png', 
-        'home/home_03.png', 
-        'home/home_04.png', 
-        'home/home_05.png', 
-        'home/giving_01.jpg', 
+        'home/home_01.png',
+        'home/home_02.png',
+        'home/home_03.png',
+        'home/home_04.png',
+        'home/home_05.png',
+        'home/giving_01.jpg',
         'home/giving_02.jpg'
       ],
-      userInfo: {},
       priceSort: false,
       filterbar: 'all',
       goodsFilter: [
@@ -131,6 +130,7 @@ export default {
     this.basicUrl = this.yunImagesBasic
   },
   onShow() {
+    this.current = this.currentVuex
     this.updataAllGoods()
   },
   computed: {
@@ -147,14 +147,16 @@ export default {
       } else { // 销量和好评率
         return arr.sort((a, b) => {
           return b[key] - a[key]
-        })  
+        })
       }
     },
-    ...mapGetters(['goodsList', 'newGoods'])
+    ...mapGetters(['currentVuex', 'goodsList', 'newGoods'])
   },
   methods: {
     tabsChange(e) {
-      this.current = e.target.key
+      let key = e.target.key
+      this.current = key
+      this.UPDATE_CURRENT(key)
     },
     filterChange(key) {
       this.filterbar = key
@@ -166,19 +168,13 @@ export default {
         this.priceSort = false
       }
     },
-    previewSwiperImg(url){
+    previewSwiperImg(url) {
       wx.previewImage({
         current: url, // 当前显示图片的http链接
         urls: this.urls // 需要预览的图片http链接列表
       })
     },
     getAddress() {
-      // wx.getLocation({
-      //   type: 'gcj02', //返回可以用于wx.openLocation的经纬度
-      //   success (res) {
-          
-      //   }
-      // })
       const latitude = 23.242904
       const longitude = 114.127264
       wx.openLocation({
@@ -206,20 +202,19 @@ export default {
       // 调用登录接口
       wx.getUserInfo({
         success: (res) => {
-          this.userInfo = res.userInfo
+          console.log(res.userInfo)
         }
       })
     },
-
-    ...mapActions(['updataAllGoods']),
-    
     // 选择商品
     chooseGood(item) {
       this.$store.commit('UPDATE_GOODS_DETAIL', item)
       wx.navigateTo({
         url: '/pages/index/detail'
       })
-    }
+    },
+    ...mapMutations(['UPDATE_CURRENT']),
+    ...mapActions(['updataAllGoods'])
   }
 }
 

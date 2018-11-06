@@ -7,32 +7,28 @@ const state = {
 const getters = {
   payingGoods: state => {
     return state.payingGoods
-  },
+  }
 }
 const mutations = {
-  'UPDATE_GOODS_DETAIL' (state, data) {
+  'UPDATE_GOODS_DETAIL'(state, data) {
     state.good = data
   },
-
-  'UPDATE_PAYING_GOOD' (state, data) {
-    if(data instanceof Array) {
+  'UPDATE_PAYING_GOOD'(state, data) {
+    if (data instanceof Array) {
       state.payingGoods = data
-    }else {
+    } else {
       state.payingGoods = [data]
     }
   },
-
-  'UPDATE_GOODS_ALL_SELECT' (state, data) {
+  'UPDATE_GOODS_ALL_SELECT'(state, data) {
     state.goods.forEach(v => {
       v.select = data.checked
     })
   },
-
-  'UPDATE_TOPAY_TYPE' (state, data) {
+  'UPDATE_TOPAY_TYPE'(state, data) {
     state.isCartToPay = data
-  },
+  }
 }
-
 // const actions = {
 //   UPDATE_CAR_BASIC_INFO({ commit }, basicInfo) {
 //     commit('UPDATE_CAR_BASIC_INFO', basicInfo)

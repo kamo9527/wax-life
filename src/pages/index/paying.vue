@@ -1,26 +1,11 @@
 <template>
   <div>
-    <xcell
-      v-if="isAddress"
-      :title="addressInfo.userName"
-      :mobile="addressInfo.telNumber" 
-      :inline-desc="addressInfo.address"
-      i-class="i_pay_address"
-      @cellClick="addressManage">
+    <xcell v-if="isAddress" :title="addressInfo.userName" :mobile="addressInfo.telNumber" :inline-desc="addressInfo.address" i-class="i_pay_address" @cellClick="addressManage">
     </xcell>
-    <xcell
-      v-else
-      title="请点击选择收获地址"
-      src="../../static/icon/local.png"
-      i-class="i_pay_address"
-      @cellClick="addressManage">
+    <xcell v-else title="请点击选择收获地址" src="../../static/icon/local.png" i-class="i_pay_address" @cellClick="addressManage">
     </xcell>
     <div class="address_line"></div>
-    <good-item
-      color="#ea9b5a"
-      :item="item"
-      :good-list="selectGoods"
-      >
+    <good-item color="#ea9b5a" :item="item" :good-list="selectGoods">
     </good-item>
     <!-- <div>
       <div class="lable">购物清单</div>.
@@ -33,29 +18,16 @@
           {{item.num + '*' + item.price + '元'}}
         </div>
       </div>
-      
     </div> -->
-
     <!-- <mini-goods-list :goods-list="selectBuy"></mini-goods-list> -->
     <div class="line"></div>
-    <xcell
-      title="商品总价"
-      :fr="`￥${totalAmount}`"
-      i-class="i_cell_pay">
+    <xcell title="商品总价" :fr="`￥${totalAmount}`" i-class="i_cell_pay">
     </xcell>
-    <xcell
-      title="运费"
-      :fr="`￥${queryForm.freight}`"
-      i-class="i_cell_pay">
+    <xcell title="运费" :fr="`￥${queryForm.freight}`" i-class="i_cell_pay">
     </xcell>
-    <xcell
-      title="合计"
-      :fr="`￥${totalAmount}`"
-      i-class="i_cell_pay last_cell">
+    <xcell title="合计" :fr="`￥${totalAmount}`" i-class="i_cell_pay last_cell">
     </xcell>
-    <pay 
-      :money="allPrice"
-      @to-pay="toPay">
+    <pay :money="allPrice" @to-pay="toPay">
     </pay>
   </div>
 </template>
@@ -63,14 +35,8 @@
 import xcell from '@/components/cell'
 import miniGoodsList from '@/components/miniGoodsList'
 import goodItem from '@/components/goodItem'
-
 import pay from '@/components/pay'
-import {mapGetters} from 'vuex'
-
-import store from '@/store/'
-
-// import {mapGetters} from 'vuex'
-// import { postClient } from '@/rest/goods'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     xcell,
@@ -88,25 +54,12 @@ export default {
       },
       selectBuy: '1',
       addressItem: '222'
-
     }
-  },
-  onShow() {
-    return
-    let index = this.$route.query.index
-    if (index !== undefined) {
-      this.addressInfo = this.addressItem(index)
-      this.isAddress = true
-    } else {
-      this.isAddress = false
-    }
-    this.$store.commit('UPDATE_IS_PICK', true)
   },
   computed: {
     allPrice() {
       return this.totalAmount + this.queryForm.freight
     },
-
     isAllselect() {
       let item = this.selectGoods.some(v => {
         return !v.select
@@ -127,8 +80,7 @@ export default {
   methods: {
     toPay() {
       let price = this.isAddress ? `恭喜您支付了${this.allPrice}元` : '请选择收获地址'
-
-      if(this.isAddress) {
+      if (this.isAddress) {
         const data = {
           act: 'createOrder',
           data: {
@@ -141,18 +93,16 @@ export default {
             list: this.selectGoods
           }
         }
-
         wx.cloud.callFunction({
           name: 'orderAction',
           data,
           complete: res => {
-            if(res.result.code == 0) {
+            if (res.result.code === 0) {
               wx.showToast({
                 title: '开单成功啦',
                 complete: () => {
                   // 购物车置空
                   this.$store.state.gooddetail.isCartToPay && this.$store.commit('CLEAN_CART')
-                  
                   setTimeout(() => {
                     wx.switchTab({
                       url: '/pages/index/index'
@@ -160,28 +110,24 @@ export default {
                   }, 1500)
                 }
               })
-            }else {
+            } else {
               wx.showToast({
                 title: '开单失败，请稍后再试',
                 icon: 'none'
               })
             }
-            
           }
         })
-      }else {
+      } else {
         wx.showToast({
           title: price,
           icon: 'none',
           duration: 1500
         })
       }
-      
-
-      
     },
     addressManage() {
-      if(wx.chooseAddress){
+      if (wx.chooseAddress) {
         wx.chooseAddress({
           success: (res) => {
             const data = res
@@ -193,22 +139,18 @@ export default {
             console.log(JSON.stringify(err))
           }
         })
-      }else{
-        console.log('当前微信版本不支持chooseAddress');
+      } else {
+        console.log('当前微信版本不支持chooseAddress')
       }
     },
     formatAddress(data) {
       return '' + data.provinceName + data.cityName + data.countyName + data.detailInfo
     }
-  },
-
-  
-  
-
+  }
 }
 </script>
 <style lang="less">
-.i_pay_address{
+.i_pay_address {
   padding-top: 15px;
   padding-bottom: 15px;
   .i_cell_hd .img_icon {
@@ -216,20 +158,20 @@ export default {
     height: 25px;
     margin-right: 5px;
   }
-}  
-.i_cell_pay{
+}
+.i_cell_pay {
   .i_cell_fr {
     color: #d4237a;
   }
 }
-.last_cell{
+.last_cell {
   border-bottom: 1rpx solid #e5e5e5;
 }
-.address_line{
+.address_line {
   width: 100%;
-height: 2px;
-background-image: linear-gradient(to right, #1296db 30%, #fff 30%, #fff 50%, #d17e52 50%, #d17e52 80%, #fff 80%, #fff 100%);
-background-size: 80px 2px;
-background-repeat: repeat-x;
+  height: 2px;
+  background-image: linear-gradient(to right, #1296db 30%, #fff 30%, #fff 50%, #d17e52 50%, #d17e52 80%, #fff 80%, #fff 100%);
+  background-size: 80px 2px;
+  background-repeat: repeat-x;
 }
 </style>

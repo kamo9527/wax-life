@@ -60,6 +60,7 @@
 </template>
 <script>
 import xcell from '@/components/cell'
+import { mapMutations } from 'vuex'
 export default {
   components: {
     xcell
@@ -93,7 +94,7 @@ export default {
     //   })
     // },
     addressManage() {
-      if(wx.chooseAddress){
+      if (wx.chooseAddress) {
         wx.chooseAddress({
           success: (res) => {
             console.log(JSON.stringify(res))
@@ -102,13 +103,14 @@ export default {
             console.log(JSON.stringify(err))
           }
         })
-      }else{
-        console.log('当前微信版本不支持chooseAddress');
+      } else {
+        console.log('当前微信版本不支持chooseAddress')
       }
     },
     goHome() {
-      wx.switchTab({  
-        url: '../index/index'  
+      this.UPDATE_CURRENT('workshop')
+      wx.switchTab({
+        url: '../index/index'
       })
     },
     phoneCall() {
@@ -121,7 +123,8 @@ export default {
           console.log('拨打电话失败！')
         }
       })
-    }
+    },
+    ...mapMutations(['UPDATE_CURRENT'])
   }
 }
 </script>
