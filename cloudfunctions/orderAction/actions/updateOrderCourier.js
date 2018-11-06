@@ -13,10 +13,10 @@ exports.call = async (event, context) => {
   }
   try {
     const result = await db.collection('orders').where({
-        orderId: event.orderId
-      }).update({
-        data: updataInfo
-      })
+      orderId: event.orderId
+    }).update({
+      data: updataInfo
+    })
     const res = {
       code: 0,
       msg: 'success'

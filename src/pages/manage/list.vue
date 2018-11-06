@@ -54,18 +54,27 @@ export default {
       this.getOrders(this.current)
     },
     sure() {
-      this.updateOrderCourier(this.questData)
-      this.questData.courier = ''
-      this.showModal = false
+      if (this.questData.courier) {
+        this.updateOrderCourier(this.questData)
+        this.showModal = false
+      } else {
+        wx.showToast({
+          icon: 'none',
+          title: '请输入快递号'
+        })
+      }
     },
     cancel() {
-      this.questData.courier = ''
+      this.questData = {
+        orderId: '',
+        courier: ''
+      }
       this.showModal = false
     },
     operate(id, status) {
       if (!id || !status) return
-      this.questData.orderId = id
       if (status === 'picking') {
+        this.questData.orderId = id
         this.showModal = true
       } else if (status === 'sending') {
         wx.showModal({
@@ -112,8 +121,12 @@ export default {
           info
         }
       }).then(res => {
+        this.questData = {
+          orderId: '',
+          courier: ''
+        }
         wx.showToast({
-          title: '快递更新成功',
+          title: '快递号更新成功',
           duration: 1500,
           complete: res => {
             this.getOrders(this.current)
