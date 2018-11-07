@@ -35,6 +35,7 @@ export default {
   props: {
     iClass: String,
     item: Object,
+    xIndex: [Number, String],
     isBtn: {
       type: Boolean,
       default: false
@@ -76,7 +77,7 @@ export default {
       }
     },
     btnClick(id, status) {
-      this.$emit('onBtn', id, status)
+      this.$emit('onBtn', id, status, this.xIndex)
     }
   }
 }

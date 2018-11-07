@@ -6,14 +6,20 @@
       <xtab key="done" title="已完成"></xtab>
     </xtabs>
     <div class="my_list" v-if="showList">
-      <order-item v-for="item in list" :key="item.orderId" :item="item" :is-btn="true" @onBtn="operate">
+      <order-item 
+        v-for="(item, index) in list" 
+        :key="item.orderId"
+        :x-index="index"
+        :item="item" 
+        :is-btn="true" 
+        @onBtn="operate">
       </order-item>
     </div>
     <div class="no_list" v-if="showNoList">
       <image src="../../static/images/no_list.png" mode="widthFix" class="no_list_img"></image>
     </div>
     <i-modal title="快递单号" :visible="showModal" @ok="sure" @cancel="cancel">
-      <i-input @change="updataVal" title="快递单号：" placeholder="请输入" />
+      <i-input :value="inputVal" @change="updataVal" title="快递单号：" placeholder="请输入" />
     </i-modal>
   </section>
 </template>
@@ -29,6 +35,8 @@ export default {
         orderId: '',
         courier: ''
       },
+      inputVal: '',
+      deleteIndex: 0,
       current: 'picking',
       showList: false,
       showNoList: false,
@@ -71,8 +79,9 @@ export default {
       }
       this.showModal = false
     },
-    operate(id, status) {
+    operate(id, status, i) {
       if (!id || !status) return
+      this.deleteIndex = i
       if (status === 'picking') {
         this.questData.orderId = id
         this.showModal = true
@@ -126,11 +135,13 @@ export default {
           orderId: '',
           courier: ''
         }
+        this.inputVal = ''
         wx.showToast({
           title: '快递号更新成功',
           duration: 1500,
           complete: res => {
-            this.getOrders(this.current)
+            this.list.splice(this.deleteIndex, 1)
+            if (this.list.length === 0) this.showNoList = true
           }
         })
       }).catch(err => {
@@ -149,7 +160,8 @@ export default {
           title: '状态更新成功',
           duration: 1500,
           complete: res => {
-            this.getOrders(this.current)
+            this.list.splice(this.deleteIndex, 1)
+            if (this.list.length === 0) this.showNoList = true
           }
         })
       }).catch(err => {
