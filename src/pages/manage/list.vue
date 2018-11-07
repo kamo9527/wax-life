@@ -118,7 +118,8 @@ export default {
         name: 'orderAction',
         data: {
           act: 'updateOrderCourier',
-          info
+          orderId: info.orderId,
+          courier: info.courier
         }
       }).then(res => {
         this.questData = {
