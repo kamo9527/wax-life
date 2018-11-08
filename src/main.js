@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import App from '@/App'
 import store from '@/store'
+import MpvueRouterPatch from 'mpvue-router-patch'
+
+Vue.use(MpvueRouterPatch)
 // var Fly=require("flyio/dist/npm/wx")
 
 // var fly=new Fly

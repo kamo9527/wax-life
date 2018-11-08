@@ -35,7 +35,8 @@ module.exports = [{
     navigationBarTitleText: '产品详情',
     usingComponents: {
       "wux-popup": "../../static/wux-weapp/popup/index",
-      'i-input-number': '../../static/iview/input-number/index'
+      'i-input-number': '../../static/iview/input-number/index',
+      'wux-divider': '../../static/wux-weapp/divider/index'
     }
   }
 }, {

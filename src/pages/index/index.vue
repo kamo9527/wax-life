@@ -22,7 +22,7 @@
         </xcol>
       </xrow>
       <div class="goods_list">
-        <div class="goods_item" v-for="item in goods" :key="item" @click="chooseGood(item)">
+        <div class="goods_item" v-for="item in goods" :key="item" @click="chooseGood(item.id)">
           <image :src="item.brand_img" mode="widthFix"></image>
           <div class="content">
             <div class="title">{{item.title}}</div>
@@ -194,23 +194,13 @@ export default {
         }
       })
     },
-    bindViewTap() {
-      const url = '../logs/index'
-      wx.navigateTo({ url })
-    },
-    getUserInfo() {
-      // 调用登录接口
-      wx.getUserInfo({
-        success: (res) => {
-          console.log(res.userInfo)
-        }
-      })
-    },
     // 选择商品
-    chooseGood(item) {
-      this.$store.commit('UPDATE_GOODS_DETAIL', item)
-      wx.navigateTo({
-        url: '/pages/index/detail'
+    chooseGood(id) {
+      this.$router.push({
+        path: '/pages/index/detail',
+        query: {
+          'id': id
+        }
       })
     },
     ...mapMutations(['UPDATE_CURRENT']),

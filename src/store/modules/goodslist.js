@@ -19,9 +19,6 @@ const getters = {
   selectGoods: state => {
     return state.cartGoods.filter(item => item.num)
   },
-  selectGoodsss: state => {
-    return state.ssgoodsss.filter(item => item.num)
-  },
   selectBuy: state => {
     return state.cartGoods.filter(item => item.num && item.select)
   },

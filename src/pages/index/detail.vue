@@ -16,25 +16,23 @@
         <div class="info">
           <span>快递：免运费</span>
           <span>月销{{goodInfo.sale}}笔</span>
-          <span>{{goodAdress}}</span>
+          <span>广东惠州</span>
         </div>
       </div>
       <!-- <xcell title="服务" fr="7天无理由 · 运费险"></xcell> -->
       <xcell title="规格" fr="请选择 颜色分类" @cellClick="sizeSelect"></xcell>
       <!-- <xcell title="参数" fr="品牌 形状..." @cellClick="paramsDialogShow = true"></xcell> -->
-      <div class="img_title">
-        <span>
-          <span class="line1"></span>
-        <div class="icon_info">
-          <span>详情</span>
-        </div>
-        <span class="line1"></span>
-        </span>
+      <div class="my_divider">
+        <wux-divider>
+          <text class="text">详情</text>
+        </wux-divider>
       </div>
       <div class="img_content">
-        <img v-for="item in goodInfo.others" class="goods-img" mode="widthFix" :src="item.src" :key="item"/>
+        <image class="goods-img" mode="widthFix" :src="basicUrl + 'home/giving_01.jpg'" /></image>
+        <image class="goods-img" mode="widthFix" :src="basicUrl + 'home/giving_02.jpg'" /></image>
+        <image class="goods-img" mode="widthFix" :src="item.src" v-for="item in goodInfo.others" :key="item"/></image>
       </div>
-        <div class="mock_foot"></div>
+      <div class="mock_foot"></div>
     </scroll-view>
     <div class="foot">
       <div class="left">
@@ -104,7 +102,6 @@
   </div>
 </template>
 <script>
-// import { formatTime } from '@/utils/index'
 import xcell from '@/components/cell'
 import store from '@/store/'
 export default {
@@ -113,20 +110,13 @@ export default {
   },
   data() {
     return {
+      id: '',
       sizeDialogShow: false,
       paramsDialogShow: false,
       goodNum: 1,
       current: 0,
       bugType: '',
-      images: [
-        '/static/images/goods.png',
-        '/static/images/goods.png',
-        '/static/images/goods.png',
-        '/static/images/goods.png',
-        '/static/images/goods.png',
-        '/static/images/goods.png'
-      ],
-      goodAdress: '广东惠州',
+      basicUrl: '',
       goodInfo: {
         price: 98,
         desc: '进口精油北欧风香薰蜡烛台礼盒天然大豆蜡卧室无烟大理石陶瓷杯',
@@ -145,7 +135,27 @@ export default {
       selectData: {}
     }
   },
-  onShow() {
+  created() {
+    this.basicUrl = this.yunImagesBasic
+  },
+  onShow(option) {
+    this.id = this.$route.query.id
+    wx.showLoading()
+    wx.cloud.callFunction({
+      name: 'goods',
+      data: {
+        act: 'getOrderByOpenId',
+        status: type
+      }
+    }).then(res => {
+      wx.hideLoading()
+      this.list = res.result.data
+      this.showList = this.list.length > 0
+      this.showNoList = !this.showList
+    }).catch(err => {
+      console.error('[云函数] [permissions] 调用失败：', err)
+    })
+    console.log(this.id)
     this.goodInfo = store.state.gooddetail.good
     this.sizeDialogData.colorName = this.goodInfo.style[0].title
     this.sizeDialogData.imgUrl = this.goodInfo.style[0].src
@@ -153,6 +163,20 @@ export default {
     this.goodInfo.style[0].select = true
   },
   methods: {
+    async getDetail(id) {
+      const db = wx.cloud.database()
+      let res = await db.collection('goods').get()
+      commit('UPDATE_ALL_GOODS', res.data)
+      // // 查询当前用户所有的 counters
+      // db.collection('goods').get()
+      // .then(res => {
+      //   console.log('aaa')
+      //   commit('UPDATE_ALL_GOODS', res.data)
+      // })
+      // .catch(err => {
+      //   console.log('fail信息:', err)
+      // })
+    },
     sizeSelect() {
       this.sizeDialogShow = true
     },
@@ -231,23 +255,28 @@ export default {
     }
   }
 }
+
 </script>
 <style scoped lang="less">
 .params_window {
   padding: 15px;
+
   .title {
     text-align: center;
     height: 30px;
     // line-height: 40px;
   }
+
   .params {
     height: 40px;
     line-height: 40px;
     text-align: left;
+
     .params_name {
       color: #999;
       width: 70px;
     }
+
     .params_desc {
       box-sizing: border-box;
       color: #333;
@@ -256,6 +285,7 @@ export default {
       line-height: 1.1;
     }
   }
+
   .complete {
     margin-top: 100px;
     height: 40px;
@@ -265,14 +295,17 @@ export default {
     background-image: linear-gradient(to right, #FF9000 0%, #FF5000 100%);
   }
 }
+
 .flex {
   display: flex;
   align-items: center;
 }
+
 .window {
   padding: 15px 15px;
   text-align: left;
   position: relative;
+
   .mock_icon {
     position: absolute;
     top: 15px;
@@ -282,6 +315,7 @@ export default {
     height: 20px;
     border: 0.5px solid #666;
     border-radius: 50%;
+
     &:before,
     &:after {
       position: absolute;
@@ -293,23 +327,28 @@ export default {
       left: 50%;
       top: 50%;
     }
+
     &:before {
       transform: translate(-50%, -50%) rotate(45deg);
     }
+
     &:after {
       transform: translate(-50%, -50%) rotate(-45deg);
     }
   }
+
   .info {
     color: #333;
     padding-bottom: 16px;
     border-bottom: 0.5px solid #f2f2f2;
+
     .img {
       display: inline-block;
       width: 80px;
       height: 80px;
       margin-right: 10px;
     }
+
     .desc {
       .price {
         color: #ff5000;
@@ -317,12 +356,14 @@ export default {
       }
     }
   }
+
   .color {
     .title {
       height: 30px;
       font-size: 15px;
       line-height: 30px;
     }
+
     .color_type {
       >span {
         display: inline-block;
@@ -333,24 +374,28 @@ export default {
         margin-bottom: 10px;
         background-color: #F8F8F8;
       }
+
       .sel {
         color: #fff;
         background-image: linear-gradient(to right, #FF7A00 100%, #FE560A 100%);
       }
     }
   }
+
   .number {
     border-top: 0.5px solid #f2f2f2;
     padding-top: 15px;
     font-size: 15px;
     justify-content: space-between;
   }
+
   .btns {
     font-size: 14px;
     flex-grow: 1.5;
     color: #fff;
     text-align: center;
     margin-top: 100px;
+
     .btn_group {
       >span {
         display: inline-block;
@@ -358,16 +403,19 @@ export default {
         height: 36px;
         line-height: 36px;
       }
+
       .add {
         background: linear-gradient(to right, #FFC500, #FF9402);
         border-top-left-radius: 20px;
         border-bottom-left-radius: 20px;
       }
+
       .pay {
         background: linear-gradient(to right, #FF7A00, #FE560A);
         border-top-right-radius: 20px;
         border-bottom-right-radius: 20px;
       }
+
       .confirm {
         width: 100%;
         border-radius: 20px;
@@ -376,15 +424,19 @@ export default {
     }
   }
 }
+
 .swiper_container {
   position: relative;
+
   .swiper_info {
     height: 230px;
   }
+
   .slide_image {
     display: block;
     width: 100%;
   }
+
   .image_count {
     position: absolute;
     right: 15px;
@@ -399,17 +451,20 @@ export default {
     font-size: 12px;
   }
 }
+
 .detail {
   padding: 0 15px;
   .price {
     color: #ff5000;
     font-size: 24px;
   }
+
   .desc {
     font-size: 16px;
     font-weight: 600;
     color: rgb(51, 51, 51);
   }
+
   .info {
     margin: 10px 0;
     display: flex;
@@ -418,37 +473,30 @@ export default {
     color: rgb(153, 153, 153);
   }
 }
-.img_title {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-top: 0.5px solid #eee;
-  padding: 10px 0;
-  >span {
-    display: flex;
-    align-items: center;
+
+.my_divider {
+  border-top: 1rpx solid #eee;
+  padding: 0 40px;
+    .text {
+      font-size: 14px;
+      color: #BFBFBF;
+    }
   }
-  .icon_info {
-    margin: 0 10px;
-  }
-  .line1 {
-    display: inline-block;
-    width: 40px;
-    border-top: 1px solid #999;
-  }
-}
+
 .img_content {
   font-size: 0;
-  img {
+  image {
     width: 100%;
-    display: block;
+    vertical-align: middle;
   }
 }
+
 .content {
   .mock_foot {
     height: 51px;
   }
 }
+
 .foot {
   height: 50px;
   width: 100%;
@@ -461,6 +509,7 @@ export default {
   justify-content: flex-start;
   color: #999;
   padding: 0 15px;
+
   .left,
   .right {
     display: flex;
@@ -468,16 +517,20 @@ export default {
     width: 1px;
     flex-grow: 1;
     font-size: 0;
+
     >span {
       text-align: center;
     }
+
     .store {
       margin-right: 0px;
     }
+
     img {
       width: 16px;
       height: 16px;
     }
+
     p {
       font-size: 12px;
       margin-top: 5px;
@@ -500,6 +553,7 @@ export default {
     font-size: 14px;
     flex-grow: 1.5;
     color: #fff;
+
     .btn_group {
       >span {
         display: inline-block;
@@ -507,11 +561,13 @@ export default {
         height: 36px;
         line-height: 36px;
       }
+
       .add {
         background: linear-gradient(to right, #FFC500, #FF9402);
         border-top-left-radius: 20px;
         border-bottom-left-radius: 20px;
       }
+
       .pay {
         background: linear-gradient(to right, #FF7A00, #FE560A);
         border-top-right-radius: 20px;
@@ -520,4 +576,5 @@ export default {
     }
   }
 }
+
 </style>
