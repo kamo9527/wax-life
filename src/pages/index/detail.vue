@@ -169,7 +169,7 @@ export default {
     },
     // 选择规格颜色
     colorSelect(index) {
-      this.bugType = ''
+      // this.bugType = ''
       this.goodInfo.style.forEach(item => {
         item.select = false
       })

@@ -53,7 +53,7 @@
       <xcell
         title="联系我们，做你的小程序" 
         src="../../static/icon/serve.png" 
-        link='.../my/link'>
+        link='../my/link'>
       </xcell>
     </div>
   </section>
