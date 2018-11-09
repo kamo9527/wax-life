@@ -1,24 +1,23 @@
 const state = {
-  good: {},
-  payingGoods: [],
+  payingList: [],
   // 结单入口标记
   isCartToPay: false
 }
 const getters = {
-  payingGoods: state => {
-    return state.payingGoods
+  payingList: state => {
+    return state.payingList
   }
 }
 const mutations = {
-  'UPDATE_GOODS_DETAIL'(state, data) {
-    state.good = data
-  },
+  // 'UPDATE_GOODS_DETAIL'(state, data) {
+  //   state.good = data
+  // },
   'UPDATE_PAYING_GOOD'(state, data) {
-    if (data instanceof Array) {
-      state.payingGoods = data
-    } else {
-      state.payingGoods = [data]
-    }
+    // if (data instanceof Array) {
+    //   state.payingList = data
+    // } else {
+    // }
+    state.payingList = [...data]
   },
   'UPDATE_GOODS_ALL_SELECT'(state, data) {
     state.goods.forEach(v => {

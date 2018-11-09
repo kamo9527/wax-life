@@ -40,7 +40,7 @@ export default {
       // this.$emit('onChange', this.item)
     },
     minus() {
-      this.item.num--
+      if (this.item.num > 1) this.item.num--
       // this.$emit('onChange', this.item)
     }
   }

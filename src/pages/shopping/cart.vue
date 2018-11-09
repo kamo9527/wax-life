@@ -53,9 +53,7 @@ export default {
       })
       return price
     },
-    ...mapGetters({
-      selectGoods: 'selectGoods'
-    })
+    ...mapGetters(['selectGoods'])
   },
   methods: {
     // itemChange(item) {

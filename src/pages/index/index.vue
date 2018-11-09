@@ -25,7 +25,7 @@
         <div class="goods_item" v-for="item in goods" :key="item" @click="chooseGood(item.id)">
           <image :src="item.brand_img" mode="widthFix"></image>
           <div class="content">
-            <div class="title">{{item.title}}</div>
+            <div class="title">{{item.brand_title}}</div>
             <div class="detail">￥<span class="price">{{item.price}}</span><span class="num">{{item.sale}}人付款</span><span class="more">. . .</span></div>
           </div>
         </div>
@@ -36,7 +36,7 @@
         <image :src="item.brand_img" mode="widthFix"></image>
         <div class="content">
           <div class="update_day">{{item.is_new}}</div>
-          <div class="title">{{item.title}}</div>
+          <div class="title">{{item.brand_title}}</div>
           <div class="detail">￥<span class="price">{{item.price}}</span></div>
         </div>
       </div>

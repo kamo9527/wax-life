@@ -3,181 +3,195 @@
     <scroll-view scroll-y>
       <div class="swiper_container">
         <swiper circular class="swiper_info" :current="current" @change="imageCount">
-          <swiper-item v-for="item in goodInfo.swiper" :key="item">
-            <image class="slide_image" :src="item.src" @click="previewSwiperImg(item)">
+          <swiper-item v-for="item in goodsInfo.swiper" :key="item">
+            <image class="slide_image" :src="item.src" @click="previewSwiperImg(item.src, 'swiper')">
             </image>
           </swiper-item>
         </swiper>
-        <div class="image_count">{{current + 1}} / {{goodInfo.swiper.length}}</div>
+        <div class="image_count">{{current + 1}} / {{goodsInfo.swiper.length}}</div>
       </div>
       <div class="detail">
-        <div class="price">￥{{goodInfo.price}}</div>
-        <div class="desc">{{goodInfo.title}}</div>
+        <div class="price">￥{{goodsInfo.price}}</div>
+        <div class="desc">{{goodsInfo.title}}</div>
         <div class="info">
           <span>快递：免运费</span>
-          <span>月销{{goodInfo.sale}}笔</span>
+          <span>月销{{goodsInfo.sale}}笔</span>
           <span>广东惠州</span>
         </div>
       </div>
       <!-- <xcell title="服务" fr="7天无理由 · 运费险"></xcell> -->
-      <xcell title="规格" fr="请选择 颜色分类" @cellClick="sizeSelect"></xcell>
+      <xcell title="风格：" :fr="chooseGoods" @cellClick="sizeSelect"></xcell>
       <!-- <xcell title="参数" fr="品牌 形状..." @cellClick="paramsDialogShow = true"></xcell> -->
-      <div class="my_divider">
-        <wux-divider>
-          <text class="text">详情</text>
-        </wux-divider>
-      </div>
+      
       <div class="img_content">
-        <image class="goods-img" mode="widthFix" :src="basicUrl + 'home/giving_01.jpg'" /></image>
-        <image class="goods-img" mode="widthFix" :src="basicUrl + 'home/giving_02.jpg'" /></image>
-        <image class="goods-img" mode="widthFix" :src="item.src" v-for="item in goodInfo.others" :key="item"/></image>
+        <div class="my_divider">
+          <wux-divider>
+            <text class="text">优惠礼品</text>
+          </wux-divider>
+        </div>
+        <image class="goods-img" mode="widthFix" src="cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/giving_01.jpg" /></image>
+        <image class="goods-img" mode="widthFix" src="cloud://wax-test-ee69e9.7761-wax-test-ee69e9/home/giving_02.jpg" /></image>
+        <div class="my_divider">
+          <wux-divider>
+            <text class="text">详情</text>
+          </wux-divider>
+        </div>
+        <image class="goods-img" mode="widthFix" 
+          v-for="item in goodsInfo.others" 
+          :src="item.src" 
+          :key="item"
+          @click="previewSwiperImg(item.src, 'others')"
+          ></image>
       </div>
       <div class="mock_foot"></div>
     </scroll-view>
+    <!-- todo 店铺和客服 -->
     <div class="foot">
       <div class="left">
-        <span class="store" @click="backToIndex">
+        <div class="store" @click="backToIndex">
           <img src="/static/icon/sub.png" alt="">
-          <p>店铺</p>
-        </span>
+          <span>店铺</span>
+        </div>
         <button :plain="true" class="service" open-type="contact">
           <img src="/static/icon/serve.png" alt="">
-          <p>客服</p>
+          <span>客服</span>
         </button>
       </div>
       <div class="right">
-        <span class="btn_group">
-          <span class="add" @click="toBug(0)">加入购物车</span>
-        <span class="pay" @click="toBug(1)">立即购买</span>
-        </span>
+        <div class="btn_group">
+          <span class="add" @click="sizeSelect('toCart')">加入购物车</span>
+          <span class="pay" @click="sizeSelect('toPay')">立即购买</span>
+        </div>
       </div>
     </div>
     <wux-popup position="bottom" class-names="slideInUp" :visible="sizeDialogShow" @close="sizeDialogClose">
       <div class="window">
         <span class="mock_icon" @click="sizeDialogClose"></span>
         <div class="flex info">
-          <img class="img" :src="sizeDialogData.imgUrl">
+          <img class="img" :src="chooseItem.src">
           <div class="desc">
-            <p class="price">￥{{goodInfo.price}}</p>
-            <p>库存：{{goodInfo.price}}</p>
-            <p>已选：{{sizeDialogData.colorName}}</p>
+            <p class="price">￥{{goodsInfo.price}}</p>
+            <p>库存：{{goodsInfo.price}}</p>
+            <p v-if="chooseItem.name">已选：{{chooseItem.title}}</p>
+            <p v-else>选择：颜色分类</p>
           </div>
         </div>
         <div class="color">
           <div class="title">颜色分类</div>
           <div class="color_type">
-            <span v-for="(good, gdIndex) in goodInfo.style" :key="gdIndex" :class="{sel: good.select}" @click="colorSelect(gdIndex)">{{good.title}}</span>
+            <span 
+              v-for="(good, gdIndex) in goodsInfo.style" 
+              :key="gdIndex" 
+              :class="{sel: good.select}" 
+              @click="colorSelect(gdIndex)"
+            >{{good.title}}
+            </span>
           </div>
         </div>
         <div class="flex number">
           <div class="title">购买数量</div>
-          <div>
-            <i-input-number :value="goodNum" min="0" max="100" @change="goodNumChange"></i-input-number>
-          </div>
+          <i-input-number :value="goodNum" min="1" max="100" @change="goodNumChange"></i-input-number>
         </div>
         <div class="btns">
-          <span class="btn_group" v-if="!bugType">
-            <span class="add" @click="addToCart">加入购物车</span>
-          <span class="pay">立即购买</span>
-          </span>
-          <span class="btn_group" v-if="bugType">
-            <span class="confirm" @click="sizeDialogConfirm">确定</span>
-          </span>
+          <div class="btn_group" v-if="opareteType">
+            <span class="confirm" @click="oparete('')">确定</span>
+          </div>
+          <div class="btn_group" v-else>
+            <span class="add" @click="oparete('toCart')">加入购物车</span>
+            <span class="pay" @click="oparete('toPay')">立即购买</span>
+          </div>
         </div>
       </div>
     </wux-popup>
-    <wux-popup position="bottom" class-names="slideInUp" :visible="paramsDialogShow" @close="paramsDialogShow = false">
+    <!-- <wux-popup position="bottom" class-names="slideInUp" :visible="paramsDialogShow" @close="paramsDialogShow = false">
       <div class="params_window">
         <div class="title">产品参数</div>
-        <div class="params flex" v-for="(params, paramsIndex) in goodInfo.params" :key="paramsIndex">
+        <div class="params flex" v-for="(params, paramsIndex) in goodsInfo.params" :key="paramsIndex">
           <div class="params_name">{{params.name}}</div>
           <div class="params_desc">{{params.desc}}</div>
         </div>
         <div class="complete" @click="paramsDialogShow = false">完成</div>
-        <!-- <template v-for="params in goodInfo.params" > 
+        <template v-for="params in goodsInfo.params" > 
           <xcell :title="params.name" :fr="params.desc"></xcell>
-        </template> -->
+        </template>
       </div>
-    </wux-popup>
+    </wux-popup> -->
   </div>
 </template>
 <script>
 import xcell from '@/components/cell'
-import store from '@/store/'
+import { mapMutations } from 'vuex'
 export default {
   components: {
     xcell
   },
   data() {
     return {
-      id: '',
-      sizeDialogShow: false,
-      paramsDialogShow: false,
-      goodNum: 1,
+      id: '', // 产品id
       current: 0,
-      bugType: '',
-      basicUrl: '',
-      goodInfo: {
-        price: 98,
-        desc: '进口精油北欧风香薰蜡烛台礼盒天然大豆蜡卧室无烟大理石陶瓷杯',
-        saleTotal: '3',
+      goodNum: 1,
+      chooseGoods: '请选择 颜色分类',
+      opareteType: '',
+      sizeDialogShow: false,
+      goodsInfo: {
+        price: 0,
+        desc: '',
+        saleTotal: '',
         style: [],
         colorTypes: [],
-        params: []
+        params: [],
+        swiper: [],
+        others: []
       },
-      sizeDialogData: {
-        colorName: '111',
-        colorId: '111',
-        price: '98',
-        stock: '100',
-        imgUrl: '/static/images/goods.png'
+      chooseItem: {
+        name: '',
+        title: '',
+        src: '',
+        num: 1
       },
       selectData: {}
     }
   },
   created() {
-    this.basicUrl = this.yunImagesBasic
   },
   onShow(option) {
+    Object.assign(this.$data, this.$options.data())
     this.id = this.$route.query.id
-    wx.showLoading()
-    wx.cloud.callFunction({
-      name: 'goods',
-      data: {
-        act: 'getOrderByOpenId',
-        status: type
-      }
-    }).then(res => {
-      wx.hideLoading()
-      this.list = res.result.data
-      this.showList = this.list.length > 0
-      this.showNoList = !this.showList
-    }).catch(err => {
-      console.error('[云函数] [permissions] 调用失败：', err)
-    })
-    console.log(this.id)
-    this.goodInfo = store.state.gooddetail.good
-    this.sizeDialogData.colorName = this.goodInfo.style[0].title
-    this.sizeDialogData.imgUrl = this.goodInfo.style[0].src
-    this.sizeDialogData.colorId = this.goodInfo.style[0].name
-    this.goodInfo.style[0].select = true
+    this.getDetail(this.id)
+  },
+  computed: {
+    swiperUrls() {
+      return this.goodsInfo.swiper.map(v => {
+        return v.src
+      })
+    },
+    othersUrls() {
+      return this.goodsInfo.others.map(v => {
+        return v.src
+      })
+    }
   },
   methods: {
     async getDetail(id) {
+      wx.showLoading()
       const db = wx.cloud.database()
-      let res = await db.collection('goods').get()
-      commit('UPDATE_ALL_GOODS', res.data)
-      // // 查询当前用户所有的 counters
-      // db.collection('goods').get()
-      // .then(res => {
-      //   console.log('aaa')
-      //   commit('UPDATE_ALL_GOODS', res.data)
-      // })
-      // .catch(err => {
-      //   console.log('fail信息:', err)
-      // })
+      let res = await db.collection('goods').where({id: id}).get()
+      this.goodsInfo = res.data[0]
+      this.chooseItem.src = this.goodsInfo.brand_img
+      wx.hideLoading()
     },
-    sizeSelect() {
+    imageCount(e) {
+      this.current = e.mp.detail.current
+    },
+    previewSwiperImg(src, key) {
+      let urls = this[key + 'Urls']
+      wx.previewImage({
+        current: src, // 当前显示图片的http链接
+        urls: urls // 需要预览的图片http链接列表
+      })
+    },
+    sizeSelect(key) {
+      this.opareteType = key
       this.sizeDialogShow = true
     },
     sizeDialogClose() {
@@ -186,62 +200,47 @@ export default {
     goodNumChange(ev) {
       this.goodNum = ev.target.value
     },
-    // 选择规格颜色
-    colorSelect(index) {
+    colorSelect(index) { // 选择规格颜色
       // this.bugType = ''
-      this.goodInfo.style.forEach(item => {
+      this.goodsInfo.style.forEach(item => {
         item.select = false
       })
-      const target = this.goodInfo.style[index]
+      const target = this.goodsInfo.style[index]
       target.select = true
-      this.sizeDialogData.colorName = target.title
-      this.sizeDialogData.imgUrl = target.src
-      this.sizeDialogData.colorId = target.name
+      this.chooseItem = target
+      this.chooseGoods = target.title
     },
-    // 购买(加入购物车/立即购买)
-    toBug(type) {
-      if (type) {
-        this.bugType = 'bug'
-      } else {
-        this.bugType = 'cart'
-      }
-      this.sizeDialogShow = true
-    },
-    addToCart() {
-      const productInfo = {
-        id: this.goodInfo.id,
-        price: this.sizeDialogData.price,
-        num: this.goodNum,
-        styleTitle: this.sizeDialogData.colorName,
-        styleName: this.sizeDialogData.colorId,
-        title: this.goodInfo.title,
-        styleSrc: this.sizeDialogData.imgUrl
-      }
-      this.$store.commit('ADD_TO_CART', productInfo)
-      wx.showToast({
-        title: '已添加到购物车',
-        complete: () => {
-          this.sizeDialogShow = false
+    oparete(key) { // 购买(加入购物车/立即购买)
+      let nextKey = key || this.opareteType
+      if (!this.chooseItem.name) {
+        if (!this.sizeDialogShow) {
+          this.sizeDialogShow = true
+        } else {
+          wx.showToast({
+            icon: 'none',
+            title: '请选择种类'
+          })
         }
-      })
-    },
-    sizeDialogConfirm() {
-      if (this.bugType === 'cart') {
-        this.addToCart()
       } else {
-        const productInfo = {
-          id: this.goodInfo.id,
-          price: this.sizeDialogData.price,
-          num: this.goodNum,
-          styleTitle: this.sizeDialogData.colorName,
-          styleName: this.sizeDialogData.colorId,
-          styleSrc: this.sizeDialogData.imgUrl
+        // 选择颜色后封装信息进行管理
+        const chooseInfo = {
+          id: this.goodsInfo.id,
+          price: this.goodsInfo.price,
+          brand_title: this.goodsInfo.brand_title,
+          ...this.chooseItem
         }
-        this.$store.commit('UPDATE_PAYING_GOOD', productInfo)
-        this.$store.commit('UPDATE_TOPAY_TYPE', 0)
-        wx.navigateTo({
-          url: '/pages/index/paying'
-        })
+        chooseInfo.num = this.goodNum
+        if (nextKey === 'toPay') {
+          this.UPDATE_CURRENT(chooseInfo)
+          wx.navigateTo({
+            url: '/pages/index/paying'
+          })
+        } else if (nextKey === 'toCart') {
+          this.ADD_TO_CART(chooseInfo)
+          wx.showToast({
+            title: '成功添加到购物车'
+          })
+        }
         this.sizeDialogShow = false
       }
     },
@@ -250,9 +249,10 @@ export default {
     },
     backToIndex() {
       wx.switchTab({
-        url: '/pages/index/index'
+        url: '/pages/index/home'
       })
-    }
+    },
+    ...mapMutations(['ADD_TO_CART', 'UPDATE_CURRENT'])
   }
 }
 
@@ -397,7 +397,8 @@ export default {
     margin-top: 100px;
 
     .btn_group {
-      >span {
+      span {
+        text-align: center;
         display: inline-block;
         width: 150px;
         height: 36px;
@@ -556,6 +557,7 @@ export default {
 
     .btn_group {
       >span {
+        text-align: center;
         display: inline-block;
         width: 100px;
         height: 36px;
