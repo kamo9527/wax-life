@@ -38,14 +38,14 @@
     </scroll-view>
     <div class="foot">
       <div class="left">
-        <span class="store">
+        <span class="store" @click="backToIndex">
           <img src="/static/icon/sub.png" alt="">
           <p>店铺</p>
         </span>
-        <span class="service">
+        <button :plain="true" class="service" open-type="contact">
           <img src="/static/icon/serve.png" alt="">
           <p>客服</p>
-        </span>
+        </button>
       </div>
       <div class="right">
         <span class="btn_group">
@@ -145,12 +145,7 @@ export default {
       selectData: {}
     }
   },
-  created() {
-    // const logs = (wx.getStorageSync('logs') || [])
-    // this.logs = logs.map(log => formatTime(new Date(log)))
-  },
   onShow() {
-    // console.log(this.yunImagesBasic)
     this.goodInfo = store.state.gooddetail.good
     this.sizeDialogData.colorName = this.goodInfo.style[0].title
     this.sizeDialogData.imgUrl = this.goodInfo.style[0].src
@@ -228,6 +223,11 @@ export default {
     },
     imageCount(e) {
       this.current = e.mp.detail.current
+    },
+    backToIndex() {
+      wx.switchTab({
+        url: '/pages/index/index'
+      })
     }
   }
 }
@@ -472,7 +472,7 @@ export default {
       text-align: center;
     }
     .store {
-      margin-right: 40px;
+      margin-right: 0px;
     }
     img {
       width: 16px;
@@ -482,6 +482,18 @@ export default {
       font-size: 12px;
       margin-top: 5px;
       line-height: 1;
+    }
+  }
+  .left {
+    .service {
+      line-height: 1;
+      border: none;
+      background: #fff;
+      margin-left: 20px;
+      p {
+        color: #999;
+        margin-top: 4px;
+      }
     }
   }
   .right {
