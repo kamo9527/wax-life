@@ -31,8 +31,8 @@ export default {
   },
   methods: {
     allSelect(e) {
-      let checked = e.target.current
-      this.UPDATE_GOODS_ALL_SELECT({checked: checked})
+      let select = e.target.current
+      this.UPDATE_GOODS_ALL_SELECT({select: select})
     },
     account() {
       if (this.accounts > 0) {

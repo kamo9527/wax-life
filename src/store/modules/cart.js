@@ -36,8 +36,8 @@ const mutations = {
     })
   },
   'UPDATE_GOODS_ALL_SELECT'(state, data) {
-    state.goods.forEach(v => {
-      v.select = data.checked
+    state.cartGoods.forEach(v => {
+      v.select = data.select
     })
   },
   // 加入购物车

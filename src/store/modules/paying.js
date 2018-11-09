@@ -19,11 +19,6 @@ const mutations = {
     // }
     state.payingList = [...data]
   },
-  'UPDATE_GOODS_ALL_SELECT'(state, data) {
-    state.goods.forEach(v => {
-      v.select = data.checked
-    })
-  },
   'UPDATE_TOPAY_TYPE'(state, data) {
     state.isCartToPay = data
   }
