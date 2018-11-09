@@ -46,7 +46,7 @@ export default {
     color: #d4237a;
   }
   .i_cell_btn{
-    background-color: #d4237a;
+    background-color: #ea9b5a;
     padding: 15px 35px;
     color: #fff;
     font-size: 15px;

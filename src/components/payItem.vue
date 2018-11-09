@@ -1,10 +1,10 @@
 <template>
   <div class="good_item">
     <div class="lable">购物清单</div>
-    <div class="content" v-for="(item, index) in goodList" :key="index">
+    <div class="content" v-for="(item, index) in payList" :key="index">
       <div class="good_detail">
-        <img :src="item.styleSrc" alt="">
-        <span>{{item.styleTitle}}</span>
+        <img :src="item.src" alt="">
+        <span>{{item.title}}</span>
       </div>
       <div class="good_price">
         {{item.num + 'x' + item.price + '元'}}
@@ -16,29 +16,14 @@
 export default {
   props: {
     iClass: String,
-    color: String,
-    disabled: Boolean,
     item: Object,
-    goodList: Array
+    payList: Array
   },
   data() {
     return {
     }
   },
-  methods: {
-    radioChange(e) {
-      this.item.select = e.target.current
-      // this.$emit('onChange', this.item)
-    },
-    add() {
-      this.item.num++
-      // this.$emit('onChange', this.item)
-    },
-    minus() {
-      this.item.num--
-      // this.$emit('onChange', this.item)
-    }
-  }
+  methods: {}
 }
 </script>
 <style lang="less">

@@ -231,7 +231,7 @@ export default {
         }
         chooseInfo.num = this.goodNum
         if (nextKey === 'toPay') {
-          this.UPDATE_CURRENT(chooseInfo)
+          this.ADD_TO_PAY(chooseInfo)
           wx.navigateTo({
             url: '/pages/index/paying'
           })
@@ -244,15 +244,12 @@ export default {
         this.sizeDialogShow = false
       }
     },
-    imageCount(e) {
-      this.current = e.mp.detail.current
-    },
     backToIndex() {
       wx.switchTab({
         url: '/pages/index/home'
       })
     },
-    ...mapMutations(['ADD_TO_CART', 'UPDATE_CURRENT'])
+    ...mapMutations(['ADD_TO_CART', 'ADD_TO_PAY'])
   }
 }
 

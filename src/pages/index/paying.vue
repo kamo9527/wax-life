@@ -1,15 +1,28 @@
 <template>
   <div>
-    <xcell v-if="isAddress" :title="addressInfo.userName" :mobile="addressInfo.telNumber" :inline-desc="addressInfo.address" i-class="i_pay_address" @cellClick="addressManage">
-    </xcell>
-    <xcell v-else title="请点击选择收获地址" src="../../static/icon/local.png" i-class="i_pay_address" @cellClick="addressManage">
-    </xcell>
+    <i-cell 
+      v-if="isAddress" 
+      :title="addressInfo.userName" 
+      :label="addressInfo.telNumber" 
+      :value="addressInfo.address" 
+      @click="addressManage"
+      is-link
+      >
+    </i-cell>
+    <i-cell 
+      v-else 
+      title="请点击选择收获地址" 
+      @click="addressManage" 
+      is-link
+    >
+      <img src='../../static/icon/local.png' slot="icon" />
+    </i-cell>
     <div class="address_line"></div>
-    <good-item color="#ea9b5a" :item="item" :good-list="selectGoods">
-    </good-item>
+    <div class="line"></div>
+    <goods-pay-list :list="payImgList"></goods-pay-list>
     <!-- <div>
       <div class="lable">购物清单</div>.
-      <div v-for="(item, index) in selectGoods" :key="index">
+      <div v-for="(item, index) in payList" :key="index">
         <div class="good_detail">
           <img :src="item.src" alt="">
           <span>{{item.title}}</span>
@@ -21,27 +34,24 @@
     </div> -->
     <!-- <mini-goods-list :goods-list="selectBuy"></mini-goods-list> -->
     <div class="line"></div>
-    <xcell title="商品总价" :fr="`￥${totalAmount}`" i-class="i_cell_pay">
+    <!-- <xcell title="商品总价" :fr="`￥${totalAmount}`" i-class="i_cell_pay">
     </xcell>
     <xcell title="运费" :fr="`￥${queryForm.freight}`" i-class="i_cell_pay">
     </xcell>
     <xcell title="合计" :fr="`￥${totalAmount}`" i-class="i_cell_pay last_cell">
-    </xcell>
-    <pay :money="allPrice" @to-pay="toPay">
-    </pay>
+    </xcell> -->
+    <pay :money="allPrice" @to-pay="toPay"></pay>
   </div>
 </template>
 <script>
+import goodsPayList from '@/components/goodsPayList'
 import xcell from '@/components/cell'
-import miniGoodsList from '@/components/miniGoodsList'
-import goodItem from '@/components/goodItem'
 import pay from '@/components/pay'
 import { mapGetters } from 'vuex'
 export default {
   components: {
+    goodsPayList,
     xcell,
-    miniGoodsList,
-    goodItem,
     pay
   },
   data() {
@@ -61,21 +71,19 @@ export default {
       return this.totalAmount + this.queryForm.freight
     },
     isAllselect() {
-      let item = this.selectGoods.some(v => {
+      let item = this.payList.some(v => {
         return !v.select
       })
-      return !item && this.selectGoods.length > 0
+      return !item && this.payList.length > 0
     },
     totalAmount() {
       let price = 0
-      this.selectGoods.forEach(v => {
+      this.payList.forEach(v => {
         price += (v.price * v.num)
       })
       return price
     },
-    ...mapGetters({
-      selectGoods: 'payingGoods'
-    })
+    ...mapGetters(['payList', 'payImgList'])
   },
   methods: {
     toPay() {
@@ -88,9 +96,9 @@ export default {
             order_name: this.addressInfo.userName,
             order_phone: this.addressInfo.telNumber,
             order_address: this.addressInfo.address,
-            order_img: this.selectGoods[0] ? this.selectGoods[0].src : '../../static/icon/local.png',
+            order_img: this.payList[0] ? this.payList[0].src : '../../static/icon/local.png',
             status: 'picking',
-            list: this.selectGoods
+            list: this.payList
           }
         }
         wx.cloud.callFunction({

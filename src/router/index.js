@@ -78,6 +78,10 @@ module.exports = [{
 }, {
   path: '/pages/index/paying',
   config: {
-    navigationBarTitleText: '填写订单'
+    navigationBarTitleText: '填写订单',
+    usingComponents: {
+      'card': '../../static/iview/card/index',
+      'i-cell': '../../static/iview/cell/index'
+    }
   }
 }]
