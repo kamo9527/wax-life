@@ -46,7 +46,7 @@ export default {
       borderStyle: 'white',
       backgroundColor: '#ffffff',
       list: [{
-        pagePath: 'pages/index/index',
+        pagePath: 'pages/index/home',
         text: '首页',
         iconPath: 'static/icon/home.png',
         selectedIconPath: 'static/icon/home-actived.png'

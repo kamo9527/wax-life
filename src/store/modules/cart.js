@@ -3,16 +3,6 @@ const state = {
 }
 const getters = {
   selectGoods: state => state.cartGoods
-  // selectBuy: state => {
-  //   return state.cartGoods.filter(item => item.num && item.select)
-  // },
-  // selectStatus: (state, getters) => (status) => {
-  //   if (status === 'all') {
-  //     return getters.selectBuy
-  //   } else {
-  //     return getters.selectBuy.filter(item => item.status === status)
-  //   }
-  // }
 }
 const mutations = {
   'ADD_TO_CART'(state, data) {

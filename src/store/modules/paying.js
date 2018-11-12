@@ -17,11 +17,8 @@ const mutations = {
       state.payList.push(data)
     }
   },
-  'UPDATE_PAYING_GOOD'(state, data) {
-    // if (data instanceof Array) {
-    //   state.payList = data
-    // } else {
-    // }
+  'CLEAN_PAY_LIST'(state, data) {
+    state.payList = []
   },
   'UPDATE_TOPAY_TYPE'(state, data) {
     state.isCartToPay = data

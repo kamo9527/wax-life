@@ -3,7 +3,7 @@
     <div class="lable">购物清单</div>
     <div class="content">
       <div class="pay_img_list">
-        <img v-for="item in list" class="img_item" :src="item" alt="">
+        <img v-for="item in list" :key="item" class="img_item" :src="item" alt="">
       </div>
       <div class="pay_num">共{{list.length}}件</div>
       <div class="with_arrow"></div>

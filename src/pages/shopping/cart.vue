@@ -17,7 +17,8 @@
     <accounts 
       color="#ea9b5a"
       :selected="isAllselect"
-      :accounts="totalAmount"
+      :accounts="totalPrice"
+      @to-pay="toPay"
       >
     </accounts>
   </div>
@@ -25,7 +26,7 @@
 <script>
 import goodsItem from '@/components/goodsItem'
 import accounts from '@/components/accounts'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 export default {
   components: {
     goodsItem,
@@ -44,7 +45,7 @@ export default {
       })
       return !item && this.selectGoods.length > 0
     },
-    totalAmount() {
+    totalPrice() {
       let price = 0
       this.selectGoods.forEach(v => {
         if (v.select) {
@@ -56,25 +57,28 @@ export default {
     ...mapGetters(['selectGoods'])
   },
   methods: {
-    // itemChange(item) {
-    //   this.UPDATE_GOODS_ITEM(item)
-    // },
-    // allSelect(isAll) {
-    //   if (this.ids.length > 0) this.UPDATE_GOODS_ALL_SELECT({ids: this.ids, select: !isAll})
-    // },
-    // toAccounts() {
-    //   console.log(this.selectGoods)
-    //   if (this.totalAmount) {
-    //     this.$router.push('/pages/goods/paying')
-    //   } else {
-    //     wx.showToast({
-    //       title: '请选择我家荔枝',
-    //       icon: 'none',
-    //       duration: 1500
-    //     })
-    //   }
-    // },
-    // ...mapMutations(['UPDATE_GOODS_ITEM'])
+    toPay() {
+      if (this.totalPrice > 0) {
+        // 筛选被选中商品
+        let list = this.selectGoods.filter(v => {
+          return v.select
+        })
+        this.ADD_TO_PAY(list)
+        this.$router.push({
+          path: '/pages/index/paying',
+          query: {
+            'from': 'together'
+          }
+        })
+      } else {
+        wx.showToast({
+          title: '请选择产品',
+          icon: 'none',
+          duration: 1500
+        })
+      }
+    },
+    ...mapMutations(['ADD_TO_PAY'])
   }
 }
 </script>

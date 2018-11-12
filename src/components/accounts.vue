@@ -35,20 +35,7 @@ export default {
       this.UPDATE_GOODS_ALL_SELECT({select: select})
     },
     account() {
-      if (this.accounts > 0) {
-        // 更新结算数据
-        const list = this.$store.state.goodslist.cartGoods
-        this.$store.commit('UPDATE_PAYING_GOOD', list)
-        this.$store.commit('UPDATE_TOPAY_TYPE', 1)
-        const url = '../index/paying'
-        wx.navigateTo({ url })
-      } else {
-        wx.showToast({
-          title: '请选择产品',
-          icon: 'none',
-          duration: 1500
-        })
-      }
+      this.$emit('to-pay')
     },
     ...mapMutations(['UPDATE_GOODS_ALL_SELECT'])
   }

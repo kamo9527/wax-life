@@ -6,7 +6,8 @@
     </xtabs>
     <div class="my_list" v-if="showList">
       <order-item
-        v-for="item in list" :key="item.id"
+        v-for="item in list" 
+        :key="item.id"
         :item="item"
         >
       </order-item>

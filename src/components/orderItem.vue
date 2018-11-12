@@ -2,7 +2,7 @@
   <div class="my_list_item">
     <div :class="['i_cell', 'i_cell_bd_start', iClass]">
       <div class="i_cell_hd">
-        <img :src="item.list && item.list[0].styleSrc" class="img_icon order_pic" alt="" />
+        <img :src="item.list[0].src" class="img_icon order_pic" alt="" />
     </div>
         <div class="i_cell_bd">
           <div class="title pb10">下单日期：{{item.show_time}}</div>
