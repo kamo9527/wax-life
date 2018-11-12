@@ -48,10 +48,10 @@
     <!-- todo 店铺和客服 -->
     <div class="foot">
       <div class="left">
-        <div class="store" @click="backToIndex">
+        <button :plain="true" class="service" @click.stop="backToIndex">
           <img src="/static/icon/sub.png" alt="">
           <span>店铺</span>
-        </div>
+        </button>
         <button :plain="true" class="service" open-type="contact">
           <img src="/static/icon/serve.png" alt="">
           <span>客服</span>
@@ -152,9 +152,7 @@ export default {
       selectData: {}
     }
   },
-  created() {
-  },
-  onShow(option) {
+  mounted(option) {
     Object.assign(this.$data, this.$options.data())
     this.id = this.$route.query.id
     this.getDetail(this.id)
@@ -185,6 +183,7 @@ export default {
     },
     previewSwiperImg(src, key) {
       let urls = this[key + 'Urls']
+      wx.hideLoading()
       wx.previewImage({
         current: src, // 当前显示图片的http链接
         urls: urls // 需要预览的图片http链接列表
@@ -506,7 +505,6 @@ export default {
   display: flex;
   justify-content: flex-start;
   color: #999;
-  padding: 0 15px;
 
   .left,
   .right {
@@ -519,31 +517,22 @@ export default {
     >span {
       text-align: center;
     }
-
-    .store {
-      margin-right: 0px;
-    }
-
-    img {
-      width: 16px;
-      height: 16px;
-    }
-
-    p {
-      font-size: 12px;
-      margin-top: 5px;
-      line-height: 1;
-    }
   }
   .left {
     .service {
       line-height: 1;
       border: none;
       background: #fff;
-      margin-left: 20px;
-      p {
+      padding: 0;
+      span {
+        font-size: 13px;
         color: #999;
-        margin-top: 4px;
+      }
+      img {
+        vertical-align: middle;
+        width: 20px;
+        height: 20px;
+        margin-right: 6px;
       }
     }
   }

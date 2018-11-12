@@ -129,7 +129,7 @@ export default {
   created() {
     this.basicUrl = this.yunImagesBasic
   },
-  onShow() {
+  mounted() {
     this.current = this.currentVuex
     this.updataAllGoods()
   },
