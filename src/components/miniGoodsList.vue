@@ -38,9 +38,13 @@ export default {
   },
   methods: {
     onClick() {
+      console.log(this.link)
       if (this.link) {
-        let url = {path: this.link, query: this.query}
-        this.$router.push(url)
+        // let url = {path: this.link, query: this.query}
+        // this.$router.push(url)
+        wx.navigateTo({
+          url: this.link
+        })
       }
       this.$emit('cellClick')
     }
