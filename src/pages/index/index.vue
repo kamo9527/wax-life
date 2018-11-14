@@ -9,11 +9,14 @@
     <div class="my_home show_move" v-if="current === 'home'">
       <image
         v-for="item in yunImages" 
-        :key="item"
-        :src="basicUrl + item"
+        :key="item.id"
+        :src="basicUrl + item.src"
+        @click="chooseId(item.id)"
         mode="widthFix" 
         >
       </image>
+      <image src="/static/images/giving_01.jpg" mode="widthFix" ></image>
+      <image src="/static/images/giving_02.jpg" mode="widthFix" ></image>
     </div>
     <div class="my_goods show_move" v-if="current === 'goods'">
       <xrow i-class="goods_filter_tabs">
@@ -25,7 +28,7 @@
         <div class="goods_item" v-for="item in goods" :key="item" @click="chooseGood(item)">
           <image :src="item.brand_img" mode="widthFix"></image>
           <div class="content">
-            <div class="title">{{item.title}}</div>
+            <div class="title">{{item.brand_title}}</div>
             <div class="detail">￥<span class="price">{{item.price}}</span><span class="num">{{item.sale}}人付款</span><span class="more">. . .</span></div>
           </div>
         </div>
@@ -44,12 +47,12 @@
     <div class="my_workshop show_move" v-if="current === 'workshop'">
       <xcell 
         i-class="my_link" 
-        src="../../static/icon/serve.png" 
+        src="/static/icon/serve.png" 
         title="深圳驰雅私人工作坊" 
         inlineDesc="专注手工蜡艺术品设计制作">
         <div slot="more">
           <button :plain="true" open-type="contact" class="my_link_note">
-            <image class="my_link_icon" src="../../static/icon/wx.png" mode="widthFix"></image>
+            <image class="my_link_icon" src="/static/icon/wx.png" mode="widthFix"></image>
             <div>联系我们</div>
           </button>
         </div>
@@ -57,14 +60,14 @@
       <div class="dot_line"></div>
        <xcell 
         i-class="my_link_address" 
-        src="../../static/icon/address.png" 
+        src="/static/icon/address.png" 
         title="广东省惠州市博罗县"
         @cellClick="getAddress"
         is-link>
       </xcell>
       <xcell 
         i-class="my_link_phone" 
-        src="../../static/icon/phone.png" 
+        src="/static/icon/phone.png" 
         title="15914039385"
         @cellClick="phoneCall"
         is-link>
@@ -102,13 +105,11 @@ export default {
       current: 'home',
       basicUrl: '',
       yunImages: [
-        'home/home_01.png',
-        'home/home_02.png',
-        'home/home_03.png',
-        'home/home_04.png',
-        'home/home_05.png',
-        'home/giving_01.jpg',
-        'home/giving_02.jpg'
+        {id: 'LCHY01', src: 'home/home_01.png'},
+        {id: 'LCHY02', src: 'home/home_002.png'},
+        {id: 'LCHY03', src: 'home/home_003.png'},
+        {id: 'LCHY04', src: 'home/home_04.png'},
+        {id: 'LCHY05', src: 'home/home_005.png'}
       ],
       priceSort: false,
       filterbar: 'all',
@@ -204,6 +205,17 @@ export default {
         success: (res) => {
           console.log(res.userInfo)
         }
+      })
+    },
+    // 选择商品
+    chooseId(id) {
+      let item = this.goods.find(v => {
+        return v.id === id
+      })
+      if (!item) return
+      this.$store.commit('UPDATE_GOODS_DETAIL', item)
+      wx.navigateTo({
+        url: '/pages/index/detail'
       })
     },
     // 选择商品

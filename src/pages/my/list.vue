@@ -12,7 +12,7 @@
       </order-item>
     </div>
     <div class="no_list" v-if="showNoList">
-      <image src="../../static/images/no_list.png" mode="widthFix" class="no_list_img"></image>
+      <image src="/static/images/no_list.png" mode="widthFix" class="no_list_img"></image>
     </div>
     <web-view src="http://www.kuaidi100.com/" v-if="isShow"></web-view>
   </section>

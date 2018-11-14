@@ -12,7 +12,7 @@
       </div>
       <div class="detail">
         <div class="price">￥{{goodInfo.price}}</div>
-        <div class="desc">{{goodInfo.title}}</div>
+        <div class="desc">{{goodInfo.brand_title}}</div>
         <div class="info">
           <span>快递：免运费</span>
           <span>月销{{goodInfo.sale}}笔</span>
@@ -22,6 +22,19 @@
       <!-- <xcell title="服务" fr="7天无理由 · 运费险"></xcell> -->
       <xcell title="规格" fr="请选择 颜色分类" @cellClick="sizeSelect"></xcell>
       <!-- <xcell title="参数" fr="品牌 形状..." @cellClick="paramsDialogShow = true"></xcell> -->
+      <div class="img_title">
+        <span>
+          <span class="line1"></span>
+        <div class="icon_info">
+          <span>优惠礼品</span>
+        </div>
+        <span class="line1"></span>
+        </span>
+      </div>
+      <div class="img_content">
+        <image class="goods-img" mode="widthFix" src="/static/images/giving_01.jpg" /></image>
+        <image class="goods-img" mode="widthFix" src="/static/images/giving_02.jpg" /></image>
+      </div>
       <div class="img_title">
         <span>
           <span class="line1"></span>
@@ -88,7 +101,7 @@
         </div>
       </div>
     </wux-popup>
-    <wux-popup position="bottom" class-names="slideInUp" :visible="paramsDialogShow" @close="paramsDialogShow = false">
+    <!-- <wux-popup position="bottom" class-names="slideInUp" :visible="paramsDialogShow" @close="paramsDialogShow = false">
       <div class="params_window">
         <div class="title">产品参数</div>
         <div class="params flex" v-for="(params, paramsIndex) in goodInfo.params" :key="paramsIndex">
@@ -96,11 +109,11 @@
           <div class="params_desc">{{params.desc}}</div>
         </div>
         <div class="complete" @click="paramsDialogShow = false">完成</div>
-        <!-- <template v-for="params in goodInfo.params" > 
+        <template v-for="params in goodInfo.params" > 
           <xcell :title="params.name" :fr="params.desc"></xcell>
-        </template> -->
+        </template>
       </div>
-    </wux-popup>
+    </wux-popup> -->
   </div>
 </template>
 <script>
@@ -118,14 +131,7 @@ export default {
       goodNum: 1,
       current: 0,
       bugType: '',
-      images: [
-        '/static/images/goods.png',
-        '/static/images/goods.png',
-        '/static/images/goods.png',
-        '/static/images/goods.png',
-        '/static/images/goods.png',
-        '/static/images/goods.png'
-      ],
+      images: [],
       goodAdress: '广东惠州',
       goodInfo: {
         price: 98,
@@ -188,10 +194,10 @@ export default {
         id: this.goodInfo.id,
         price: this.sizeDialogData.price,
         num: this.goodNum,
-        styleTitle: this.sizeDialogData.colorName,
-        styleName: this.sizeDialogData.colorId,
-        title: this.goodInfo.title,
-        styleSrc: this.sizeDialogData.imgUrl
+        title: this.sizeDialogData.colorName,
+        name: this.sizeDialogData.colorId,
+        brand_title: this.goodInfo.brand_title,
+        src: this.sizeDialogData.imgUrl
       }
       this.$store.commit('ADD_TO_CART', productInfo)
       wx.showToast({
@@ -209,9 +215,10 @@ export default {
           id: this.goodInfo.id,
           price: this.sizeDialogData.price,
           num: this.goodNum,
-          styleTitle: this.sizeDialogData.colorName,
-          styleName: this.sizeDialogData.colorId,
-          styleSrc: this.sizeDialogData.imgUrl
+          title: this.sizeDialogData.colorName,
+          brand_title: this.goodInfo.brand_title,
+          name: this.sizeDialogData.colorId,
+          src: this.sizeDialogData.imgUrl
         }
         this.$store.commit('UPDATE_PAYING_GOOD', productInfo)
         this.$store.commit('UPDATE_TOPAY_TYPE', 0)
@@ -439,6 +446,10 @@ export default {
 }
 .img_content {
   font-size: 0;
+  image {
+    width: 100%;
+    vertical-align: middle;
+  }
   img {
     width: 100%;
     display: block;

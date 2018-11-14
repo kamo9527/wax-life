@@ -2,16 +2,16 @@
   <div :class="['i_cell', iClass]">
     <i-radio i-class="my_radio" :color="color" :disabled="item.disabled" :checked="item.select" @change="radioChange"></i-radio>
     <div class="i_cell_hd">
-      <img :src="item.styleSrc" class="goods_pic" alt="" />
+      <img :src="item.src" class="goods_pic" alt="" />
     </div>
     <div class="i_cell_bd">
-      <div class="title pb10">{{item.title}}</div>
-      <div><span class="goods_style">{{item.kind}}</span></div>
+      <div class="title pb10">{{item.brand_title}}</div>
+      <div><span class="goods_style">{{item.title}}</span></div>
       <div class="goods_pay">
         <div class="item_count">
-          <img src="../../static/icon/minus.png" class="count_icon" @click.stop="minus" alt="">
+          <img src="/static/icon/minus.png" class="count_icon" @click.stop="minus" alt="">
           <span class="count_num">{{item.num}}</span>
-          <img src="../../static/icon/add.png" class="count_icon" @click.stop="add" alt="">
+          <img src="/static/icon/add.png" class="count_icon" @click.stop="add" alt="">
         </div>
         <div class="goods_price">￥{{item.price * item.num}}</div>
       </div>
@@ -40,7 +40,7 @@ export default {
       // this.$emit('onChange', this.item)
     },
     minus() {
-      this.item.num--
+      if (this.item.num > 1) this.item.num--
       // this.$emit('onChange', this.item)
     }
   }
@@ -63,24 +63,24 @@ export default {
   }
 .goods_style{
   font-size: 12px;
-  padding: 5px 22px 5px 4px;
+  padding: 4px;
   background-color: #F8F8F8;
   border-radius: 4px;
   position: relative;
-  &::after{
-    content: "";
-    position: absolute;
-    top: 4px;
-    right: 6px;
-    display: inline-block;
-    vertical-align: middle;
-    transform: rotate(135deg);
-    width: 8px;
-    height: 8px;
-    border-width: 1px 1px 0 0;
-    border-color: #a0a0a0;
-    border-style: solid;
-  }
+  // &::after{
+  //   content: "";
+  //   position: absolute;
+  //   top: 4px;
+  //   right: 6px;
+  //   display: inline-block;
+  //   vertical-align: middle;
+  //   transform: rotate(135deg);
+  //   width: 8px;
+  //   height: 8px;
+  //   border-width: 1px 1px 0 0;
+  //   border-color: #a0a0a0;
+  //   border-style: solid;
+  // }
 }
 .goods_pay{
   overflow: hidden;
