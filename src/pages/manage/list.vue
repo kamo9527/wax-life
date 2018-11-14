@@ -18,8 +18,11 @@
     <div class="no_list" v-if="showNoList">
       <image src="/static/images/no_list.png" mode="widthFix" class="no_list_img"></image>
     </div>
-    <i-modal title="快递单号" :visible="showModal" @ok="sure" @cancel="cancel">
-      <i-input :value="inputVal" @change="updataVal" title="快递单号：" placeholder="请输入" />
+    <i-modal title="快递单号录入" :visible="showModal" @ok="sure" @cancel="cancel">
+      <div class="dsflex input">
+        <span>快递单号: </span>
+        <input type="number" placeholder="请输入" v-model="questData.courier">
+      </div>
     </i-modal>
   </section>
 </template>
@@ -190,5 +193,25 @@ export default {
     color: #999;
   }
 }
+.dsflex {
+        border-top: 1px solid #e6e2e1;
+        border-bottom: 1px solid #e6e2e1;
 
+      display: flex;
+      align-items: center;
+    } 
+.input {
+      span {
+        width: 100px;
+      }
+      input {
+        text-align: left;
+        width: 300px;
+        flex: 1;
+        height: 40px;
+        padding: 5px 10px;
+        box-sizing: border-box;
+        background: #fff;
+      }
+    }
 </style>

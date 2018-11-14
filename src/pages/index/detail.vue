@@ -87,7 +87,7 @@
         <div class="flex number">
           <div class="title">购买数量</div>
           <div>
-            <i-input-number :value="goodNum" min="0" max="100" @change="goodNumChange"></i-input-number>
+            <i-input-number :value="goodNum" min="1" max="100" @change="goodNumChange"></i-input-number>
           </div>
         </div>
         <div class="btns">
