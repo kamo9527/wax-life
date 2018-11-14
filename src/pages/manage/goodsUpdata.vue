@@ -10,7 +10,7 @@
           <icon type="clear" size="20" class="my_cancel" @click.stop="clearImg('swiper', index)" />
         </li>
         <li class="pic_item" @click="uploadImg('swiper')" v-if="swiperLen < 4">
-          <image class="img" src="../../static/images/upload.png"></image>
+          <image class="img" src="/static/images/upload.png"></image>
         </li>
       </ul>
     </i-panel>
@@ -22,7 +22,7 @@
           <icon type="clear" size="20" class="my_cancel" @click.stop="clearImg('style', styleIndex)" />
         </li>
         <li class="pic_item" @click="styleAddShow = true">
-          <image class="img" src="../../static/images/upload.png"></image>
+          <image class="img" src="/static/images/upload.png"></image>
         </li>
       </ul>
     </i-panel>
@@ -33,7 +33,7 @@
           <icon type="clear" size="20" class="my_cancel" @click.stop="clearImg('others', othersIndex)" />
         </li>
         <li class="pic_item" @click="uploadImg('others')">
-          <image class="img" src="../../static/images/upload.png"></image>
+          <image class="img" src="/static/images/upload.png"></image>
         </li>
       </ul>
     </i-panel>
@@ -59,7 +59,7 @@ export default {
       styleAddShow: false, // 风格项添加
       addItem: {
         title: '',
-        src: '../../static/images/upload.png'
+        src: '/static/images/upload.png'
       },
       basicInfo: [
         { key: 'id', name: '产品ID：', placeholder: '如 LCHY01' },
@@ -120,7 +120,7 @@ export default {
     },
     onClose() {
       this.addItem.title = ''
-      this.addItem.src = '../../static/images/upload.png'
+      this.addItem.src = '/static/images/upload.png'
       this.styleAddShow = false
     },
     finish() {

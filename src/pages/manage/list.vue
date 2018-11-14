@@ -16,7 +16,7 @@
       </order-item>
     </div>
     <div class="no_list" v-if="showNoList">
-      <image src="../../static/images/no_list.png" mode="widthFix" class="no_list_img"></image>
+      <image src="/static/images/no_list.png" mode="widthFix" class="no_list_img"></image>
     </div>
     <i-modal title="快递单号" :visible="showModal" @ok="sure" @cancel="cancel">
       <i-input :value="inputVal" @change="updataVal" title="快递单号：" placeholder="请输入" />

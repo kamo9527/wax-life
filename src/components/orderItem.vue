@@ -2,13 +2,13 @@
   <div class="my_list_item">
     <div :class="['i_cell', 'i_cell_bd_start', iClass]">
       <div class="i_cell_hd">
-        <img :src="item.list && item.list[0].styleSrc" class="img_icon order_pic" alt="" />
+        <img :src="item.list[0].src" class="img_icon order_pic" alt="" />
     </div>
         <div class="i_cell_bd">
           <div class="title pb10">下单日期：{{item.show_time}}</div>
           <div class="title pb10">订单编号：{{item.orderId}}</div>
           <div class="order_content" v-for="v in item.list" :key="v.id">
-            <span class="title">{{v.styleTitle}} </span>
+            <span class="title">{{v.title}} </span>
             <span>x {{v.num}}</span>
           </div>
           <div class="order_detail">姓名：{{item.order_name}}</div>

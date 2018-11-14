@@ -2,7 +2,7 @@
   <div>
     <xcell v-if="isAddress" :title="addressInfo.userName" :mobile="addressInfo.telNumber" :inline-desc="addressInfo.address" i-class="i_pay_address" @cellClick="addressManage">
     </xcell>
-    <xcell v-else title="请点击选择收获地址" src="../../static/icon/local.png" i-class="i_pay_address" @cellClick="addressManage">
+    <xcell v-else title="请点击选择收获地址" src="/static/icon/local.png" i-class="i_pay_address" @cellClick="addressManage">
     </xcell>
     <div class="address_line"></div>
     <good-item color="#ea9b5a" :item="item" :good-list="selectGoods">

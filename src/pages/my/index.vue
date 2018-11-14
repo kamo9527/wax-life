@@ -3,7 +3,7 @@
     <div class="my_center">
       <ul class="my_center_top">
         <li class="center_icon">
-          <image src="../../static/icon/members.png" class="members_img"></image>
+          <image src="/static/icon/members.png" class="members_img"></image>
         </li>
         <li class="center_user_avatar">
           <div class="user_avatar">
@@ -21,38 +21,38 @@
       <xcell
         v-if="hasAuth"
         title="我的管理" 
-        src="../../static/icon/manage.png" 
+        src="/static/icon/manage.png" 
         link="../manage/list"
         >
       </xcell>
       <xcell
         v-if="hasAuth"
         title="商品录入" 
-        src="../../static/icon/upload.png" 
+        src="/static/icon/upload.png" 
         link="../manage/goodsUpdata"
         >
       </xcell>
       <xcell
         title="我的订单" 
-        src="../../static/icon/all.png" 
+        src="/static/icon/all.png" 
         link="../my/list"
         >
       </xcell>
       <xcell
         title="我的地址" 
-        src="../../static/icon/address_0.png" 
+        src="/static/icon/address_0.png" 
         @cellClick="addressManage"
         is-link>
       </xcell>
       <xcell
         title="店家简介" 
-        src="../../static/icon/sub.png" 
+        src="/static/icon/sub.png" 
         @cellClick="goHome"
         is-link>
       </xcell>
       <xcell
         title="联系我们，做你的小程序" 
-        src="../../static/icon/serve.png" 
+        src="/static/icon/serve.png" 
         link='../my/link'>
       </xcell>
     </div>
