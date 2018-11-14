@@ -5,11 +5,11 @@
     <xcell v-else title="请点击选择收获地址" src="/static/icon/local.png" i-class="i_pay_address" @cellClick="addressManage">
     </xcell>
     <div class="address_line"></div>
-    <good-item color="#ea9b5a" :item="item" :good-list="selectGoods">
-    </good-item>
+    <div class="line"></div>
+    <!-- <good-item :list="payImgList"></good-item> -->
     <!-- <div>
       <div class="lable">购物清单</div>.
-      <div v-for="(item, index) in selectGoods" :key="index">
+      <div v-for="(item, index) in payingGoods" :key="index">
         <div class="good_detail">
           <img :src="item.src" alt="">
           <span>{{item.title}}</span>
@@ -19,14 +19,13 @@
         </div>
       </div>
     </div> -->
-    <!-- <mini-goods-list :goods-list="selectBuy"></mini-goods-list> -->
+    <mini-goods-list :list="payImgList" link="/pages/index/list"></mini-goods-list>
     <div class="line"></div>
-    <xcell title="商品总价" :fr="`￥${totalAmount}`" i-class="i_cell_pay">
-    </xcell>
-    <xcell title="运费" :fr="`￥${queryForm.freight}`" i-class="i_cell_pay">
-    </xcell>
-    <xcell title="合计" :fr="`￥${totalAmount}`" i-class="i_cell_pay last_cell">
-    </xcell>
+    <div class="i_cell_list">
+      <xcell title="商品总价" :fr="`￥${totalAmount}`" i-class="i_cell_pay"></xcell>
+      <xcell title="运费" :fr="`￥${queryForm.freight}`" i-class="i_cell_pay"></xcell>
+      <xcell title="合计" :fr="`￥${totalAmount}`" i-class="i_cell_pay"></xcell>
+    </div>
     <pay :money="allPrice" @to-pay="toPay">
     </pay>
   </div>
@@ -34,14 +33,14 @@
 <script>
 import xcell from '@/components/cell'
 import miniGoodsList from '@/components/miniGoodsList'
-import goodItem from '@/components/goodItem'
+// import goodItem from '@/components/goodItem'
 import pay from '@/components/pay'
 import { mapGetters } from 'vuex'
 export default {
   components: {
     xcell,
     miniGoodsList,
-    goodItem,
+    // goodItem,
     pay
   },
   data() {
@@ -60,22 +59,14 @@ export default {
     allPrice() {
       return this.totalAmount + this.queryForm.freight
     },
-    isAllselect() {
-      let item = this.selectGoods.some(v => {
-        return !v.select
-      })
-      return !item && this.selectGoods.length > 0
-    },
     totalAmount() {
       let price = 0
-      this.selectGoods.forEach(v => {
+      this.payingGoods.forEach(v => {
         price += (v.price * v.num)
       })
       return price
     },
-    ...mapGetters({
-      selectGoods: 'payingGoods'
-    })
+    ...mapGetters(['payingGoods', 'payImgList'])
   },
   methods: {
     toPay() {
@@ -88,9 +79,9 @@ export default {
             order_name: this.addressInfo.userName,
             order_phone: this.addressInfo.telNumber,
             order_address: this.addressInfo.address,
-            order_img: this.selectGoods[0] ? this.selectGoods[0].src : '../../static/icon/local.png',
+            order_img: this.payingGoods[0].src,
             status: 'picking',
-            list: this.selectGoods
+            list: this.payingGoods
           }
         }
         wx.cloud.callFunction({
@@ -105,7 +96,7 @@ export default {
                   this.$store.state.gooddetail.isCartToPay && this.$store.commit('CLEAN_CART')
                   setTimeout(() => {
                     wx.switchTab({
-                      url: '/pages/index/index'
+                      url: '/pages/my/index'
                     })
                   }, 1500)
                 }
@@ -169,9 +160,9 @@ export default {
 }
 .address_line {
   width: 100%;
-  height: 2px;
-  background-image: linear-gradient(to right, #1296db 30%, #fff 30%, #fff 50%, #d17e52 50%, #d17e52 80%, #fff 80%, #fff 100%);
-  background-size: 80px 2px;
+  height: 4px;
+  background-image: linear-gradient(-45deg,#fff 5%, #1296db 5%, #1296db 35%, #fff 35%, #fff 55%, #d17e52 55%, #d17e52 85%, #fff 85%, #fff 100%);
+  background-size: 25% 4px;
   background-repeat: repeat-x;
 }
 </style>

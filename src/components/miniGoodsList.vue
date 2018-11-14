@@ -2,14 +2,14 @@
   <div :class="['i_cell', iClass]" @click="onClick">
     <div class="i_cell_bd goods_img_list">
         <image class="goods_img" 
-          v-for="(item, index) in goodsList" 
-          :key="index" 
-          :src="item.src" 
+          v-for="item in list" 
+          :key="item" 
+          :src="item" 
           >
         </image>
     </div>
     <div class="i_goods_num">
-      共<span class="goods_num">{{goodsList.length}}</span>件
+      共<span class="goods_num">{{list.length}}</span>件
     </div>
     <div :class="{'with_arrow': isLink || link}"></div>
   </div>
@@ -19,7 +19,7 @@
 export default {
   props: {
     iClass: String,
-    goodsList: {
+    list: {
       type: Array,
       default: []
     },

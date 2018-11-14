@@ -7,7 +7,10 @@ const state = {
 const getters = {
   payingGoods: state => {
     return state.payingGoods
-  }
+  },
+  payImgList: state => state.payingGoods.map(v => {
+    return v.src
+  })
 }
 const mutations = {
   'UPDATE_GOODS_DETAIL'(state, data) {
