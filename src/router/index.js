@@ -79,4 +79,9 @@ module.exports = [{
   config: {
     navigationBarTitleText: '填写订单'
   }
+}, {
+  path: '/pages/index/list',
+  config: {
+    navigationBarTitleText: '商品列表'
+  }
 }]
