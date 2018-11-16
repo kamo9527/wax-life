@@ -93,7 +93,7 @@
         <div class="btns">
           <span class="btn_group" v-if="!bugType">
             <span class="add" @click="addToCart">加入购物车</span>
-          <span class="pay">立即购买</span>
+            <span class="pay" @click="sizeDialogConfirm">立即购买</span>
           </span>
           <span class="btn_group" v-if="bugType">
             <span class="confirm" @click="sizeDialogConfirm">确定</span>
@@ -142,7 +142,7 @@ export default {
         params: []
       },
       sizeDialogData: {
-        colorName: '111',
+        colorName: '',
         colorId: '111',
         price: '98',
         stock: '100',
@@ -153,13 +153,12 @@ export default {
   },
   onShow() {
     this.goodInfo = store.state.gooddetail.good
-    this.sizeDialogData.colorName = this.goodInfo.style[0].title
-    this.sizeDialogData.imgUrl = this.goodInfo.style[0].src
-    this.sizeDialogData.colorId = this.goodInfo.style[0].name
-    this.goodInfo.style[0].select = true
+    this.sizeDialogData.imgUrl = this.goodInfo.brand_img
+    this.sizeDialogShow = false
   },
   methods: {
     sizeSelect() {
+      this.bugType = ''
       this.sizeDialogShow = true
     },
     sizeDialogClose() {
@@ -170,7 +169,6 @@ export default {
     },
     // 选择规格颜色
     colorSelect(index) {
-      // this.bugType = ''
       this.goodInfo.style.forEach(item => {
         item.select = false
       })
@@ -190,6 +188,14 @@ export default {
       this.sizeDialogShow = true
     },
     addToCart() {
+      if (!this.sizeDialogData.colorName) {
+        wx.showToast({
+          title: '请选择规格',
+          icon: 'none'
+        })
+        return
+      }
+
       const productInfo = {
         id: this.goodInfo.id,
         price: this.sizeDialogData.price,
@@ -208,6 +214,15 @@ export default {
       })
     },
     sizeDialogConfirm() {
+      console.log('sizeDialogConfirm', this.sizeDialogData.colorName)
+      if (!this.sizeDialogData.colorName) {
+        wx.showToast({
+          title: '请选择规格',
+          icon: 'none'
+        })
+        return
+      }
+
       if (this.bugType === 'cart') {
         this.addToCart()
       } else {
