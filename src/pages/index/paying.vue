@@ -1,8 +1,21 @@
 <template>
   <div>
-    <xcell v-if="isAddress" :title="addressInfo.userName" :mobile="addressInfo.telNumber" :inline-desc="addressInfo.address" i-class="i_pay_address" @cellClick="addressManage">
+    <xcell
+      v-if="isAddress"
+      :title="addressInfo.userName"
+      :mobile="addressInfo.telNumber"
+      :inline-desc="addressInfo.address"
+      i-class="i_pay_address"
+      @cellClick="addressManage"
+    >
     </xcell>
-    <xcell v-else title="请点击选择收获地址" src="/static/icon/local.png" i-class="i_pay_address" @cellClick="addressManage">
+    <xcell
+      v-else
+      title="请点击选择收获地址"
+      src="/static/icon/local.png"
+      i-class="i_pay_address"
+      @cellClick="addressManage"
+    >
     </xcell>
     <div class="address_line"></div>
     <div class="line"></div>
@@ -19,14 +32,32 @@
         </div>
       </div>
     </div> -->
-    <mini-goods-list :list="payImgList" link="/pages/index/list"></mini-goods-list>
+    <mini-goods-list
+      :list="payImgList"
+      link="/pages/index/list"
+    ></mini-goods-list>
     <div class="line"></div>
     <div class="i_cell_list">
-      <xcell title="商品总价" :fr="`￥${totalAmount}`" i-class="i_cell_pay"></xcell>
-      <xcell title="运费" :fr="`￥${queryForm.freight}`" i-class="i_cell_pay"></xcell>
-      <xcell title="合计" :fr="`￥${totalAmount}`" i-class="i_cell_pay"></xcell>
+      <xcell
+        title="商品总价"
+        :fr="`￥${totalAmount}`"
+        i-class="i_cell_pay"
+      ></xcell>
+      <xcell
+        title="运费"
+        :fr="`￥${queryForm.freight}`"
+        i-class="i_cell_pay"
+      ></xcell>
+      <xcell
+        title="合计"
+        :fr="`￥${totalAmount}`"
+        i-class="i_cell_pay"
+      ></xcell>
     </div>
-    <pay :money="allPrice" @to-pay="toPay">
+    <pay
+      :money="allPrice"
+      @to-pay="toPay"
+    >
     </pay>
   </div>
 </template>
@@ -70,6 +101,15 @@ export default {
   },
   methods: {
     toPay() {
+      wx.cloud.callFunction({
+        name: 'toPay'
+      })
+        .then(res => {
+          console.log(res.result) // 3
+        })
+        .catch(console.error)
+    },
+    makeOrder() {
       let price = this.isAddress ? `恭喜您支付了${this.allPrice}元` : '请选择收获地址'
       if (this.isAddress) {
         const data = {
@@ -89,6 +129,20 @@ export default {
           data,
           complete: res => {
             if (res.result.code === 0) {
+              // wx.requestPayment({
+              //   ...res.data.pay_params,
+              //   success: function () {
+              //     wx.redirectTo({
+              //       url: 'success?count=' + amount
+              //     })
+              //   },
+              //   fail: function (d) {
+              //     wx.showModal({
+              //       content: '支付失败，请重试。',
+              //       confirmColor: '#ce3b28'
+              //     })
+              //   }
+              // })
               wx.showToast({
                 title: '开单成功啦',
                 complete: () => {
@@ -161,7 +215,18 @@ export default {
 .address_line {
   width: 100%;
   height: 4px;
-  background-image: linear-gradient(-45deg,#fff 5%, #1296db 5%, #1296db 35%, #fff 35%, #fff 55%, #d17e52 55%, #d17e52 85%, #fff 85%, #fff 100%);
+  background-image: linear-gradient(
+    -45deg,
+    #fff 5%,
+    #1296db 5%,
+    #1296db 35%,
+    #fff 35%,
+    #fff 55%,
+    #d17e52 55%,
+    #d17e52 85%,
+    #fff 85%,
+    #fff 100%
+  );
   background-size: 25% 4px;
   background-repeat: repeat-x;
 }
